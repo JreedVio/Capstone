@@ -18,18 +18,22 @@
 #include <unordered_map>
 #include <array>
 #include <chrono>
+#include <memory>
 
 #include "Vector.h"
 #include "VMath.h"
 #include "MMath.h"
 #include "Hash.h"
 #include "GlobalLighting.h"
+#include "ShaderComponent.h"
 
 using namespace MATH;
 
 
 #include "Renderer.h"
 
+template<typename T>
+using Ref = std::shared_ptr<T>;
 
 const std::vector<const char*> validationLayers = {
     "VK_LAYER_KHRONOS_validation"
@@ -66,38 +70,38 @@ struct QueueFamilyIndices {
         Vec3 normal;
         Vec2 texCoord;
 
-        static VkVertexInputBindingDescription getBindingDescription() {
-            VkVertexInputBindingDescription bindingDescription{};
-            bindingDescription.binding = 0;
-            bindingDescription.stride = sizeof(Vertex);
-            bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-            return bindingDescription;
-        }
+static VkVertexInputBindingDescription getBindingDescription() {
+    VkVertexInputBindingDescription bindingDescription{};
+    bindingDescription.binding = 0;
+    bindingDescription.stride = sizeof(Vertex);
+    bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+    return bindingDescription;
+}
 
-        static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions() {
-            std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
+static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions() {
+    std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
 
-            attributeDescriptions[0].binding = 0;
-            attributeDescriptions[0].location = 0;
-            attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-            attributeDescriptions[0].offset = offsetof(Vertex, pos);
+    attributeDescriptions[0].binding = 0;
+    attributeDescriptions[0].location = 0;
+    attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+    attributeDescriptions[0].offset = offsetof(Vertex, pos);
 
-            attributeDescriptions[1].binding = 0;
-            attributeDescriptions[1].location = 1;
-            attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-            attributeDescriptions[1].offset = offsetof(Vertex, normal);
+    attributeDescriptions[1].binding = 0;
+    attributeDescriptions[1].location = 1;
+    attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+    attributeDescriptions[1].offset = offsetof(Vertex, normal);
 
-            attributeDescriptions[2].binding = 0;
-            attributeDescriptions[2].location = 2;
-            attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-            attributeDescriptions[2].offset = offsetof(Vertex, texCoord);
+    attributeDescriptions[2].binding = 0;
+    attributeDescriptions[2].location = 2;
+    attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+    attributeDescriptions[2].offset = offsetof(Vertex, texCoord);
 
-            return attributeDescriptions;
-        }
-        bool operator == (const Vertex& other) const {
-            return pos == other.pos && normal == other.normal && texCoord == other.texCoord;
-        }
-        
+    return attributeDescriptions;
+}
+bool operator == (const Vertex& other) const {
+    return pos == other.pos && normal == other.normal && texCoord == other.texCoord;
+}
+
     }; /// End of struct Vertex
 
 
@@ -113,61 +117,81 @@ struct QueueFamilyIndices {
         };
     }
 
- 
-struct UniformBufferObject {
-    Matrix4 view;
-    Matrix4 proj;
-};
-struct PushConst {
-    Matrix4 model;
-    Matrix4 normal;
-    
-};
 
-struct BufferMemory {
-    VkBuffer bufferID;
-    VkDeviceMemory bufferMemoryID;
-};
+    struct UniformBufferObject {
+        Matrix4 view;
+        Matrix4 proj;
+    };
+    struct PushConst {
+        Matrix4 model;
+        Matrix4 normal;
 
-struct Sampler2D_Data {
-    VkImage textureImage;
-    VkDeviceMemory textureImageMemory;
-    VkImageView textureImageView;
-    VkSampler textureSampler;
-};
+    };
 
-struct Descriptor {
-    VkDescriptorPool pool;
-    std::vector<VkDescriptorSet> sets;
-};
+    struct BufferMemory {
+        VkBuffer bufferID;
+        VkDeviceMemory bufferMemoryID;
+    };
 
-struct ModelParameters {
-    std::vector<Vertex> vertices;
-    std::vector<uint32_t> indices;
-};
+    struct Sampler2D_Data {
+        VkImage textureImage;
+        VkDeviceMemory textureImageMemory;
+        VkImageView textureImageView;
+        VkSampler textureSampler;
+    };
 
-class VulkanRenderer : public Renderer {
-public:
-    /// C11 precautions 
-    VulkanRenderer(const VulkanRenderer&) = delete;  /// Copy constructor
-    VulkanRenderer(VulkanRenderer&&) = delete;       /// Move constructor
-    VulkanRenderer& operator=(const VulkanRenderer&) = delete; /// Copy operator
-    VulkanRenderer& operator=(VulkanRenderer&&) = delete;      /// Move operator
+    struct Descriptor {
+        VkDescriptorPool pool;
+        std::vector<VkDescriptorSet> sets;
+    };
 
-    VulkanRenderer();
-    ~VulkanRenderer();
-    SDL_Window* CreateWindow(std::string name_, int width, int height);
-    bool OnCreate();
-    void OnDestroy();
-    void Render();
-    void SetUBO(const Matrix4& projection, const Matrix4& view);
-    void SetGLightsUbo(const GlobalLighting& glights);
-    void SetConst(const Matrix4& model);
-    SDL_Window* GetWindow() {
-        return window;
+    struct ModelParameters {
+        std::vector<Vertex> vertices;
+        std::vector<uint32_t> indices;
+    };
+
+    class VulkanRenderer : public Renderer {
+    public:
+        /// C11 precautions 
+        VulkanRenderer(const VulkanRenderer&) = delete;  /// Copy constructor
+        VulkanRenderer(VulkanRenderer&&) = delete;       /// Move constructor
+        VulkanRenderer& operator=(const VulkanRenderer&) = delete; /// Copy operator
+        VulkanRenderer& operator=(VulkanRenderer&&) = delete;      /// Move operator
+
+
+        ~VulkanRenderer();
+        SDL_Window* CreateWindow(std::string name_, int width, int height);
+        bool OnCreate();
+        void OnDestroy();
+        void Render();
+        void SetUBO(const Matrix4& projection, const Matrix4& view);
+        void SetGLightsUbo(const GlobalLighting& glights);
+        void SetConst(const Matrix4& model);
+        SDL_Window* GetWindow() {
+            return window;
+        }
+        VkDevice GetDevice(){
+            return device;
+        }
+        VkRenderPass GetRenderPass() {
+            return renderPass;
+        }
+        VkExtent2D GetSwapChainExtent() {
+            return swapChainExtent;
+        }
+
+    static VulkanRenderer* GetInstance() {
+        if (Instance == nullptr) {
+            Instance = new VulkanRenderer();
+        }
+        return Instance;
     }
 
 private:
+    static VulkanRenderer* Instance;
+
+    VulkanRenderer();
+
     UniformBufferObject ubo;
     GlobalLighting glightsUBO;
     PushConst pushConst[2];
@@ -186,10 +210,11 @@ private:
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
     VkDevice device;
     VkRenderPass renderPass;
-    VkDescriptorSetLayout descriptorSetLayout;
-    VkPipelineLayout pipelineLayout;
-    VkPipeline graphicsPipeline;
-    VkPipeline graphicsPipeline1;
+
+    Ref<ShaderComponent> shaderComponent;
+    ///VkDescriptorSetLayout descriptorSetLayout;
+    ///VkPipelineLayout pipelineLayout;
+    ///VkPipeline graphicsPipeline;
 
     VkImage depthImage;
     VkDeviceMemory depthImageMemory;
@@ -229,9 +254,8 @@ private:
     void updateGLightsUniformBuffer(uint32_t currentImage);
     VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
     void createRenderPass();
-    void createDescriptorSetLayout();
-    void createGraphicsPipeline(const char* vFilename, const char* fFilename);
-    void createGraphicsPipelineGeometry();
+    //void createDescriptorSetLayout();
+    //void createGraphicsPipeline(const char* vFilename, const char* fFilename);
     void createFramebuffers();
     void createCommandPool();
     void createDepthResources();
@@ -295,14 +319,13 @@ private:
     std::vector<VkImageView> swapChainImageViews;
     std::vector<VkFramebuffer> swapChainFramebuffers;
 
-    VkShaderModule createShaderModule(const std::vector<char>& code);
+    //VkShaderModule createShaderModule(const std::vector<char>& code);
     VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
     VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
     SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
 
-    static std::vector<char> readFile(const std::string& filename);
-
+    //static std::vector<char> readFile(const std::string& filename);
    
 };
 #endif 

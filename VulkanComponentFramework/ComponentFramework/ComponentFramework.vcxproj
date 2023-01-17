@@ -127,20 +127,27 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="GlobalLightning.cpp" />
     <ClCompile Include="Hash.cpp" />
+    <ClCompile Include="MaterialComponent.cpp" />
+    <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MMath.cpp" />
     <ClCompile Include="Scene0.cpp" />
+    <ClCompile Include="ShaderComponent.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="VMath.cpp" />
     <ClCompile Include="VulkanRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="GlobalLighting.h" />
     <ClInclude Include="Hash.h" />
+    <ClInclude Include="MaterialComponent.h" />
+    <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="OpenGLRenderer.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SceneManager.h" />
@@ -149,9 +156,11 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene0.h" />
+    <ClInclude Include="ShaderComponent.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="tiny_obj_loader.h" />
+    <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="VulkanRenderer.h" />

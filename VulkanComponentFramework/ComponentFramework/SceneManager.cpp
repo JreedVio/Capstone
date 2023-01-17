@@ -31,29 +31,10 @@ SceneManager::~SceneManager() {
 
 bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 
-	switch(rendererType){
-	case RendererType::OPENGL:
-		renderer = new OpenGLRenderer();
-		renderer->setRendererType(RendererType::OPENGL);
-		renderer->CreateWindow(name_, width_, height_);
-		renderer->OnCreate();
-			
-		
-		break;
-
-	case RendererType::VULKAN:
-		renderer = new VulkanRenderer();
-		renderer->setRendererType(RendererType::VULKAN);
-		renderer->CreateWindow(name_, width_, height_);
-		renderer->OnCreate();
-		break;
-
-	case RendererType::DIRECTX11:
-	case RendererType::DIRECTX12:
-		Debug::FatalError("Renderer not supported", __FILE__, __LINE__);
-		return false;
-		break;
-	}
+	renderer = VulkanRenderer::GetInstance();
+	renderer->setRendererType(RendererType::VULKAN);
+	renderer->CreateWindow(name_, width_, height_);
+	renderer->OnCreate();
 
 	timer = new Timer();
 	if (timer == nullptr) {

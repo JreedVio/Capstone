@@ -3,10 +3,18 @@
 
 #pragma once
 #include "Component.h"
-#include "glew.h" // so we can make a GLuint
+#include <vulkan/vulkan.h>
+#include <vector>
+
 class MaterialComponent: public Component {
-	GLuint textureID;
 	const char* filename;
+	VkImage textureImage;
+	VkDeviceMemory textureImageMemory;
+	VkImageView textureImageView;
+	VkSampler textureSampler;
+
+	VkDescriptorPool pool;
+	std::vector<VkDescriptorSet> sets;
 
 	public:
 		MaterialComponent(Component* parent_, const char* filename_);
@@ -15,7 +23,6 @@ class MaterialComponent: public Component {
 		virtual void OnDestroy();
 		virtual void Update(const float deltaTime_);
 		virtual void Render()const;
-		inline GLuint getTextureID() const { return textureID; }
 
 };
 

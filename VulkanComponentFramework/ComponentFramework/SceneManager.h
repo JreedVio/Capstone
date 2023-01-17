@@ -2,7 +2,7 @@
 #define SCENEMANAGER_H
 
 #include <string>
-#include "Renderer.h"
+#include "VulkanRenderer.h"
 class SceneManager  {
 public:
 	
@@ -29,7 +29,8 @@ private:
 	class Scene* currentScene;
 	class Timer* timer;
 
-	Renderer* renderer;
+	//class VulkanRenderer;
+	VulkanRenderer* renderer;
 	unsigned int fps;
 	bool isRunning;
 	void BuildScene(SCENE_NUMBER scene_);

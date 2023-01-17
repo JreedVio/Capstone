@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Renderers">
       <UniqueIdentifier>{30c80976-ed84-4ca8-ab3a-bd86aa11c0ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{3ea2208c-4dd9-4e6f-ac53-fcb7f5f0b38b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{41305bc9-9920-422d-ab14-62e017999070}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -68,6 +74,18 @@
     </ClCompile>
     <ClCompile Include="GlobalLightning.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +142,21 @@
     </ClInclude>
     <ClInclude Include="GlobalLighting.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

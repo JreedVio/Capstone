@@ -1,4 +1,4 @@
-// Umer Noor 2022
+/*// Umer Noor 2022
 // Original code from/taught by Dr. Scott Fielder
 
 #pragma once
@@ -26,4 +26,4 @@ struct TransformComponent : public Component {
 		orientation = orientation_;
 		scale = scale_;
 	}
-};
+};*/
