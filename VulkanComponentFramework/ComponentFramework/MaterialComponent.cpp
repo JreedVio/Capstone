@@ -28,17 +28,18 @@ void MaterialComponent::createTextureImage() {
     // Assumed that it is png
     VkDeviceSize imageSize = image->w * image->h * 4;
 
-    BufferMemory stagingBuffer;
+    VkDeviceMemory stagingBufferMemoryID;
+    VkBuffer stagingBufferID;
 
     VkDevice device = renderer->GetDevice();
 
-    VulkanRenderer::GetInstance()-> createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer.bufferID, stagingBuffer.bufferMemoryID);
+    VulkanRenderer::GetInstance()-> createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBufferID, stagingBufferMemoryID);
 
     void* data;
-    vkMapMemory(device, stagingBuffer.bufferMemoryID, 0, imageSize, 0, &data);
+    vkMapMemory(device, stagingBufferMemoryID, 0, imageSize, 0, &data);
     // It's a fast way of transfering information
     memcpy(data, image->pixels, static_cast<size_t>(imageSize));
-    vkUnmapMemory(device, stagingBuffer.bufferMemoryID);
+    vkUnmapMemory(device, stagingBufferMemoryID);
 
 
     renderer->createImage(image->w, image->h, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL,
@@ -47,14 +48,14 @@ void MaterialComponent::createTextureImage() {
         textureImage, textureImageMemory);
     renderer->transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
     // Loading memory from the staging memory to the actual image memory
-    renderer->copyBufferToImage(stagingBuffer.bufferID, textureImage,
+    renderer->copyBufferToImage(stagingBufferID, textureImage,
         static_cast<uint32_t>(image->w), static_cast<uint32_t>(image->h));
     renderer->transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB,
         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-    vkDestroyBuffer(device, stagingBuffer.bufferID, nullptr);
-    vkFreeMemory(device, stagingBuffer.bufferMemoryID, nullptr);
+    vkDestroyBuffer(device, stagingBufferID, nullptr);
+    vkFreeMemory(device, stagingBufferMemoryID, nullptr);
 
     SDL_FreeSurface(image);
 

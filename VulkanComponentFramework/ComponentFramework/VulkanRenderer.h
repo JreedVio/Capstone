@@ -23,7 +23,6 @@
 #include "Vector.h"
 #include "VMath.h"
 #include "MMath.h"
-#include "Hash.h"
 #include "GlobalLighting.h"
 #include "ShaderComponent.h"
 #include "MaterialComponent.h"
@@ -57,55 +56,18 @@ struct QueueFamilyIndices {
     std::optional<uint32_t> graphicsFamily;
     std::optional<uint32_t> presentFamily;
 
-    bool isComplete() {
-        return graphicsFamily.has_value() && presentFamily.has_value();
-    }
-};
+        bool isComplete() {
+            return graphicsFamily.has_value() && presentFamily.has_value();
+        }
+    };
 
     struct SwapChainSupportDetails {
     VkSurfaceCapabilitiesKHR capabilities;
     std::vector<VkSurfaceFormatKHR> formats;
     std::vector<VkPresentModeKHR> presentModes;
-};
+    };
 
-    struct Vertex {
-        Vec3 pos;
-        Vec3 normal;
-        Vec2 texCoord;
-
-static VkVertexInputBindingDescription getBindingDescription() {
-    VkVertexInputBindingDescription bindingDescription{};
-    bindingDescription.binding = 0;
-    bindingDescription.stride = sizeof(Vertex);
-    bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-    return bindingDescription;
-}
-
-static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions() {
-    std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
-
-    attributeDescriptions[0].binding = 0;
-    attributeDescriptions[0].location = 0;
-    attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-    attributeDescriptions[0].offset = offsetof(Vertex, pos);
-
-    attributeDescriptions[1].binding = 0;
-    attributeDescriptions[1].location = 1;
-    attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-    attributeDescriptions[1].offset = offsetof(Vertex, normal);
-
-    attributeDescriptions[2].binding = 0;
-    attributeDescriptions[2].location = 2;
-    attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-    attributeDescriptions[2].offset = offsetof(Vertex, texCoord);
-
-    return attributeDescriptions;
-}
-bool operator == (const Vertex& other) const {
-    return pos == other.pos && normal == other.normal && texCoord == other.texCoord;
-}
-
-    }; /// End of struct Vertex
+    
 
 
     namespace std {
@@ -129,16 +91,6 @@ bool operator == (const Vertex& other) const {
         Matrix4 model;
         Matrix4 normal;
 
-    };
-
-    struct BufferMemory {
-        VkBuffer bufferID;
-        VkDeviceMemory bufferMemoryID;
-    };
-
-    struct ModelParameters {
-        std::vector<Vertex> vertices;
-        std::vector<uint32_t> indices;
     };
 
     struct Descriptor {
@@ -195,6 +147,8 @@ bool operator == (const Vertex& other) const {
         void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
         void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
         VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
+        void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+
 private:
     static VulkanRenderer* Instance;
 
@@ -205,8 +159,6 @@ private:
     PushConst pushConst[2];
 
     Descriptor descriptor[2];
-
-    ModelParameters modelParameters[2];
 
     const size_t MAX_FRAMES_IN_FLIGHT = 2;
     SDL_Event sdlEvent;
@@ -222,6 +174,7 @@ private:
 
     Ref<ShaderComponent> shaderComponent;
     Ref<MaterialComponent> materialComponent[2];
+    Ref<MeshComponent> meshComponent[2];
     ///VkDescriptorSetLayout descriptorSetLayout;
     ///VkPipelineLayout pipelineLayout;
     ///VkPipeline graphicsPipeline;
@@ -231,9 +184,6 @@ private:
     VkImageView depthImageView;
 
     VkCommandPool commandPool;
-
-    BufferMemory vertexBuffer[2];
-    BufferMemory indexBuffer[2];
 
     std::vector<VkBuffer> cameraBuffers;
     std::vector<VkDeviceMemory> cameraBuffersMemory;
@@ -268,18 +218,13 @@ private:
     void createFramebuffers();
     void createCommandPool();
     void createDepthResources();
-    void loadModel(const char* filename, ModelParameters& modelparameters, BufferMemory& vertexBuffer, BufferMemory& indexBuffer);
-    void createVertexBuffer(ModelParameters& modelparameters, BufferMemory& vertexBuffer);
         /// A helper function for createVertexBuffer()
         uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
-    void createIndexBuffer(ModelParameters& modelparameters, BufferMemory& indexBuffer);
     void createUniformBuffers(VkDeviceSize bufferSize,
         std::vector<VkBuffer>& uniformBuffer, std::vector<VkDeviceMemory>& uniformBufferMemory);
     void createDescriptorPool(Descriptor& descriptor);
     void createDescriptorSets(Ref<MaterialComponent>, Descriptor& descriptor);
     void destroyUniformBuffer(std::vector<VkBuffer>& uniformBuffer, std::vector<VkDeviceMemory>& uniformBufferMemory);
-    
-    void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
     void createCommandBuffers();
     void recordCommandBuffer();
     void createSyncObjects();
