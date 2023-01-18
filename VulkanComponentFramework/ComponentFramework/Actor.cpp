@@ -58,19 +58,20 @@ void Actor::ListComponents() const {
 	std::cout << '\n';
 }
 
-Matrix4 Actor::GetModelMatrix() {
+PushConst Actor::GetModelMatrix() {
 	Ref<TransformComponent> transform = GetComponent<TransformComponent>();
 	if (transform) {
-		modelMatrix = transform->GetTransformMatrix();
+		pushConst.model = transform->GetTransformMatrix();
 	}
 	else {
-		modelMatrix.loadIdentity();
+        pushConst.model.loadIdentity();
 	}
 	if (parent) {
-		modelMatrix = dynamic_cast<Actor*>(parent)->GetModelMatrix() * modelMatrix;
+        pushConst.model = dynamic_cast<Actor*>(parent)->pushConst.model * pushConst.model;
 	}
+    pushConst.normal = MMath::transpose(MMath::inverse(pushConst.model));
 
-	return modelMatrix;
+	return pushConst;
 }
 
 void Actor::createDescriptorSets() {
@@ -131,4 +132,9 @@ void Actor::createDescriptorSets() {
 
         vkUpdateDescriptorSets(renderer->GetDevice(), static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
     }
+}
+
+void Actor::SetPushConst(const Matrix4& model) {
+    pushConst.model = model;
+    pushConst.normal = MMath::transpose(MMath::inverse(model));
 }

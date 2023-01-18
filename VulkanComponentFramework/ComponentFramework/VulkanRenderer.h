@@ -88,11 +88,7 @@ struct QueueFamilyIndices {
         Matrix4 view;
         Matrix4 proj;
     };
-    struct PushConst {
-        Matrix4 model;
-        Matrix4 normal;
-
-    };
+    
 
     class VulkanRenderer : public Renderer {
     public:
@@ -110,7 +106,7 @@ struct QueueFamilyIndices {
         void Render();
         void SetUBO(const Matrix4& projection, const Matrix4& view);
         void SetGLightsUbo(const GlobalLighting& glights);
-        void SetConst(const Matrix4& model);
+        void SetPushConst(const Matrix4& model);
         SDL_Window* GetWindow() {
             return window;
         }
@@ -159,7 +155,7 @@ private:
 
     UniformBufferObject ubo;
     GlobalLighting glightsUBO;
-    PushConst pushConst[2];
+
 
     const size_t MAX_FRAMES_IN_FLIGHT = 2;
     SDL_Event sdlEvent;

@@ -48,6 +48,8 @@ void VulkanRenderer::OnDestroy() {
 }
 
 void VulkanRenderer::Render() {
+    recordCommandBuffer();
+
     vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
     uint32_t imageIndex;
@@ -943,11 +945,13 @@ void VulkanRenderer::recordCommandBuffer() {
 
         // Draw objects with different textures and models using the same pipeline (shader)
 
-        for (int j = 0; j < std::size(pushConst); j++) {
+        for (int j = 0; j < std::size(actor); j++) {
 
             //NEW
+            PushConst temp = actor[j]->pushConst;
+
             vkCmdPushConstants(commandBuffers[i], shaderComponent->pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0,
-                sizeof(PushConst), &pushConst[j]);
+                sizeof(PushConst), &temp);
 
             vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, &meshComponent[j]->vertexBufferID, offsets);
 
@@ -1000,14 +1004,9 @@ void VulkanRenderer::SetGLightsUbo(const GlobalLighting& glights) {
     glightsUBO.diffuse = glights.diffuse;
 }
 
-void VulkanRenderer::SetConst(const Matrix4& model) {
-    pushConst[0].model = model;
-    pushConst[0].normal = MMath::transpose(MMath::inverse(model));
-
-    pushConst[1].model = MMath::translate(3.0f, 0.0f, 0.0f) * model;
-    pushConst[1].normal = MMath::transpose(MMath::inverse(model));
-
-    recordCommandBuffer();
+void VulkanRenderer::SetPushConst(const Matrix4& model) {
+    actor[0]->SetPushConst(model);
+    actor[1]->SetPushConst(MMath::translate(3.0f, 0.0f, 0.0f) * model);
 }
 
 void VulkanRenderer::updateUniformBuffer(uint32_t currentImage) {

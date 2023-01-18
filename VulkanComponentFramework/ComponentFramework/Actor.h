@@ -11,6 +11,11 @@ using namespace MATH;
 
 class VulkanRenderer;
 
+struct PushConst {
+	Matrix4 model;
+	Matrix4 normal;
+};
+
 class Actor : public Component {
 	/// Unless you know what these do don't allow them
 	/// to be created implicitly 
@@ -21,15 +26,15 @@ class Actor : public Component {
 
 private:
 	std::vector< Ref<Component> > components;
-	Matrix4 modelMatrix;
-
+	
 	VulkanRenderer* renderer;
 
 public:
-
 	VkDescriptorPool pool;
 	std::vector<VkDescriptorSet> sets;
-
+	
+	PushConst pushConst;
+	
 	Actor(Component* parent_);
 	~Actor();
 	bool OnCreate();
@@ -87,7 +92,7 @@ public:
 
 	void ListComponents() const;
 
-	Matrix4 GetModelMatrix();
-	void createDescriptorPool();
+	PushConst GetModelMatrix();
 	void createDescriptorSets();
+	void SetPushConst(const Matrix4& model);
 };
