@@ -5,10 +5,8 @@
 #include "VulkanRenderer.h"
 
 ShaderComponent::ShaderComponent(Component* parent_, const char* vsFilename_, const char* fsFilename_):
-	graphicsPipeline(0), pipelineLayout(0),
-	Component(parent_) {
-	vsFilename = vsFilename_;
-	fsFilename = fsFilename_;
+	graphicsPipeline(0), pipelineLayout(0), descriptorSetLayout(0), vsFilename(vsFilename_),
+    fsFilename(fsFilename_), renderer(nullptr),	Component(parent_) {
 }
 
 ShaderComponent::~ShaderComponent() {
@@ -16,8 +14,9 @@ ShaderComponent::~ShaderComponent() {
 }
 
 bool ShaderComponent::OnCreate() {
+    renderer = VulkanRenderer::GetInstance();
     createDescriptorSetLayout();
-    createGraphicsPipeline(vsFilename, fsFilename);
+    createGraphicsPipeline();
 	return true;
 }
 void ShaderComponent::OnDestroy() {}
@@ -53,16 +52,16 @@ void ShaderComponent::createDescriptorSetLayout() {
     layoutInfo.pBindings = bindings.data();
 
     // Make sure I destroy this in the cleanup()
-    if (vkCreateDescriptorSetLayout(VulkanRenderer::GetInstance()->GetDevice(), &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
+    if (vkCreateDescriptorSetLayout(renderer->GetDevice(), &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
         throw std::runtime_error("failed to create descriptor set layout!");
     }
 }
 
-void ShaderComponent::createGraphicsPipeline(const char* vFilename, const char* fFilename) {
+void ShaderComponent::createGraphicsPipeline() {
     //auto vertShaderCode = readFile(vFilename);
     //auto fragShaderCode = readFile(fFilename);
-    auto vertShaderCode = readFile("shaders/multiPhong.vert.spv");
-    auto fragShaderCode = readFile("shaders/multiPhong.frag.spv");
+    auto vertShaderCode = readFile(vsFilename);
+    auto fragShaderCode = readFile(fsFilename);
 
     VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
     VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
@@ -100,14 +99,14 @@ void ShaderComponent::createGraphicsPipeline(const char* vFilename, const char* 
     VkViewport viewport{};
     viewport.x = 0.0f;
     viewport.y = 0.0f;
-    viewport.width = static_cast<float>(VulkanRenderer::GetInstance()->GetSwapChainExtent().width);
-    viewport.height = static_cast<float>(VulkanRenderer::GetInstance()->GetSwapChainExtent().height);
+    viewport.width = static_cast<float>(renderer->GetSwapChainExtent().width);
+    viewport.height = static_cast<float>(renderer->GetSwapChainExtent().height);
     viewport.minDepth = 0.0f;
     viewport.maxDepth = 1.0f;
 
     VkRect2D scissor{};
     scissor.offset = { 0, 0 };
-    scissor.extent = VulkanRenderer::GetInstance()->GetSwapChainExtent();
+    scissor.extent = renderer->GetSwapChainExtent();
 
     VkPipelineViewportStateCreateInfo viewportState{};
     viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -167,7 +166,7 @@ void ShaderComponent::createGraphicsPipeline(const char* vFilename, const char* 
     pipelineLayoutInfo.pPushConstantRanges = &push_constant;
     pipelineLayoutInfo.pushConstantRangeCount = 1;
 
-    if (vkCreatePipelineLayout(VulkanRenderer::GetInstance()->GetDevice(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
+    if (vkCreatePipelineLayout(renderer->GetDevice(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
         throw std::runtime_error("failed to create pipeline layout!");
     }
 
@@ -183,16 +182,16 @@ void ShaderComponent::createGraphicsPipeline(const char* vFilename, const char* 
     pipelineInfo.pDepthStencilState = &depthStencil;
     pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.layout = pipelineLayout;
-    pipelineInfo.renderPass = VulkanRenderer::GetInstance()->GetRenderPass();
+    pipelineInfo.renderPass = renderer->GetRenderPass();
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-    if (vkCreateGraphicsPipelines(VulkanRenderer::GetInstance()->GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
+    if (vkCreateGraphicsPipelines(renderer->GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
         throw std::runtime_error("failed to create graphics pipeline!");
     }
 
-    vkDestroyShaderModule(VulkanRenderer::GetInstance()->GetDevice(), fragShaderModule, nullptr);
-    vkDestroyShaderModule(VulkanRenderer::GetInstance()->GetDevice(), vertShaderModule, nullptr);
+    vkDestroyShaderModule(renderer->GetDevice(), fragShaderModule, nullptr);
+    vkDestroyShaderModule(renderer->GetDevice(), vertShaderModule, nullptr);
 }
 
 std::vector<char> ShaderComponent::readFile(const std::string& filename) {
@@ -220,7 +219,7 @@ VkShaderModule ShaderComponent::createShaderModule(const std::vector<char>& code
     createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
     VkShaderModule shaderModule;
-    if (vkCreateShaderModule(VulkanRenderer::GetInstance()->GetDevice(), &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+    if (vkCreateShaderModule(renderer->GetDevice(), &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
         throw std::runtime_error("failed to create shader module!");
     }
 

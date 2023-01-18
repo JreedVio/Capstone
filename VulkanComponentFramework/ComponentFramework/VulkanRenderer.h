@@ -26,6 +26,9 @@
 #include "Hash.h"
 #include "GlobalLighting.h"
 #include "ShaderComponent.h"
+#include "MaterialComponent.h"
+#include "MeshComponent.h"
+#include "TransformComponent.h"
 
 using namespace MATH;
 
@@ -133,21 +136,14 @@ bool operator == (const Vertex& other) const {
         VkDeviceMemory bufferMemoryID;
     };
 
-    struct Sampler2D_Data {
-        VkImage textureImage;
-        VkDeviceMemory textureImageMemory;
-        VkImageView textureImageView;
-        VkSampler textureSampler;
+    struct ModelParameters {
+        std::vector<Vertex> vertices;
+        std::vector<uint32_t> indices;
     };
 
     struct Descriptor {
         VkDescriptorPool pool;
         std::vector<VkDescriptorSet> sets;
-    };
-
-    struct ModelParameters {
-        std::vector<Vertex> vertices;
-        std::vector<uint32_t> indices;
     };
 
     class VulkanRenderer : public Renderer {
@@ -173,20 +169,32 @@ bool operator == (const Vertex& other) const {
         VkDevice GetDevice(){
             return device;
         }
+        VkPhysicalDevice GetPhysicalDevice() {
+            return physicalDevice;
+        }
         VkRenderPass GetRenderPass() {
             return renderPass;
         }
         VkExtent2D GetSwapChainExtent() {
             return swapChainExtent;
         }
-
-    static VulkanRenderer* GetInstance() {
-        if (Instance == nullptr) {
-            Instance = new VulkanRenderer();
+        std::vector<VkImage> GetSwapChainImages() {
+            return swapChainImages;
         }
-        return Instance;
-    }
 
+        static VulkanRenderer* GetInstance() {
+            if (Instance == nullptr) {
+                Instance = new VulkanRenderer();
+            }
+            return Instance;
+        }
+
+        void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+        void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling,
+            VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
+        void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
+        void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
+        VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
 private:
     static VulkanRenderer* Instance;
 
@@ -197,6 +205,7 @@ private:
     PushConst pushConst[2];
 
     Descriptor descriptor[2];
+
     ModelParameters modelParameters[2];
 
     const size_t MAX_FRAMES_IN_FLIGHT = 2;
@@ -212,6 +221,7 @@ private:
     VkRenderPass renderPass;
 
     Ref<ShaderComponent> shaderComponent;
+    Ref<MaterialComponent> materialComponent[2];
     ///VkDescriptorSetLayout descriptorSetLayout;
     ///VkPipelineLayout pipelineLayout;
     ///VkPipeline graphicsPipeline;
@@ -240,6 +250,8 @@ private:
 
     bool framebufferResized = false;
 
+    VkDescriptorPool pool;
+    std::vector<VkDescriptorSet> sets;
 
     bool hasStencilComponent(VkFormat format);
 
@@ -252,18 +264,10 @@ private:
     void recreateSwapChain();
     void updateUniformBuffer(uint32_t currentImage);
     void updateGLightsUniformBuffer(uint32_t currentImage);
-    VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
     void createRenderPass();
-    //void createDescriptorSetLayout();
-    //void createGraphicsPipeline(const char* vFilename, const char* fFilename);
     void createFramebuffers();
     void createCommandPool();
     void createDepthResources();
-    void createTextureImage(const char* filename, Sampler2D_Data &texture);
-    void createTextureImageView(Sampler2D_Data &texture);
-    void createTextureSampler(Sampler2D_Data &texture);
-    void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling,
-        VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
     void loadModel(const char* filename, ModelParameters& modelparameters, BufferMemory& vertexBuffer, BufferMemory& indexBuffer);
     void createVertexBuffer(ModelParameters& modelparameters, BufferMemory& vertexBuffer);
         /// A helper function for createVertexBuffer()
@@ -271,18 +275,16 @@ private:
     void createIndexBuffer(ModelParameters& modelparameters, BufferMemory& indexBuffer);
     void createUniformBuffers(VkDeviceSize bufferSize,
         std::vector<VkBuffer>& uniformBuffer, std::vector<VkDeviceMemory>& uniformBufferMemory);
-    void destroyUniformBuffer(std::vector<VkBuffer>& uniformBuffer, std::vector<VkDeviceMemory>& uniformBufferMemory);
     void createDescriptorPool(Descriptor& descriptor);
-    void createDescriptorSets(Sampler2D_Data texture, Descriptor& descriptor);
-    void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+    void createDescriptorSets(Ref<MaterialComponent>, Descriptor& descriptor);
+    void destroyUniformBuffer(std::vector<VkBuffer>& uniformBuffer, std::vector<VkDeviceMemory>& uniformBufferMemory);
+    
     void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
     void createCommandBuffers();
     void recordCommandBuffer();
     void createSyncObjects();
     void cleanup();
     void cleanupSwapChain();
-    void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
-    void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
 
     VkFormat findDepthFormat();
     VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
@@ -306,10 +308,6 @@ private:
     VkCommandBuffer beginSingleTimeCommands();
     void endSingleTimeCommands(VkCommandBuffer commandBuffer);
 
-    
-    Sampler2D_Data textures[2];
-
-
     QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 
     VkSwapchainKHR swapChain;
@@ -323,10 +321,7 @@ private:
     VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
     VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
-    SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
-
-    //static std::vector<char> readFile(const std::string& filename);
-   
+    SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);   
 };
 #endif 
 

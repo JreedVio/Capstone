@@ -7,6 +7,7 @@
 #include <string>
 #include <vulkan/vulkan.h>
 
+class VulkanRenderer;
 
 class ShaderComponent: public Component {
 	ShaderComponent(const ShaderComponent&) = delete;
@@ -23,6 +24,8 @@ public:
 	VkPipeline graphicsPipeline;
 	VkDescriptorSetLayout descriptorSetLayout;
 
+	VulkanRenderer* renderer;
+
 	ShaderComponent(Component* parent_, const char* vsFilename_, const char* fsFilename_);
 	~ShaderComponent();
 	bool OnCreate() override;
@@ -30,7 +33,7 @@ public:
 	void Update(const float deltaTime ) override;
 	void Render() const override;
 	void createDescriptorSetLayout();
-	void createGraphicsPipeline(const char* vFilename, const char* fFilename);
+	void createGraphicsPipeline();
 	std::vector<char> readFile(const std::string& filename);
 	VkShaderModule createShaderModule(const std::vector<char>& code);
 };

@@ -13,6 +13,8 @@ VulkanRenderer::VulkanRenderer(): /// Initialize all the variables
     swapChainExtent{},swapChainImageFormat{} { 
 
     shaderComponent = std::make_shared<ShaderComponent>(nullptr, "shaders/multiPhong.vert.spv", "shaders/multiPhong.frag.spv");
+    materialComponent[0] = std::make_shared<MaterialComponent>(nullptr, "./textures/mario_mime.png");
+    materialComponent[1] = std::make_shared<MaterialComponent>(nullptr, "./textures/skull_texture.png");
 
  }
 
@@ -158,12 +160,10 @@ void VulkanRenderer::initVulkan() {
     createDepthResources();
     // This is what we are drawing onto
     createFramebuffers();
-    // ***Mutable***
-    createTextureImage("./textures/mario_mime.png", textures[0]);
-    createTextureImage("./textures/skull_texture.png", textures[1]);
-    //createTextureImageView();
-    //createTextureSampler();
-    //createTextureSampler();
+
+    materialComponent[0]->OnCreate();
+    materialComponent[1]->OnCreate();
+
     loadModel("./meshes/Mario.obj", modelParameters[0], 
         vertexBuffer[0], indexBuffer[0]);
     loadModel("./meshes/Skull.obj", modelParameters[1],
@@ -178,8 +178,8 @@ void VulkanRenderer::initVulkan() {
         glightingBuffersMemory);
     createDescriptorPool(descriptor[0]);
     createDescriptorPool(descriptor[1]);
-    createDescriptorSets(textures[0], descriptor[0]);
-    createDescriptorSets(textures[1], descriptor[1]);
+    createDescriptorSets(materialComponent[0], descriptor[0]);
+    createDescriptorSets(materialComponent[1], descriptor[1]);
     createCommandBuffers();
     recordCommandBuffer();
     createSyncObjects();
@@ -225,17 +225,17 @@ void VulkanRenderer::destroyUniformBuffer(std::vector<VkBuffer>& uniformBuffer, 
 void VulkanRenderer::cleanup() {
     cleanupSwapChain();
 
-    vkDestroySampler(device, textures[0].textureSampler, nullptr);
-    vkDestroyImageView(device, textures[0].textureImageView, nullptr);
+    vkDestroySampler(device, materialComponent[0]->textureSampler, nullptr);
+    vkDestroyImageView(device, materialComponent[0]->textureImageView, nullptr);
 
-    vkDestroyImage(device, textures[0].textureImage, nullptr);
-    vkFreeMemory(device, textures[0].textureImageMemory, nullptr);
+    vkDestroyImage(device, materialComponent[0]->textureImage, nullptr);
+    vkFreeMemory(device, materialComponent[0]->textureImageMemory, nullptr);
 
-    vkDestroySampler(device, textures[1].textureSampler, nullptr);
-    vkDestroyImageView(device, textures[1].textureImageView, nullptr);
+    vkDestroySampler(device, materialComponent[1]->textureSampler, nullptr);
+    vkDestroyImageView(device, materialComponent[1]->textureImageView, nullptr);
 
-    vkDestroyImage(device, textures[1].textureImage, nullptr);
-    vkFreeMemory(device, textures[1].textureImageMemory, nullptr);
+    vkDestroyImage(device, materialComponent[1]->textureImage, nullptr);
+    vkFreeMemory(device, materialComponent[1]->textureImageMemory, nullptr);
 
     vkDestroyDescriptorSetLayout(device, shaderComponent->descriptorSetLayout, nullptr);
 
@@ -301,8 +301,8 @@ void VulkanRenderer::recreateSwapChain() {
         glightingBuffersMemory);
     createDescriptorPool(descriptor[0]);
     createDescriptorPool(descriptor[1]);
-    createDescriptorSets(textures[0], descriptor[0]);
-    createDescriptorSets(textures[1], descriptor[1]);
+    createDescriptorSets(materialComponent[0], descriptor[0]);
+    createDescriptorSets(materialComponent[1], descriptor[1]);
     createCommandBuffers();
     recordCommandBuffer();
 }
@@ -822,72 +822,7 @@ bool VulkanRenderer::hasStencilComponent(VkFormat format) {
     return format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT;
 }
 
-void VulkanRenderer::createTextureImage(const char * filename, Sampler2D_Data &textureData) {
-    //SDL_Surface* image = IMG_Load(TEXTURE_PATH.c_str());
-    SDL_Surface* image = IMG_Load(filename);
-    ///image->format
-    // Assumed that it is png
-    VkDeviceSize imageSize = image->w * image->h * 4;
 
-    BufferMemory stagingBuffer;
-
-    createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer.bufferID, stagingBuffer.bufferMemoryID);
-
-    void* data;
-    vkMapMemory(device, stagingBuffer.bufferMemoryID, 0, imageSize, 0, &data);
-    // It's a fast way of transfering information
-    memcpy(data, image->pixels, static_cast<size_t>(imageSize));
-    vkUnmapMemory(device, stagingBuffer.bufferMemoryID);
-
-  
-    createImage(image->w, image->h, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, 
-        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
-        textureData.textureImage, textureData.textureImageMemory);
-    transitionImageLayout(textureData.textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-    // Loading memory from the staging memory to the actual image memory
-    copyBufferToImage(stagingBuffer.bufferID, textureData.textureImage, 
-        static_cast<uint32_t>(image->w), static_cast<uint32_t>(image->h));
-    transitionImageLayout(textureData.textureImage, VK_FORMAT_R8G8B8A8_SRGB, 
-        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
-        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-    vkDestroyBuffer(device, stagingBuffer.bufferID, nullptr);
-    vkFreeMemory(device, stagingBuffer.bufferMemoryID, nullptr);
-
-    SDL_FreeSurface(image);
-
-    createTextureImageView(textureData);
-    createTextureSampler(textureData);
-}
-
-void VulkanRenderer::createTextureImageView(Sampler2D_Data &textureData) {
-    textureData.textureImageView = createImageView(textureData.textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT);
-}
-
-void VulkanRenderer::createTextureSampler(Sampler2D_Data &textureData) {
-    VkPhysicalDeviceProperties properties{};
-    vkGetPhysicalDeviceProperties(physicalDevice, &properties);
-
-    VkSamplerCreateInfo samplerInfo{};
-    samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-    samplerInfo.magFilter = VK_FILTER_LINEAR;
-    samplerInfo.minFilter = VK_FILTER_LINEAR;
-    samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-    samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-    samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-    samplerInfo.anisotropyEnable = VK_TRUE;
-    samplerInfo.maxAnisotropy = properties.limits.maxSamplerAnisotropy;
-    samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
-    samplerInfo.unnormalizedCoordinates = VK_FALSE;
-    samplerInfo.compareEnable = VK_FALSE;
-    samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
-    samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-
-    if (vkCreateSampler(device, &samplerInfo, nullptr, &textureData.textureSampler) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create texture sampler!");
-    }
-}
 
 VkImageView VulkanRenderer::createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags) {
     VkImageViewCreateInfo viewInfo{};
@@ -1141,7 +1076,7 @@ void VulkanRenderer::createDescriptorPool(Descriptor& descriptor) {
     }
 }
 
-void VulkanRenderer::createDescriptorSets(Sampler2D_Data textureData, Descriptor& descriptor) {
+void VulkanRenderer::createDescriptorSets(Ref<MaterialComponent> materialComponent_, Descriptor& descriptor) {
     std::vector<VkDescriptorSetLayout> layouts(swapChainImages.size(), shaderComponent->descriptorSetLayout);
     VkDescriptorSetAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
@@ -1168,8 +1103,8 @@ void VulkanRenderer::createDescriptorSets(Sampler2D_Data textureData, Descriptor
         // The 2D sampler
         VkDescriptorImageInfo imageInfo{};
         imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        imageInfo.imageView = textureData.textureImageView;
-        imageInfo.sampler = textureData.textureSampler;
+        imageInfo.imageView = materialComponent_->textureImageView;
+        imageInfo.sampler = materialComponent_->textureSampler;
 
         std::array<VkWriteDescriptorSet, 3> descriptorWrites{};
 
