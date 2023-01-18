@@ -8,7 +8,7 @@ using namespace MATH;
 
 MeshComponent::MeshComponent(Component* parent_, const char* filename_) : 
     indexBufferID(0), indexBufferMemoryID(0), vertexBufferID(0), vertexBufferMemoryID(0),
-    renderer(nullptr), filename(filename_), Component(parent_) {
+    vertices(0), indices(0), renderer(nullptr), filename(filename_), Component(parent_) {
 }
 
 MeshComponent::~MeshComponent() {

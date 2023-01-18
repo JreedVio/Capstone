@@ -1,4 +1,4 @@
-/*#include <iostream>
+#include <iostream>
 #include "TransformComponent.h"
 #include "MeshComponent.h"
 #include "QMath.h"
@@ -36,4 +36,4 @@ Matrix4 TransformComponent::GetTransformMatrix() const
 	Matrix4 m;
 	m = MMath::translate(pos) * MMath::scale(scale) * QMath::toMatrix4(orientation);
 	return m;
-}*/
+}

@@ -28,6 +28,7 @@
 #include "MaterialComponent.h"
 #include "MeshComponent.h"
 #include "TransformComponent.h"
+#include "Actor.h"
 
 using namespace MATH;
 
@@ -93,11 +94,6 @@ struct QueueFamilyIndices {
 
     };
 
-    struct Descriptor {
-        VkDescriptorPool pool;
-        std::vector<VkDescriptorSet> sets;
-    };
-
     class VulkanRenderer : public Renderer {
     public:
         /// C11 precautions 
@@ -133,6 +129,12 @@ struct QueueFamilyIndices {
         std::vector<VkImage> GetSwapChainImages() {
             return swapChainImages;
         }
+        std::vector<VkBuffer>  GetCameraBuffers() {
+            return cameraBuffers;
+        }
+        std::vector<VkBuffer> GetGLightingBuffers() {
+            return glightingBuffers;
+        }
 
         static VulkanRenderer* GetInstance() {
             if (Instance == nullptr) {
@@ -148,6 +150,7 @@ struct QueueFamilyIndices {
         void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
         VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
         void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+        void createDescriptorPool(VkDescriptorPool& pool_);
 
 private:
     static VulkanRenderer* Instance;
@@ -157,8 +160,6 @@ private:
     UniformBufferObject ubo;
     GlobalLighting glightsUBO;
     PushConst pushConst[2];
-
-    Descriptor descriptor[2];
 
     const size_t MAX_FRAMES_IN_FLIGHT = 2;
     SDL_Event sdlEvent;
@@ -172,12 +173,11 @@ private:
     VkDevice device;
     VkRenderPass renderPass;
 
+    Ref<Actor> actor[2];
+
     Ref<ShaderComponent> shaderComponent;
     Ref<MaterialComponent> materialComponent[2];
     Ref<MeshComponent> meshComponent[2];
-    ///VkDescriptorSetLayout descriptorSetLayout;
-    ///VkPipelineLayout pipelineLayout;
-    ///VkPipeline graphicsPipeline;
 
     VkImage depthImage;
     VkDeviceMemory depthImageMemory;
@@ -200,9 +200,6 @@ private:
 
     bool framebufferResized = false;
 
-    VkDescriptorPool pool;
-    std::vector<VkDescriptorSet> sets;
-
     bool hasStencilComponent(VkFormat format);
 
     void initVulkan();
@@ -222,8 +219,6 @@ private:
         uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
     void createUniformBuffers(VkDeviceSize bufferSize,
         std::vector<VkBuffer>& uniformBuffer, std::vector<VkDeviceMemory>& uniformBufferMemory);
-    void createDescriptorPool(Descriptor& descriptor);
-    void createDescriptorSets(Ref<MaterialComponent>, Descriptor& descriptor);
     void destroyUniformBuffer(std::vector<VkBuffer>& uniformBuffer, std::vector<VkDeviceMemory>& uniformBufferMemory);
     void createCommandBuffers();
     void recordCommandBuffer();
@@ -262,7 +257,6 @@ private:
     std::vector<VkImageView> swapChainImageViews;
     std::vector<VkFramebuffer> swapChainFramebuffers;
 
-    //VkShaderModule createShaderModule(const std::vector<char>& code);
     VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
     VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);

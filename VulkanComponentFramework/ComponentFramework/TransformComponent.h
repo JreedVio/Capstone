@@ -1,4 +1,4 @@
-/*// Umer Noor 2022
+// Umer Noor 2022
 // Original code from/taught by Dr. Scott Fielder
 
 #pragma once
@@ -21,9 +21,10 @@ struct TransformComponent : public Component {
 	void Render() const;
 	Matrix4 GetTransformMatrix() const;
 	Quaternion GetOrientation() { return orientation; }
+	Vec3 GetPosition() { return pos; }
 	void SetTransform(Vec3 pos_, Quaternion orientation_, Vec3 scale_ = Vec3(1.0f, 1.0f, 1.0f)) {
 		pos = pos_;
 		orientation = orientation_;
 		scale = scale_;
 	}
-};*/
+};
