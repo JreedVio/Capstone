@@ -5,7 +5,10 @@
 #include "SceneManager.h"
 #include "Debug.h"
 #include "MMath.h"
+#include "Utilities.h"
+
 using namespace MATH;
+using namespace Utilities;
   
 int main(int argc, char* args[]) {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -19,7 +22,9 @@ int main(int argc, char* args[]) {
 			gsm->Run();
 		}
 		delete gsm;
-	}
+		Memory::PrintTotalMemoryAndAllocations();		
+		
+	}	
+		
 	exit(0);
-
 }

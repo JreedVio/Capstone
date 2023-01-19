@@ -9,14 +9,14 @@
 
 Scene0::Scene0(Renderer *renderer_): 
 	Scene(nullptr),renderer(renderer_){
-	camera = new Camera();
+	camera = std::make_shared<Camera>();
 
 
 	Debug::Info("Created Scene0: ", __FILE__, __LINE__);
 }
 
 Scene0::~Scene0() {
-	if (camera) delete camera;
+	
 }
 
 bool Scene0::OnCreate() {

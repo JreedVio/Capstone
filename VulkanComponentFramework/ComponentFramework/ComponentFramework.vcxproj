@@ -141,6 +141,7 @@
     <ClCompile Include="ShaderComponent.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
+    <ClCompile Include="Utilities.cpp" />
     <ClCompile Include="VMath.cpp" />
     <ClCompile Include="VulkanRenderer.cpp" />
   </ItemGroup>
@@ -171,6 +172,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="Utilities.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="VulkanRenderer.h" />

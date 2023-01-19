@@ -5,16 +5,19 @@
 #include "Renderer.h"
 #include "Camera.h"
 #include "GlobalLighting.h"
+
 using namespace MATH;
 
 /// Forward declarations 
 union SDL_Event;
 
+template<typename T>
+using Ref = std::shared_ptr<T>;
 
 class Scene0 : public Scene {
 private:
 	Renderer *renderer;
-	Camera* camera;
+	Ref<Camera> camera;
 	GlobalLighting globalLights;
 	Matrix4 mariosModelMatrix;
 	
