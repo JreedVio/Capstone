@@ -12,6 +12,7 @@ using namespace Utilities;
   
 int main(int argc, char* args[]) {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
 	{
 		std::string name = { "Graphics Game Engine" };
 		Debug::DebugInit(name + "_Log");
@@ -25,6 +26,6 @@ int main(int argc, char* args[]) {
 		Memory::PrintTotalMemoryAndAllocations();		
 		
 	}	
-		
+
 	exit(0);
 }

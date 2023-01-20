@@ -1,4 +1,5 @@
 #include "VulkanRenderer.h"
+#include "AssetManager.h"
 
 using namespace std;
 
@@ -157,10 +158,6 @@ void VulkanRenderer::initVulkan() {
     createRenderPass();
     // Set up structures
 
-    // Asset Manager
-
-    shaderComponent->OnCreate();
-
     // Rendering commands <- Command buffer <- Command pool
     // Buffer have all the instructions for GPU
     // !You cant multithread out of the same command pool
@@ -170,24 +167,19 @@ void VulkanRenderer::initVulkan() {
     // This is what we are drawing onto
     createFramebuffers();
 
-    materialComponent[0]->OnCreate();
-    materialComponent[1]->OnCreate();
-
-    meshComponent[0]->OnCreate();
-    meshComponent[1]->OnCreate();
-
-    
-    // Loading vertices into the memory of GPU
-    //createVertexBuffer();
-    // Vertex deduplication
-    // Gets rid of redundant vertices
-    //createIndexBuffer();
     createUniformBuffers(sizeof(UniformBufferObject), cameraBuffers, cameraBuffersMemory);
-    createUniformBuffers(sizeof(GlobalLighting), glightingBuffers, 
-        glightingBuffersMemory);
-
-    actor[0]->OnCreate();
-    actor[1]->OnCreate();
+    createUniformBuffers(sizeof(GlobalLighting), glightingBuffers, glightingBuffersMemory);
+    AssetManager* assetManager = AssetManager::GetInstance();
+ 
+    //Recreate shaders
+    for (auto pipeline : assetManager->GetShaderList()) {
+        pipeline.second->OnCreate();
+    }
+    
+    //Recreate Actors
+    for (auto actor : assetManager->GetActorList()) {
+        actor.second->OnCreate();
+    }
 
     createCommandBuffers();
     recordCommandBuffer();
@@ -207,8 +199,13 @@ void VulkanRenderer::cleanupSwapChain() {
 
     vkFreeCommandBuffers(device, commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
 
-    vkDestroyPipeline(device, shaderComponent->graphicsPipeline, nullptr);
-    vkDestroyPipelineLayout(device, shaderComponent->pipelineLayout, nullptr);
+    AssetManager* assetManager = AssetManager::GetInstance();
+
+    for (auto pipeline : assetManager->GetShaderList()) {
+        pipeline.second->OnDestroy();
+    }
+    //vkDestroyPipeline(device, shaderComponent->graphicsPipeline, nullptr);
+    //vkDestroyPipelineLayout(device, shaderComponent->pipelineLayout, nullptr);
     vkDestroyRenderPass(device, renderPass, nullptr);
 
     for (auto imageView : swapChainImageViews) {
@@ -220,8 +217,10 @@ void VulkanRenderer::cleanupSwapChain() {
     destroyUniformBuffer(cameraBuffers, cameraBuffersMemory);
     destroyUniformBuffer(glightingBuffers, glightingBuffersMemory);
 
-    vkDestroyDescriptorPool(device, actor[0]->pool, nullptr);
-    vkDestroyDescriptorPool(device, actor[1]->pool, nullptr);
+    for (auto actor : assetManager->GetActorList()) {
+        vkDestroyDescriptorPool(device, actor.second->pool, nullptr);
+    }
+
 }
 
 void VulkanRenderer::destroyUniformBuffer(std::vector<VkBuffer>& uniformBuffer, std::vector<VkDeviceMemory>& uniformBufferMemory) {
@@ -234,31 +233,30 @@ void VulkanRenderer::destroyUniformBuffer(std::vector<VkBuffer>& uniformBuffer, 
 void VulkanRenderer::cleanup() {
     cleanupSwapChain();
 
-    vkDestroySampler(device, materialComponent[0]->textureSampler, nullptr);
+    //Destroy materials
+    for (auto material : AssetManager::GetInstance()->GetMaterialList()) {
+        material.second->OnDestroy();
+    }
+
+    //Destroy meshes
+    for (auto mesh : AssetManager::GetInstance()->GetMeshList()) {
+        mesh.second->OnDestroy();
+    }
+
+    //Shader is destroyed in cleanup swap chain
+
+ /*   vkDestroySampler(device, materialComponent[0]->textureSampler, nullptr);
     vkDestroyImageView(device, materialComponent[0]->textureImageView, nullptr);
-
     vkDestroyImage(device, materialComponent[0]->textureImage, nullptr);
-    vkFreeMemory(device, materialComponent[0]->textureImageMemory, nullptr);
+    vkFreeMemory(device, materialComponent[0]->textureImageMemory, nullptr);*/
 
-    vkDestroySampler(device, materialComponent[1]->textureSampler, nullptr);
-    vkDestroyImageView(device, materialComponent[1]->textureImageView, nullptr);
+    //vkDestroyDescriptorSetLayout(device, shaderComponent->descriptorSetLayout, nullptr);
 
-    vkDestroyImage(device, materialComponent[1]->textureImage, nullptr);
-    vkFreeMemory(device, materialComponent[1]->textureImageMemory, nullptr);
+    //vkDestroyBuffer(device, meshComponent[0]->indexBufferID, nullptr);
+    //vkFreeMemory(device, meshComponent[0]->indexBufferMemoryID, nullptr);
 
-    vkDestroyDescriptorSetLayout(device, shaderComponent->descriptorSetLayout, nullptr);
-
-    vkDestroyBuffer(device, meshComponent[0]->indexBufferID, nullptr);
-    vkFreeMemory(device, meshComponent[0]->indexBufferMemoryID, nullptr);
-
-    vkDestroyBuffer(device, meshComponent[0]->vertexBufferID, nullptr);
-    vkFreeMemory(device, meshComponent[0]->vertexBufferMemoryID, nullptr);
-
-    vkDestroyBuffer(device, meshComponent[1]->indexBufferID, nullptr);
-    vkFreeMemory(device, meshComponent[1]->indexBufferMemoryID, nullptr);
-
-    vkDestroyBuffer(device, meshComponent[1]->vertexBufferID, nullptr);
-    vkFreeMemory(device, meshComponent[1]->vertexBufferMemoryID, nullptr);
+    //vkDestroyBuffer(device, meshComponent[0]->vertexBufferID, nullptr);
+    //vkFreeMemory(device, meshComponent[0]->vertexBufferMemoryID, nullptr);
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
@@ -941,25 +939,38 @@ void VulkanRenderer::recordCommandBuffer() {
 
         VkDeviceSize offsets[] = { 0 };
 
-        vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, shaderComponent->graphicsPipeline);
+
 
         // Draw objects with different textures and models using the same pipeline (shader)
 
-        for (int j = 0; j < std::size(actor); j++) {
+        /*for (int j = 0; j < std::size(actor); j++) {
+        *             PushConst temp = actor[j]->pushConst;
+        vkCmdPushConstants(commandBuffers[i], shaderComponent->pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0,
+            sizeof(PushConst), &temp);
 
-            //NEW
-            PushConst temp = actor[j]->pushConst;
+        vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, &meshComponent[j]->vertexBufferID, offsets);
 
-            vkCmdPushConstants(commandBuffers[i], shaderComponent->pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0,
-                sizeof(PushConst), &temp);
+        vkCmdBindIndexBuffer(commandBuffers[i], meshComponent[j]->indexBufferID, 0, VK_INDEX_TYPE_UINT32);
 
-            vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, &meshComponent[j]->vertexBufferID, offsets);
+        vkCmdBindDescriptorSets(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, shaderComponent->pipelineLayout, 0, 1, &actor[j]->sets[i], 0, nullptr);
 
-            vkCmdBindIndexBuffer(commandBuffers[i], meshComponent[j]->indexBufferID, 0, VK_INDEX_TYPE_UINT32);
-
-            vkCmdBindDescriptorSets(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, shaderComponent->pipelineLayout, 0, 1, &actor[j]->sets[i], 0, nullptr);
-
-            vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(meshComponent[j]->indices.size()), 1, 0, 0, 0);
+        vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(meshComponent[j]->indices.size()), 1, 0, 0, 0);
+        }*/
+        std::unordered_map<const char*, Ref<Actor>> actorList = AssetManager::GetInstance()->GetActorList();
+        for (auto actorElement: actorList) {
+            //Get components for actor
+            Ref<Actor> actor = actorElement.second;
+            Ref<ShaderComponent> actorShader = actor->GetComponent<ShaderComponent>();
+            Ref<MeshComponent> actorMesh = actor->GetComponent<MeshComponent>();
+            Ref<MaterialComponent> actorMaterial = actor->GetComponent<MaterialComponent>();
+            PushConst actorPushConst = actor->GetModelMatrix();
+            vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, actorShader->graphicsPipeline);
+            vkCmdPushConstants(commandBuffers[i], actorShader->pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0,
+                sizeof(PushConst), &actorPushConst);
+            vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, &actorMesh->vertexBufferID, offsets);
+            vkCmdBindIndexBuffer(commandBuffers[i], actorMesh->indexBufferID, 0, VK_INDEX_TYPE_UINT32);
+            vkCmdBindDescriptorSets(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, actorShader->pipelineLayout, 0, 1, &actor->sets[i], 0, nullptr);
+            vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(actorMesh->indices.size()), 1, 0, 0, 0);
         }
 
         vkCmdEndRenderPass(commandBuffers[i]);

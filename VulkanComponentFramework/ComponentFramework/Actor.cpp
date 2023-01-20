@@ -2,7 +2,7 @@
 #include "Debug.h"
 #include "VulkanRenderer.h"
 
-Actor::Actor(Component* parent_) :
+Actor::Actor(Ref<Component> parent_) :
     pool(0), sets(0), renderer(nullptr),
     Component(parent_) {}
 
@@ -13,14 +13,14 @@ bool Actor::OnCreate() {
     createDescriptorSets();
 
 	if (isCreated) return isCreated;
-	Debug::Info("Loading assets for Actor: ", __FILE__, __LINE__);
-	for (auto component : components) {
-		if (component->OnCreate() == false) {
-			Debug::Error("Loading assets for Actor/Components: ", __FILE__, __LINE__);
-			isCreated = false;
-			return isCreated;
-		}
-	}
+	//Debug::Info("Loading assets for Actor: ", __FILE__, __LINE__);
+	//for (auto component : components) {
+	//	if (component->OnCreate() == false) {
+	//		//Debug::Error("Loading assets for Actor/Components: ", __FILE__, __LINE__);
+	//		isCreated = false;
+	//		return isCreated;
+	//	}
+	//}
 	isCreated = true;
 	return isCreated;
 }
@@ -30,7 +30,6 @@ Actor::~Actor() {
 }
 void Actor::OnDestroy() {
 	RemoveAllComponents();
-	//RemoveComponent();
 	Debug::Info("Deleting assets for Actor: ", __FILE__, __LINE__);
 	isCreated = false;
 }
@@ -67,7 +66,7 @@ PushConst Actor::GetModelMatrix() {
         pushConst.model.loadIdentity();
 	}
 	if (parent) {
-        pushConst.model = dynamic_cast<Actor*>(parent)->pushConst.model * pushConst.model;
+        pushConst.model = std::dynamic_pointer_cast<Actor>(parent)->pushConst.model * pushConst.model;
 	}
     pushConst.normal = MMath::transpose(MMath::inverse(pushConst.model));
 

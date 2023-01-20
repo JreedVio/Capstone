@@ -26,7 +26,7 @@ public:
 
 	VulkanRenderer* renderer;
 
-	ShaderComponent(Component* parent_, const char* vsFilename_, const char* fsFilename_);
+	ShaderComponent(Ref<Component> parent_, const char* vsFilename_, const char* fsFilename_);
 	~ShaderComponent();
 	bool OnCreate() override;
 	void OnDestroy() override;

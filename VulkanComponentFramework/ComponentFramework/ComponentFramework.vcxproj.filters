@@ -37,6 +37,15 @@
     <Filter Include="Header Files\Components">
       <UniqueIdentifier>{41305bc9-9920-422d-ab14-62e017999070}</UniqueIdentifier>
     </Filter>
+    <Filter Include="XML">
+      <UniqueIdentifier>{25489152-374b-48ab-9ffb-cd6266d97d7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Assets">
+      <UniqueIdentifier>{dd9dd530-babf-4aa1-b673-92c906071de1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Assets">
+      <UniqueIdentifier>{d367666f-6e09-4286-b475-0d608a21f4f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -102,6 +111,12 @@
     <ClCompile Include="Utilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tinyxml2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -142,9 +157,6 @@
     </ClInclude>
     <ClInclude Include="OpenGLRenderer.h">
       <Filter>Header Files\Renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="tiny_obj_loader.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hash.h">
       <Filter>Header Files\Math</Filter>
@@ -194,6 +206,15 @@
     <ClInclude Include="Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tiny_obj_loader.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml2.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Graphics Game Engine_Log.txt">
@@ -237,5 +258,13 @@
     <None Include="shaders\multiPhong.geom">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="RendererAssets.xml">
+      <Filter>XML</Filter>
+    </Xml>
+    <Xml Include="Scene0.xml">
+      <Filter>XML</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

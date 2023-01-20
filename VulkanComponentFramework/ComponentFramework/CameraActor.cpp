@@ -5,7 +5,7 @@
 #include "TransformComponent.h"
 #include "Debug.h"
 using namespace MATH;
-CameraActor::CameraActor(Component* parent_): Actor(parent_) {
+CameraActor::CameraActor(Ref<Component> parent_): Actor(parent_) {
 	
 }
 

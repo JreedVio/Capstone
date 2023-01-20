@@ -6,13 +6,13 @@
 
 using namespace MATH;
 
-MeshComponent::MeshComponent(Component* parent_, const char* filename_) : 
+MeshComponent::MeshComponent(Ref<Component> parent_, const char* filename_) :
     indexBufferID(0), indexBufferMemoryID(0), vertexBufferID(0), vertexBufferMemoryID(0),
     vertices(0), indices(0), renderer(nullptr), filename(filename_), Component(parent_) {
 }
 
 MeshComponent::~MeshComponent() {
-    OnDestroy();
+
 }
 
 bool MeshComponent::OnCreate() {
@@ -25,6 +25,19 @@ void MeshComponent::Render() const {
 }
 
 void MeshComponent::OnDestroy() {
+ 
+    VkDevice device = renderer->GetDevice();
+
+    //Destroy indecies
+    vkDestroyBuffer(device, indexBufferID, nullptr);
+    vkFreeMemory(device, indexBufferMemoryID, nullptr);
+    indices.clear();
+
+    //Destroy vertices
+    vkDestroyBuffer(device, vertexBufferID, nullptr);
+    vkFreeMemory(device, vertexBufferMemoryID, nullptr);
+    vertices.clear();
+
 }
 
 void MeshComponent::Update(const float deltaTime) {}

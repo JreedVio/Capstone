@@ -22,7 +22,7 @@ class MaterialComponent: public Component {
 
 		VulkanRenderer* renderer;
 
-		MaterialComponent(Component* parent_, const char* filename_);
+		MaterialComponent(Ref<Component> parent_, const char* filename_);
 		virtual ~MaterialComponent();
 		virtual bool OnCreate();
 		virtual void OnDestroy();

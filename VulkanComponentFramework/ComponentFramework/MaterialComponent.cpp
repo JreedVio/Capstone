@@ -1,12 +1,12 @@
 #include "MaterialComponent.h"
 #include "VulkanRenderer.h"
-MaterialComponent::MaterialComponent(Component* parent_, const char* filename_):
+MaterialComponent::MaterialComponent(Ref<Component> parent_, const char* filename_):
     textureImage(0), textureImageMemory(0), textureImageView(0), textureSampler(0), 
     renderer(nullptr), filename(filename_), Component(parent_) {
 }
 
 MaterialComponent::~MaterialComponent() {
-	OnDestroy();
+
 }
 
 bool MaterialComponent::OnCreate() {
@@ -16,7 +16,13 @@ bool MaterialComponent::OnCreate() {
 	return true;
 }
 
-void MaterialComponent::OnDestroy() {	
+void MaterialComponent::OnDestroy() {
+    VkDevice device = renderer->GetDevice();
+    vkDestroySampler(device, textureSampler, nullptr);
+    vkDestroyImageView(device, textureImageView, nullptr);
+    vkDestroyImage(device, textureImage, nullptr);
+    vkFreeMemory(device, textureImageMemory, nullptr);
+
 }
 void MaterialComponent::Update(const float deltaTime) {}
 void MaterialComponent::Render()const {}

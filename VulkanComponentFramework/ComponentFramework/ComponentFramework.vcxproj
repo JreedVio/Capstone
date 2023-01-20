@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraActor.cpp" />
     <ClCompile Include="Debug.cpp" />
@@ -140,6 +141,7 @@
     <ClCompile Include="Scene0.cpp" />
     <ClCompile Include="ShaderComponent.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="tinyxml2.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="Utilities.cpp" />
     <ClCompile Include="VMath.cpp" />
@@ -147,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraActor.h" />
     <ClInclude Include="Component.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="ShaderComponent.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="Utilities.h" />
@@ -193,6 +197,10 @@
     <None Include="shaders\phong.frag" />
     <None Include="shaders\phong.vert" />
     <None Include="shaders\vert.spv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="RendererAssets.xml" />
+    <Xml Include="Scene0.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

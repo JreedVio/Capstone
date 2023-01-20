@@ -6,10 +6,10 @@
 //dont have to say it again, but why not
 using namespace MATH;
 
-TransformComponent::TransformComponent(Component* parent_):Component(parent_) 
+TransformComponent::TransformComponent(Ref<Component> parent_):Component(parent_)
 {
 }
-TransformComponent::TransformComponent(Component* parent_, Vec3 pos_, Quaternion orientation_, Vec3 scale_) 
+TransformComponent::TransformComponent(Ref<Component> parent_, Vec3 pos_, Quaternion orientation_, Vec3 scale_)
 	: Component(parent_), pos(pos_), orientation(orientation_), scale(scale_)
 {
 }
@@ -23,7 +23,9 @@ TransformComponent::~TransformComponent() {
 bool TransformComponent::OnCreate() {
 	return true;
 }
-void TransformComponent::OnDestroy() {}
+void TransformComponent::OnDestroy() {
+	parent = nullptr;
+}
 
 void TransformComponent::Update(const float deltaTime) {
 }

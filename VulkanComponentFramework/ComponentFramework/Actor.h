@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Component.h"
 #include "TransformComponent.h"
+#include "QMath.h"
 #include <vulkan/vulkan.h>
 #include <array>
 
@@ -35,7 +36,7 @@ public:
 	
 	PushConst pushConst;
 	
-	Actor(Component* parent_);
+	Actor(Ref<Component> parent_);
 	~Actor();
 	bool OnCreate();
 	void OnDestroy();

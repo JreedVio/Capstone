@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "VulkanRenderer.h"
 #include "OpenGLRenderer.h"
+#include "AssetManager.h"
 #include "Timer.h"
 #include "Scene0.h"
 #include "Debug.h"
@@ -9,8 +10,8 @@
 
 SceneManager::SceneManager(): 
 	currentScene(nullptr), timer(nullptr),
-	fps(60), isRunning(false), rendererType(RendererType::VULKAN),
-	renderer(nullptr) {}
+	fps(60), isRunning(false), rendererType(RendererType::VULKAN), 
+	renderer(nullptr), assetManager(nullptr) {}
 
 SceneManager::~SceneManager() {
 	if (currentScene) {
@@ -23,8 +24,19 @@ SceneManager::~SceneManager() {
 		delete timer;
 		timer = nullptr;
 	}
-	renderer->OnDestroy();
-	delete renderer;
+
+	if (renderer) {
+		renderer->OnDestroy();
+		delete renderer;
+		renderer = nullptr;
+	}
+
+	if (assetManager) {
+		assetManager->OnDestroy();
+		delete assetManager;
+		assetManager = nullptr;
+	}
+
 	Debug::Info("Deleting the GameSceneManager", __FILE__, __LINE__);
 
 }
@@ -35,6 +47,15 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 	renderer->setRendererType(RendererType::VULKAN);
 	renderer->CreateWindow(name_, width_, height_);
 	renderer->OnCreate();
+
+	//Create asset manager
+	assetManager = AssetManager::GetInstance();
+	if (!assetManager->OnCreate()) {
+		Debug::Info("AssetManager Failed", __FILE__, __LINE__);
+		//return false;
+	}
+	Debug::Info("AssetManager Created", __FILE__, __LINE__);
+	assetManager->LoadAssets("RendererAssets");
 
 	timer = new Timer();
 	if (timer == nullptr) {
@@ -122,8 +143,9 @@ void SceneManager::BuildScene(SCENE_NUMBER scene) {
 	}
 
 	switch (scene) {
-	case SCENE0:  
+	case SCENE0:
 		currentScene = new Scene0(renderer);
+		assetManager->LoadScene("Scene0");
 		status = currentScene->OnCreate();
 		break;
 

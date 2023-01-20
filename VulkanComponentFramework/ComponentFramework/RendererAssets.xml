@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root>
+	<RendererAssets>
+
+		<Component>
+	
+			<Mesh name="MarioModel" filename= "./meshes/Mario.obj"/>
+			<Mesh name="SkullModel" filename= "./meshes/Skull.obj"/>
+			<Mesh name="CubeModel" filename= "./meshes/Cube.obj"/>
+			
+			<Material name="MarioFire" filename="./textures/mario_fire.png"/>
+			<Material name="MarioBlack" filename="./textures/mario_mime.png"/>
+			<Material name="SkullNormal" filename="./textures/skull_texture.png"/>
+
+
+			<Shader name ="PhongShader" vertFilename ="shaders/multiPhong.vert.spv" fragFilename="shaders/multiPhong.frag.spv"/>
+
+			<!-->
+			<Shader name ="PhongShader" vertFilename ="shaders/phong.vert.spv" fragFilename="shaders/phong.frag.spv"/>
+			<Shader name ="NormalShader" vertFilename ="shaders/drawNormals.vert.spv" fragFilename="shaders/drawNormals.frag.spv" geomFilename="shaders/drawNormals.geom.spv"/>
+			<Shader name ="LineShader" vertFilename ="shaders/drawLine.vert.spv" fragFilename="shaders/drawLine.frag.spv" geomFilename="shaders/drawLine.geom.spv"/>
+			<-->
+
+		</Component>
+		
+	</RendererAssets>
+</Root>

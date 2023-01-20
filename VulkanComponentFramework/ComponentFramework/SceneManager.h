@@ -3,6 +3,9 @@
 
 #include <string>
 #include "VulkanRenderer.h"
+
+class AssetManager;
+
 class SceneManager  {
 public:
 	
@@ -29,8 +32,8 @@ private:
 	class Scene* currentScene;
 	class Timer* timer;
 
-	//class VulkanRenderer;
 	VulkanRenderer* renderer;
+	AssetManager* assetManager;
 	unsigned int fps;
 	bool isRunning;
 	void BuildScene(SCENE_NUMBER scene_);

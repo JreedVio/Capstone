@@ -4,13 +4,13 @@
 #include <string.h>
 #include "VulkanRenderer.h"
 
-ShaderComponent::ShaderComponent(Component* parent_, const char* vsFilename_, const char* fsFilename_):
+ShaderComponent::ShaderComponent(Ref<Component> parent_, const char* vsFilename_, const char* fsFilename_):
 	graphicsPipeline(0), pipelineLayout(0), descriptorSetLayout(0), vsFilename(vsFilename_),
     fsFilename(fsFilename_), renderer(nullptr),	Component(parent_) {
 }
 
 ShaderComponent::~ShaderComponent() {
-	OnDestroy();
+
 }
 
 bool ShaderComponent::OnCreate() {
@@ -19,7 +19,12 @@ bool ShaderComponent::OnCreate() {
     createGraphicsPipeline();
 	return true;
 }
-void ShaderComponent::OnDestroy() {}
+void ShaderComponent::OnDestroy() {
+    VkDevice device = renderer->GetDevice();
+    vkDestroyPipeline(device, graphicsPipeline, nullptr);
+    vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
+    vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
+}
 void ShaderComponent::Update(const float deltaTime) {}
 void ShaderComponent::Render() const {}
 
