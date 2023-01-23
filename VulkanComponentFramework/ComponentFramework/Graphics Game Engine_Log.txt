@@ -2,7 +2,6 @@
 [INFO]: AssetManager Created
 [INFO]: Succeed to Load Asset RendererAssets
 [INFO]: Created Scene0: 
-[ERROR]: Cannot find component in file: D:\Documents\Documents\Humber\Semester6\Capstone\VulkanComponentFramework\ComponentFramework\AssetManager.h on line: 105
 [INFO]: Succeed to Load Scene Scene0
 [INFO]: Deleting assets for Actor: 
 [INFO]: Deleting assets for Actor: 

@@ -7,6 +7,8 @@
 #include "TransformComponent.h"
 #include "Actor.h"
 #include <mutex>
+#include "SceneManager.h"
+#include "Scene.h"
 
 #define BUFFER_SIZE 128
 
@@ -28,7 +30,7 @@ AssetManager* AssetManager::GetInstance(){
 
 
 AssetManager::~AssetManager(){
-	OnDestroy();
+	//OnDestroy();
 }
 
 
@@ -41,6 +43,9 @@ void AssetManager::LoadAssets(const char* fileName_) {
 	//Add Components
 	XMLElement* componentData = fileData->FirstChildElement("Component");
 	AddComponentData(componentData);
+	//Add Actor
+	XMLElement* actorData = fileData->FirstChildElement("Actor");
+	AddActorData(actorData);
 	Debug::Info("Succeed to Load Asset " + std::string(fileName_), __FILE__, __LINE__);
 }
 
@@ -51,20 +56,15 @@ void AssetManager::LoadScene(const char* sceneName_) {
 		Debug::Info("Fail to Load Scene " + std::string(sceneName_), __FILE__, __LINE__);
 		return;
 	}
-	//Add light and camera reading in future (Maybe)
-	
 	//Load Room data 
-	 
-	//Add Actor to scene
-	XMLElement* actorData = fileData->FirstChildElement("Actor");
-	AddActorData(actorData);
+	CreateRoom(fileData);
+	
 
 	Debug::Info("Succeed to Load Scene " + std::string(sceneName_), __FILE__, __LINE__);
 
 }
 
 void AssetManager::OnDestroy() {
-
 
 	RemoveAllComponents();
 }
@@ -159,14 +159,13 @@ void AssetManager::AddComponentData(XMLElement* componentData) {
 					const char* fragFile = fragFilenameAttribute->Value();
 
 					AddComponent<ShaderComponent>(componentName, nullptr, vertFile, fragFile);
-
 				}
 			}
 		}
 		componentFirstElement = componentFirstElement->NextSiblingElement();
 	}
 	//Call OnCreate() for all components
-	CreateComponents();
+	//CreateComponents();
 }
 
 bool AssetManager::CreateComponents(){
@@ -185,7 +184,6 @@ void AssetManager::AddActorData(XMLElement* actorData) {
 		XMLElement* componentMeshElement = actorData->FirstChildElement("Mesh");
 		XMLElement* componentMaterialElement = actorData->FirstChildElement("Material");
 		XMLElement* componentShaderElement = actorData->FirstChildElement("Shader");
-		XMLElement* componentTransformElement = actorData->FirstChildElement("Transform");
 		XMLElement* componentBodyElement = actorData->FirstChildElement("Body");
 		XMLElement* componentAIElement = actorData->FirstChildElement("AI");
 		if (!componentMeshElement || !componentMaterialElement || !componentShaderElement) {
@@ -197,16 +195,14 @@ void AssetManager::AddActorData(XMLElement* actorData) {
 			//Get Actor name
 			const char* actorName = actorData->FindAttribute("name")->Value();
 			//Check actor data
-			const char* parentName = componentParentElement->FindAttribute("componentName")->Value();
-			
+			const char* parentName = componentParentElement->FindAttribute("componentName")->Value();	
 
-			if (parentName == "None") {
+			if (strcmp(parentName, "None") == 0) {
 				newActor = std::make_shared<Actor>(nullptr);
 			}
 			else {
-				newActor = std::make_shared<Actor>(GetComponent<Actor>(parentName));
+				newActor = std::make_shared<Actor>(GetComponent<Actor>(parentName).get());
 			}
-
 
 			//Get components to add to actor
 			const char* meshName = componentMeshElement->FindAttribute("componentName")->Value();
@@ -214,9 +210,46 @@ void AssetManager::AddActorData(XMLElement* actorData) {
 			const char* shaderName = componentShaderElement->FindAttribute("componentName")->Value();
 			Ref<MeshComponent> actorMesh = GetComponent<MeshComponent>(meshName);
 			Ref<MaterialComponent> actorMaterial = GetComponent<MaterialComponent>(materialName);
-			Ref<ShaderComponent> actorShader = GetComponent<ShaderComponent>(shaderName);
+			Ref<ShaderComponent> actorShader = GetShader(shaderName);
+
+			//Add all components to actor
+			newActor->AddComponent<MeshComponent>(actorMesh);
+			newActor->AddComponent<MaterialComponent>(actorMaterial);
+			newActor->AddComponent<ShaderComponent>(actorShader);
+			newActor->OnCreate();
+			AddActor(actorName, newActor);
+		}
+		actorData = actorData->NextSiblingElement("Actor");
+	}
+}
+
+bool AssetManager::CreateActors(){
+
+	for (auto actor : actorList) {
+		if (actor.second->OnCreate() == false) {
+			return false;
+		}
+	}
+	return true;
+}
+
+void AssetManager::CreateRoom(XMLElement* roomData){
+
+		//Get information for room
+
+		//Get Actor location and store in the room
+
+		//Get First child element and check if it exists;
+		XMLElement* actorData = roomData->FirstChildElement("Actor");
+		while (actorData) {
+
+			//Get Actor from list
+			const char* actorName = actorData->FindAttribute("name")->Value();
+			//Get the data of the actor from the actor list
+			Ref<Actor> actorData_ = GetActor(actorName);
+			Ref<Actor> actor_ = std::make_shared<Actor>(*actorData_.get());
 			//Get data for transform
-			Ref<TransformComponent> transform = std::make_shared<TransformComponent>(nullptr);
+			XMLElement* componentTransformElement = actorData->FirstChildElement("Transform");
 			//Position data
 			float posX = componentTransformElement->FloatAttribute("posX");
 			float posY = componentTransformElement->FloatAttribute("posY");
@@ -244,29 +277,14 @@ void AssetManager::AddActorData(XMLElement* actorData) {
 				scaleZ = 0.0f;
 			}
 			//Set transform component
-			transform->SetTransform(Vec3(posX, posY, posZ), orientation, Vec3(scaleX, scaleY, scaleZ));
-			//transform->SetTransform(Vec3(0.0f, 0.0f, 0.0f), Quaternion(), Vec3(1.0f, 1.0f, 1.0f));
-
-			//Add all components to actor
-			newActor->AddComponent<MeshComponent>(actorMesh);
-			newActor->AddComponent<MaterialComponent>(actorMaterial);
-			newActor->AddComponent<ShaderComponent>(actorShader);
-			newActor->AddComponent<TransformComponent>(transform);
-			newActor->OnCreate();
-			AddActor(actorName, newActor);
+			Ref<TransformComponent> tranform = std::make_shared<TransformComponent>(actor_.get(), Vec3(posX, posY, posZ), orientation, Vec3(scaleX, scaleY, scaleZ));
+			actor_->AddComponent(tranform);
+			actor_->OnCreate();
+			//Add Actor to current scene
+			SceneManager::GetInstance()->GetCurrentScene()->AddActor(actorName, actor_);
+			actorData = actorData->NextSiblingElement("Actor");
 		}
-		actorData = actorData->NextSiblingElement("Actor");
-	}
-}
 
-bool AssetManager::CreateActors(){
-
-	for (auto actor : actorList) {
-		if (actor.second->OnCreate() == false) {
-			return false;
-		}
-	}
-	return true;
 }
 
 bool AssetManager::OnCreate(){
@@ -279,28 +297,38 @@ void AssetManager::RemoveAllComponents(){
 
 	componentCatalog.clear();
 	actorList.clear();
+	//materialList.clear();
+	//meshList.clear();
+	shaderList.clear();
 }
 
 
-Ref<MaterialComponent> AssetManager::GetMaterial(const char* name_) {
-	for (auto texture_ : materialList) {
-		if (strcmp(texture_.first, name_) == 0) {
-			return texture_.second;
+Ref<Actor> AssetManager::GetActor(const char* name_){
+	for (auto actor_ : actorList) {
+		if (strcmp(actor_.first, name_) == 0) {
+			return actor_.second;
 		}
 	}
 	//Debug message when fail
-	std::string message = std::string(name_) + " -> Texture not found in AssetManager";
+	std::string message = std::string(name_) + " -> Actor not found in AssetManager";
+	Debug::FatalError(message, __FILE__, __LINE__);
+	return nullptr;
+}
+
+Ref<MaterialComponent> AssetManager::GetMaterial(const char* name_) {
+
+	Ref<MaterialComponent> material_ = GetComponent<MaterialComponent>(name_);
+	if (material_) return material_;
+	//Debug message when fail
+	std::string message = std::string(name_) + " -> Material not found in AssetManager";
 	Debug::FatalError(message, __FILE__, __LINE__);
 	return nullptr;
 }
 
 Ref<MeshComponent> AssetManager::GetMesh(const char* name_) {
 
-	for (auto model_ : meshList) {
-		if (strcmp(model_.first, name_) == 0) {
-			return model_.second;
-		}
-	}
+	Ref<MeshComponent> mesh_ = GetComponent<MeshComponent>(name_);
+	if (mesh_) return mesh_;
 	//Debug message when fail
 	std::string message = std::string(name_) + " -> Model not found in AssetManager";
 	Debug::FatalError(message, __FILE__, __LINE__);
@@ -318,33 +346,4 @@ Ref<ShaderComponent> AssetManager::GetShader(const char* name_) {
 	std::string message = std::string(name_) + " -> Pipeline not found in AssetManager";
 	Debug::FatalError(message, __FILE__, __LINE__);
 	return nullptr;
-}
-
-std::vector<const char*> AssetManager::GetMaterialName() {
-	std::vector<const char*> textureNames;
-
-	for (auto texture_ : materialList) {
-		textureNames.push_back(texture_.first);
-	}
-
-	return textureNames;
-}
-
-std::vector<const char*> AssetManager::GetMeshName() {
-	std::vector<const char*> modelNames;
-
-	for (auto model_ : meshList) {
-		modelNames.push_back(model_.first);
-	}
-
-	return modelNames;
-}
-std::vector<const char*> AssetManager::GetShaderNames() {
-	std::vector<const char*> shaderNames;
-
-	for (auto shader_ : shaderList) {
-		shaderNames.push_back(shader_.first);
-	}
-
-	return shaderNames;
 }

@@ -5,15 +5,17 @@
 #include "VulkanRenderer.h"
 
 class AssetManager;
+class Scene;
 
 class SceneManager  {
 public:
 	
-	SceneManager();
+	static SceneManager* GetInstance();
 	~SceneManager();
 	void Run();
 	bool Initialize(std::string name_, int width_, int height_);
 	void GetEvents();
+	Scene* GetCurrentScene() { return currentScene; }
 	
 	
 private:
@@ -28,8 +30,11 @@ private:
 		SCENE6
 	};
 
+	SceneManager();
+	static SceneManager* Instance;
+
 	enum class RendererType rendererType;
-	class Scene* currentScene;
+	Scene* currentScene;
 	class Timer* timer;
 
 	VulkanRenderer* renderer;

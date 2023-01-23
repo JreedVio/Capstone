@@ -18,7 +18,7 @@ int main(int argc, char* args[]) {
 		Debug::DebugInit(name + "_Log");
 		Debug::Info("Starting the GameSceneManager", __FILE__, __LINE__);
 
-		SceneManager* gsm = new SceneManager();
+		SceneManager* gsm = SceneManager::GetInstance();
 		if (gsm->Initialize(name, 1280, 720) == true) {
 			gsm->Run();
 		}

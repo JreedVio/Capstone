@@ -28,10 +28,9 @@ private:
 	XMLDocument sceneDoc;
 	std::unordered_map<const char*, Ref<Actor>> actorList;
 	std::unordered_map<const char*, Ref<Component>> componentCatalog;
-	std::unordered_map<const char*, Ref<MeshComponent>> meshList;
-	std::unordered_map<const char*, Ref<MaterialComponent>> materialList;
+	//std::unordered_map<const char*, Ref<MeshComponent>> meshList;
+	//std::unordered_map<const char*, Ref<MaterialComponent>> materialList;
 	std::unordered_map<const char*, Ref<ShaderComponent>> shaderList;
-
 
 	XMLElement* ReadManiFest(LoadType loadType, const char* fileName_);
 	AssetManager();
@@ -39,6 +38,7 @@ private:
 	bool CreateComponents();
 	void AddActorData(XMLElement* actorData);
 	bool CreateActors();
+	void CreateRoom(XMLElement* roomData);
 
 public:
 	static AssetManager* GetInstance();
@@ -48,18 +48,17 @@ public:
 	void LoadAssets(const char* fileName_);
 	void LoadScene(const char* sceneName_);
 	void OnDestroy();
+
 	std::unordered_map<const char*, Ref<Component>> GetComponentList() { return componentCatalog; }
 	std::unordered_map<const char*, Ref<Actor>> GetActorList() { return actorList; }
-	std::unordered_map<const char*, Ref<MeshComponent>> GetMeshList() { return meshList; }
-	std::unordered_map<const char*, Ref<MaterialComponent>> GetMaterialList() { return materialList; }
+	//std::unordered_map<const char*, Ref<MeshComponent>> GetMeshList() { return meshList; }
+	//std::unordered_map<const char*, Ref<MaterialComponent>> GetMaterialList() { return materialList; }
 	std::unordered_map<const char*, Ref<ShaderComponent>> GetShaderList() { return shaderList; }
 
+	Ref<Actor> GetActor(const char* name_);
 	Ref<MaterialComponent> GetMaterial(const char* name_);
 	Ref<MeshComponent> GetMesh(const char* name_);
 	Ref<ShaderComponent> GetShader(const char* name_);
-	std::vector<const char*> GetMaterialName();
-	std::vector<const char*> GetMeshName();
-	std::vector<const char*> GetShaderNames();
 	
 	void RemoveAllComponents();
 
@@ -81,12 +80,25 @@ public:
 	template<typename ComponentTemplate, typename ... Args>
 	void AddComponent(const char* name_, Args&& ... args_) {
 		Ref<ComponentTemplate> t = std::make_shared<ComponentTemplate>(std::forward<Args>(args_)...);
-		componentCatalog[name_] = t;
+		t->OnCreate();
+		if (std::dynamic_pointer_cast<ShaderComponent>(t)) {
+			shaderList[name_] = std::dynamic_pointer_cast<ShaderComponent>(t);
+		}
+		else {
+			componentCatalog[name_] = t;
+		}
+
 	}
 
 	template<typename ComponentTemplate, typename ... Args>
 	void AddComponent(const char* name_, Ref<ComponentTemplate> component_) {
-		componentCatalog[name_] = component_;
+		component_->OnCreate();
+		if (std::dynamic_pointer_cast<ShaderComponent>(component_)) {
+			shaderList[name_] = component_;
+		}
+		else {
+			componentCatalog[name_] = component_;
+		}
 	}
 
 	template<typename ComponentTemplate>

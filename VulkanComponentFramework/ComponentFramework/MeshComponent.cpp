@@ -6,7 +6,7 @@
 
 using namespace MATH;
 
-MeshComponent::MeshComponent(Ref<Component> parent_, const char* filename_) :
+MeshComponent::MeshComponent(Component* parent_, const char* filename_) :
     indexBufferID(0), indexBufferMemoryID(0), vertexBufferID(0), vertexBufferMemoryID(0),
     vertices(0), indices(0), renderer(nullptr), filename(filename_), Component(parent_) {
 }

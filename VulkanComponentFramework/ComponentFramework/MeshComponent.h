@@ -77,7 +77,7 @@ public:
 	VkBuffer vertexBufferID;
 	VkDeviceMemory vertexBufferMemoryID;
 
-	MeshComponent(Ref<Component> parent_, const char* filename_);
+	MeshComponent(Component* parent_, const char* filename_);
 	~MeshComponent();
 	bool OnCreate();
 	void OnDestroy();

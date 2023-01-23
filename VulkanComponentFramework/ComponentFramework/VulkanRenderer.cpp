@@ -1,5 +1,7 @@
 #include "VulkanRenderer.h"
 #include "AssetManager.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 using namespace std;
 
@@ -10,20 +12,6 @@ VulkanRenderer::VulkanRenderer(): /// Initialize all the variables
     windowWidth(0), windowHeight(0),presentQueue(0),graphicsQueue(nullptr), renderPass(0), swapChain(0),
     swapChainExtent{},swapChainImageFormat{} { 
 
-    shaderComponent = std::make_shared<ShaderComponent>(nullptr, "shaders/multiPhong.vert.spv", "shaders/multiPhong.frag.spv");
-    materialComponent[0] = std::make_shared<MaterialComponent>(nullptr, "./textures/mario_mime.png");
-    materialComponent[1] = std::make_shared<MaterialComponent>(nullptr, "./textures/skull_texture.png");
-    meshComponent[0] = std::make_shared<MeshComponent>(nullptr, "./meshes/Mario.obj");
-    meshComponent[1] = std::make_shared<MeshComponent>(nullptr, "./meshes/Skull.obj");
-    actor[0] = std::make_shared<Actor>(nullptr);
-    actor[1] = std::make_shared<Actor>(nullptr);
-
-    actor[0]->AddComponent(shaderComponent);
-    actor[0]->AddComponent(materialComponent[0]);
-    actor[0]->AddComponent(meshComponent[0]);
-    actor[1]->AddComponent(shaderComponent);
-    actor[1]->AddComponent(materialComponent[1]);
-    actor[1]->AddComponent(meshComponent[1]);
  }
 
 
@@ -177,9 +165,14 @@ void VulkanRenderer::initVulkan() {
     }
     
     //Recreate Actors
-    for (auto actor : assetManager->GetActorList()) {
-        actor.second->OnCreate();
+    SceneManager* sceneManager = SceneManager::GetInstance();
+    Scene* scene_ = sceneManager->GetCurrentScene();
+    if (scene_) {
+        for (auto actor : scene_->GetActorList()) {
+            actor.second->OnCreate();
+        }
     }
+
 
     createCommandBuffers();
     recordCommandBuffer();
@@ -217,9 +210,12 @@ void VulkanRenderer::cleanupSwapChain() {
     destroyUniformBuffer(cameraBuffers, cameraBuffersMemory);
     destroyUniformBuffer(glightingBuffers, glightingBuffersMemory);
 
-    for (auto actor : assetManager->GetActorList()) {
-        vkDestroyDescriptorPool(device, actor.second->pool, nullptr);
-    }
+    SceneManager* sceneManager = SceneManager::GetInstance();
+    Scene* currentScene = sceneManager->GetCurrentScene();
+    currentScene->OnDestroy();
+    //for (auto actor : sceneManager->GetCurrentScene()->GetActorList()) {
+    //    vkDestroyDescriptorPool(device, actor.second->pool, nullptr);
+    //}
 
 }
 
@@ -233,14 +229,9 @@ void VulkanRenderer::destroyUniformBuffer(std::vector<VkBuffer>& uniformBuffer, 
 void VulkanRenderer::cleanup() {
     cleanupSwapChain();
 
-    //Destroy materials
-    for (auto material : AssetManager::GetInstance()->GetMaterialList()) {
-        material.second->OnDestroy();
-    }
-
-    //Destroy meshes
-    for (auto mesh : AssetManager::GetInstance()->GetMeshList()) {
-        mesh.second->OnDestroy();
+    //Destroy components materials
+    for (auto component : AssetManager::GetInstance()->GetComponentList()) {
+        component.second->OnDestroy();
     }
 
     //Shader is destroyed in cleanup swap chain
@@ -306,8 +297,7 @@ void VulkanRenderer::recreateSwapChain() {
     createUniformBuffers(sizeof(UniformBufferObject), cameraBuffers, cameraBuffersMemory);
     createUniformBuffers(sizeof(GlobalLighting), glightingBuffers,
         glightingBuffersMemory);
-    createDescriptorPool(actor[0]->pool);
-    createDescriptorPool(actor[1]->pool);
+
     createCommandBuffers();
     recordCommandBuffer();
 }
@@ -939,38 +929,26 @@ void VulkanRenderer::recordCommandBuffer() {
 
         VkDeviceSize offsets[] = { 0 };
 
-
-
-        // Draw objects with different textures and models using the same pipeline (shader)
-
-        /*for (int j = 0; j < std::size(actor); j++) {
-        *             PushConst temp = actor[j]->pushConst;
-        vkCmdPushConstants(commandBuffers[i], shaderComponent->pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0,
-            sizeof(PushConst), &temp);
-
-        vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, &meshComponent[j]->vertexBufferID, offsets);
-
-        vkCmdBindIndexBuffer(commandBuffers[i], meshComponent[j]->indexBufferID, 0, VK_INDEX_TYPE_UINT32);
-
-        vkCmdBindDescriptorSets(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, shaderComponent->pipelineLayout, 0, 1, &actor[j]->sets[i], 0, nullptr);
-
-        vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(meshComponent[j]->indices.size()), 1, 0, 0, 0);
-        }*/
-        std::unordered_map<const char*, Ref<Actor>> actorList = AssetManager::GetInstance()->GetActorList();
-        for (auto actorElement: actorList) {
-            //Get components for actor
-            Ref<Actor> actor = actorElement.second;
-            Ref<ShaderComponent> actorShader = actor->GetComponent<ShaderComponent>();
-            Ref<MeshComponent> actorMesh = actor->GetComponent<MeshComponent>();
-            Ref<MaterialComponent> actorMaterial = actor->GetComponent<MaterialComponent>();
-            PushConst actorPushConst = actor->GetModelMatrix();
-            vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, actorShader->graphicsPipeline);
-            vkCmdPushConstants(commandBuffers[i], actorShader->pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0,
-                sizeof(PushConst), &actorPushConst);
-            vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, &actorMesh->vertexBufferID, offsets);
-            vkCmdBindIndexBuffer(commandBuffers[i], actorMesh->indexBufferID, 0, VK_INDEX_TYPE_UINT32);
-            vkCmdBindDescriptorSets(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, actorShader->pipelineLayout, 0, 1, &actor->sets[i], 0, nullptr);
-            vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(actorMesh->indices.size()), 1, 0, 0, 0);
+        //Get the current scene, and get the actor list for render
+        SceneManager* sceneManager = SceneManager::GetInstance();
+        Scene* scene_ = sceneManager->GetCurrentScene();
+        if (scene_) {
+            std::unordered_map<const char*, Ref<Actor>> actorList = scene_->GetActorList();
+            for (auto actorElement : actorList) {
+                //Get components for actor
+                Ref<Actor> actor = actorElement.second;
+                Ref<ShaderComponent> actorShader = actor->GetComponent<ShaderComponent>();
+                Ref<MeshComponent> actorMesh = actor->GetComponent<MeshComponent>();
+                Ref<MaterialComponent> actorMaterial = actor->GetComponent<MaterialComponent>();
+                PushConst actorPushConst = actor->GetModelMatrix();
+                vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, actorShader->graphicsPipeline);
+                vkCmdPushConstants(commandBuffers[i], actorShader->pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0,
+                    sizeof(PushConst), &actorPushConst);
+                vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, &actorMesh->vertexBufferID, offsets);
+                vkCmdBindIndexBuffer(commandBuffers[i], actorMesh->indexBufferID, 0, VK_INDEX_TYPE_UINT32);
+                vkCmdBindDescriptorSets(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, actorShader->pipelineLayout, 0, 1, &actor->sets[i], 0, nullptr);
+                vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(actorMesh->indices.size()), 1, 0, 0, 0);
+            }
         }
 
         vkCmdEndRenderPass(commandBuffers[i]);
@@ -1016,8 +994,7 @@ void VulkanRenderer::SetGLightsUbo(const GlobalLighting& glights) {
 }
 
 void VulkanRenderer::SetPushConst(const Matrix4& model) {
-    actor[0]->SetPushConst(model);
-    actor[1]->SetPushConst(MMath::translate(3.0f, 0.0f, 0.0f) * model);
+
 }
 
 void VulkanRenderer::updateUniformBuffer(uint32_t currentImage) {

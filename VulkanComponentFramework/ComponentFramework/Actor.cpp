@@ -2,17 +2,24 @@
 #include "Debug.h"
 #include "VulkanRenderer.h"
 
-Actor::Actor(Ref<Component> parent_) :
+Actor::Actor(Component* parent_) :
     pool(0), sets(0), renderer(nullptr),
     Component(parent_) {}
 
+Actor::Actor(const Actor& actor_){
+    std::cout << "Copying actor\n";
+    std::vector<Ref<Component>> new_List = std::vector<Ref<Component>>();
+    new_List = actor_.GetComponentList();
+    components = new_List;
+    parent = actor_.GetParent();
+}
+
 bool Actor::OnCreate() {
     renderer = VulkanRenderer::GetInstance();
+	if (isCreated) return isCreated;
 
     renderer->createDescriptorPool(pool);
     createDescriptorSets();
-
-	if (isCreated) return isCreated;
 	//Debug::Info("Loading assets for Actor: ", __FILE__, __LINE__);
 	//for (auto component : components) {
 	//	if (component->OnCreate() == false) {
@@ -26,10 +33,15 @@ bool Actor::OnCreate() {
 }
 
 Actor::~Actor() {
-	OnDestroy();
+	//OnDestroy();
 }
 void Actor::OnDestroy() {
-	RemoveAllComponents();
+    //If the actor is not created, don't destroy it
+    if (!isCreated) return;
+
+    VkDevice device = renderer->GetDevice();
+    vkDestroyDescriptorPool(device, pool, nullptr);
+	//RemoveAllComponents();
 	Debug::Info("Deleting assets for Actor: ", __FILE__, __LINE__);
 	isCreated = false;
 }
@@ -66,7 +78,7 @@ PushConst Actor::GetModelMatrix() {
         pushConst.model.loadIdentity();
 	}
 	if (parent) {
-        pushConst.model = std::dynamic_pointer_cast<Actor>(parent)->pushConst.model * pushConst.model;
+        pushConst.model = dynamic_cast<Actor*>(parent)->pushConst.model * pushConst.model;
 	}
     pushConst.normal = MMath::transpose(MMath::inverse(pushConst.model));
 

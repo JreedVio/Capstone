@@ -12,7 +12,6 @@
 			<Material name="MarioBlack" filename="./textures/mario_mime.png"/>
 			<Material name="SkullNormal" filename="./textures/skull_texture.png"/>
 
-
 			<Shader name ="PhongShader" vertFilename ="shaders/multiPhong.vert.spv" fragFilename="shaders/multiPhong.frag.spv"/>
 
 			<!-->
@@ -22,6 +21,25 @@
 			<-->
 
 		</Component>
-		
+		<Actor name="Mario">
+			<Parent componentName="None"/>
+			<Mesh componentName="MarioModel"/>
+			<Material componentName="MarioFire"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+
+		<Actor name="Skull">
+			<Parent componentName="None"/>
+			<Mesh componentName="SkullModel"/>
+			<Material componentName="SkullNormal"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+
+		<Actor name="Cube">
+			<Parent componentName="None"/>
+			<Mesh componentName="CubeModel"/>
+			<Material componentName="MarioBlack"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
 	</RendererAssets>
 </Root>

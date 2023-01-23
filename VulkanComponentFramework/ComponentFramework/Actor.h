@@ -20,13 +20,13 @@ struct PushConst {
 class Actor : public Component {
 	/// Unless you know what these do don't allow them
 	/// to be created implicitly 
-	Actor(const Actor&) = delete;
+	//Actor(const Actor&) = delete; //test with copy contructor
 	Actor(Actor&&) = delete;
 	Actor& operator=(const Actor&) = delete;
 	Actor& operator=(Actor&&) = delete;
 
 private:
-	std::vector< Ref<Component> > components;
+	std::vector<Ref<Component>> components;
 	
 	VulkanRenderer* renderer;
 
@@ -36,12 +36,15 @@ public:
 	
 	PushConst pushConst;
 	
-	Actor(Ref<Component> parent_);
+	Actor(Component* parent_);
+	Actor(const Actor& actor_);
 	~Actor();
 	bool OnCreate();
 	void OnDestroy();
 	void Update(const float deltaTime_);
 	void Render() const;
+
+	std::vector<Ref<Component>> GetComponentList() const { return components; }
 
 	template<typename ComponentTemplate>
 	void AddComponent(Ref<ComponentTemplate> component_) {

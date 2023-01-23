@@ -156,7 +156,6 @@ private:
     UniformBufferObject ubo;
     GlobalLighting glightsUBO;
 
-
     const size_t MAX_FRAMES_IN_FLIGHT = 2;
     SDL_Event sdlEvent;
     uint32_t windowWidth;
@@ -168,12 +167,6 @@ private:
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
     VkDevice device;
     VkRenderPass renderPass;
-
-    Ref<Actor> actor[2];
-
-    Ref<ShaderComponent> shaderComponent;
-    Ref<MaterialComponent> materialComponent[2];
-    Ref<MeshComponent> meshComponent[2];
 
     VkImage depthImage;
     VkDeviceMemory depthImageMemory;

@@ -4,7 +4,7 @@
 #include <string.h>
 #include "VulkanRenderer.h"
 
-ShaderComponent::ShaderComponent(Ref<Component> parent_, const char* vsFilename_, const char* fsFilename_):
+ShaderComponent::ShaderComponent(Component* parent_, const char* vsFilename_, const char* fsFilename_):
 	graphicsPipeline(0), pipelineLayout(0), descriptorSetLayout(0), vsFilename(vsFilename_),
     fsFilename(fsFilename_), renderer(nullptr),	Component(parent_) {
 }

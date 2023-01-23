@@ -46,6 +46,12 @@
     <Filter Include="Source Files\Assets">
       <UniqueIdentifier>{d367666f-6e09-4286-b475-0d608a21f4f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scenes\Room">
+      <UniqueIdentifier>{c8e64fbd-004f-4d9d-a142-c0ba8227745f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes\Room">
+      <UniqueIdentifier>{5aaf668a-a3c0-4338-9c01-07725fa873f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -116,6 +122,12 @@
     </ClCompile>
     <ClCompile Include="AssetManager.cpp">
       <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomScene.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>Source Files\Scenes\Room</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +226,12 @@
     </ClInclude>
     <ClInclude Include="AssetManager.h">
       <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Header Files\Scenes\Room</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

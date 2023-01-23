@@ -7,18 +7,22 @@
 #include "Scene0.h"
 #include "Debug.h"
 
+SceneManager* SceneManager::Instance(nullptr);
 
 SceneManager::SceneManager(): 
 	currentScene(nullptr), timer(nullptr),
 	fps(60), isRunning(false), rendererType(RendererType::VULKAN), 
 	renderer(nullptr), assetManager(nullptr) {}
 
-SceneManager::~SceneManager() {
-	if (currentScene) {
-		currentScene->OnDestroy();
-		delete currentScene;
-		currentScene = nullptr;
+SceneManager* SceneManager::GetInstance(){
+	if (!Instance) {
+		Instance = new SceneManager();
 	}
+
+	return Instance;
+}
+
+SceneManager::~SceneManager() {
 	
 	if (timer) {
 		delete timer;
@@ -35,6 +39,12 @@ SceneManager::~SceneManager() {
 		assetManager->OnDestroy();
 		delete assetManager;
 		assetManager = nullptr;
+	}
+
+	if (currentScene) {
+		currentScene->OnDestroy();
+		delete currentScene;
+		currentScene = nullptr;
 	}
 
 	Debug::Info("Deleting the GameSceneManager", __FILE__, __LINE__);
@@ -138,6 +148,7 @@ void SceneManager::BuildScene(SCENE_NUMBER scene) {
 	bool status; 
 
 	if (currentScene != nullptr) {
+		//Cleanup scene
 		delete currentScene;
 		currentScene = nullptr;
 	}

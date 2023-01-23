@@ -17,7 +17,7 @@ using Ref = std::shared_ptr<T>;
 class Scene0 : public Scene {
 private:
 	Renderer *renderer;
-	Ref<Camera> camera;
+	//Ref<Camera> camera;
 	GlobalLighting globalLights;
 	Matrix4 mariosModelMatrix;
 	

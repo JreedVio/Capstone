@@ -9,7 +9,7 @@ private:
 	Matrix4 viewMatrix;
 	
 public:
-	CameraActor(Ref<Component> parent_);
+	CameraActor(Component* parent_);
 	virtual ~CameraActor();
 
 	bool OnCreate() override;

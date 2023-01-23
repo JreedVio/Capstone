@@ -135,6 +135,8 @@
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="QMath.cpp" />
+    <ClCompile Include="Room.cpp" />
+    <ClCompile Include="RoomScene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MMath.cpp" />
@@ -164,6 +166,8 @@
     <ClInclude Include="QMath.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Room.h" />
+    <ClInclude Include="RoomScene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MMath.h" />

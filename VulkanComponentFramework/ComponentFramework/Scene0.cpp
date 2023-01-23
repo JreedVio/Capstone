@@ -16,7 +16,7 @@ Scene0::Scene0(Renderer *renderer_):
 }
 
 Scene0::~Scene0() {
-	
+	OnDestroy();
 }
 
 bool Scene0::OnCreate() {
@@ -79,7 +79,6 @@ void Scene0::Render() const {
 		glEnable(GL_CULL_FACE);
 		/// Draw your scene here
 		
-		
 		glUseProgram(0);
 		
 		break;
@@ -88,5 +87,7 @@ void Scene0::Render() const {
 
 
 void Scene0::OnDestroy() {
-	
+	for (auto actor_ : actorList) {
+		actor_.second->OnDestroy();
+	}
 }

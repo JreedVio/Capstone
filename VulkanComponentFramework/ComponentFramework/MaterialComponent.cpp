@@ -1,6 +1,6 @@
 #include "MaterialComponent.h"
 #include "VulkanRenderer.h"
-MaterialComponent::MaterialComponent(Ref<Component> parent_, const char* filename_):
+MaterialComponent::MaterialComponent(Component* parent_, const char* filename_):
     textureImage(0), textureImageMemory(0), textureImageView(0), textureSampler(0), 
     renderer(nullptr), filename(filename_), Component(parent_) {
 }
