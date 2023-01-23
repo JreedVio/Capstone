@@ -298,6 +298,22 @@ void VulkanRenderer::recreateSwapChain() {
     createUniformBuffers(sizeof(GlobalLighting), glightingBuffers,
         glightingBuffersMemory);
 
+    AssetManager* assetManager = AssetManager::GetInstance();
+
+    //Recreate shaders
+    for (auto pipeline : assetManager->GetShaderList()) {
+        pipeline.second->OnCreate();
+    }
+
+    //Get the current scene, and get the actor list for render
+    SceneManager* sceneManager = SceneManager::GetInstance();
+    Scene* scene_ = sceneManager->GetCurrentScene();
+    if (scene_) {
+        std::unordered_map<const char*, Ref<Actor>> actorList = scene_->GetActorList();
+        for (auto actorElement : actorList) {
+            actorElement.second->OnCreate();
+        }
+    }
     createCommandBuffers();
     recordCommandBuffer();
 }
