@@ -16,17 +16,17 @@ bool Server::OnCreate()
     /* A specific host address can be specified by   */
     /* enet_address_set_host (& address, "x.x.x.x"); */
 
-    //enet_address_set_host(&address, "10.124.0.88");
-    address.host = ENET_HOST_ANY;
+    enet_address_set_host(&address, "172.17.1.203");
+    address.port = 7777;
+    //address.host = ENET_HOST_ANY;
 
     const size_t s = 1000;
     char hostName_[s] = "asd";
-    enet_address_get_host_ip(&address, hostName_, s);
+    enet_address_get_host(&address, hostName_, s);
 
     std::cout << hostName_;
 
     /* Bind the server to port 1234. */
-    address.port = 7777;
     server = enet_host_create(&address /* the address to bind the server host to */,
         32      /* allow up to 32 clients and/or outgoing connections */,
         2      /* allow up to 2 channels to be used, 0 and 1 */,
