@@ -34,7 +34,7 @@ bool Client::OnCreate()
     ENetEvent event;
     ENetPeer* peer;
     /* Connect to some.server.net:1234. */
-    enet_address_set_host(&address, "142.214.83.88");
+    enet_address_set_host(&address, "10.124.0.88");
     address.port = 7777;
     /* Initiate the connection, allocating the two channels 0 and 1. */
     peer = enet_host_connect(client, &address, 2, 0);
@@ -47,7 +47,7 @@ bool Client::OnCreate()
     if (enet_host_service(client, &event, 5000) > 0 &&
         event.type == ENET_EVENT_TYPE_CONNECT)
     {
-        std::cout << "Connection to 142.214.83.88 succeeded.\n";
+        std::cout << "Connection to 10.124.0.88 succeeded.\n";
         //return true;
     }
     else
@@ -56,7 +56,7 @@ bool Client::OnCreate()
         /* received. Reset the peer in the event the 5 seconds   */
         /* had run out without any significant event.            */
         enet_peer_reset(peer);
-        std::cout << "Connection to 142.214.83.88 failed.\n";
+        std::cout << "Connection to 10.124.0.88 failed.\n";
         return false;
     }
 

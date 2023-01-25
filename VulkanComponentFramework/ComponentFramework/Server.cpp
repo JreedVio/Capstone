@@ -15,6 +15,9 @@ bool Server::OnCreate()
     /* Bind the server to the default localhost.     */
     /* A specific host address can be specified by   */
     /* enet_address_set_host (& address, "x.x.x.x"); */
+
+    enet_address_set_host(&address, "10.124.0.88");
+
     address.host = ENET_HOST_ANY;
     /* Bind the server to port 1234. */
     address.port = 7777;
