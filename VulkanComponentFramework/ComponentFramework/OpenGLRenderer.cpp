@@ -45,7 +45,7 @@ void OpenGLRenderer::Render() {
 }
 
 
-SDL_Window* OpenGLRenderer::CreateWindow(std::string name_, int width_, int height_){
+SDL_Window* OpenGLRenderer::CreateSDLWindow(std::string name_, int width_, int height_){
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		Debug::FatalError("Failed to initialize SDL", __FILE__, __LINE__);
 		return nullptr;

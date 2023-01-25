@@ -5,7 +5,7 @@ class OpenGLRenderer: public Renderer {
 public:
 	OpenGLRenderer();
 	~OpenGLRenderer();
-	virtual SDL_Window* CreateWindow(std::string name_, int width_, int height_);
+	virtual SDL_Window* CreateSDLWindow(std::string name_, int width_, int height_);
 	virtual bool OnCreate();
 	virtual void OnDestroy();
 	virtual void Render();

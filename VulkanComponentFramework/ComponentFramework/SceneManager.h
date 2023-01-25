@@ -3,6 +3,8 @@
 
 #include <string>
 #include "VulkanRenderer.h"
+#include "NetworkManager.h"
+
 
 class AssetManager;
 class Scene;
@@ -32,6 +34,8 @@ private:
 
 	SceneManager();
 	static SceneManager* Instance;
+
+	NetworkManager* networkManager;
 
 	enum class RendererType rendererType;
 	Scene* currentScene;

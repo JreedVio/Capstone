@@ -47,6 +47,12 @@ SceneManager::~SceneManager() {
 		currentScene = nullptr;
 	}
 
+	if (networkManager) {
+		//networkManager->OnDestroy();
+		delete networkManager;
+		networkManager = nullptr;
+	}
+
 	Debug::Info("Deleting the GameSceneManager", __FILE__, __LINE__);
 
 }
@@ -55,7 +61,7 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 
 	renderer = VulkanRenderer::GetInstance();
 	renderer->setRendererType(RendererType::VULKAN);
-	renderer->CreateWindow(name_, width_, height_);
+	renderer->CreateSDLWindow(name_, width_, height_);
 	renderer->OnCreate();
 
 	//Create asset manager
