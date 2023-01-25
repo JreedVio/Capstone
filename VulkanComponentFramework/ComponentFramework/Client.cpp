@@ -34,7 +34,7 @@ bool Client::OnCreate()
     ENetEvent event;
     ENetPeer* peer;
     /* Connect to some.server.net:1234. */
-    enet_address_set_host(&address, "10.124.0.88");
+    enet_address_set_host_ip(&address, "10.124.0.88");
     address.port = 7777;
     /* Initiate the connection, allocating the two channels 0 and 1. */
     peer = enet_host_connect(client, &address, 2, 0);
