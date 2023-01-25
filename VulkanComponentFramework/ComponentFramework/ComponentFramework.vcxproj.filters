@@ -284,5 +284,11 @@
     <Xml Include="Scene0.xml">
       <Filter>XML</Filter>
     </Xml>
+    <Xml Include="TestScene.xml">
+      <Filter>XML</Filter>
+    </Xml>
+    <Xml Include="TestScene2.xml">
+      <Filter>XML</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

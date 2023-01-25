@@ -20,14 +20,9 @@ public:
 	
 private:
 	
-	enum SCENE_NUMBER {
-		SCENE0 = 0,
-		SCENE1,
-		SCENE2,
-		SCENE3,
-		SCENE4,
-		SCENE5,
-		SCENE6
+	enum SCENETYPE {
+		ROOMSCENE = 0,
+		MENUSCENE
 	};
 
 	SceneManager();
@@ -41,7 +36,7 @@ private:
 	AssetManager* assetManager;
 	unsigned int fps;
 	bool isRunning;
-	void BuildScene(SCENE_NUMBER scene_);
+	void BuildScene(SCENETYPE scenetype_, const char* fileName);
 };
 
 

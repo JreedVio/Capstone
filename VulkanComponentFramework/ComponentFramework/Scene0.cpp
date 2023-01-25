@@ -4,10 +4,9 @@
 #include "Scene0.h"
 #include "MMath.h"
 #include "Debug.h"
-#include "VulkanRenderer.h"
 #include "Camera.h"
 
-Scene0::Scene0(Renderer *renderer_): 
+Scene0::Scene0(VulkanRenderer* renderer_):
 	Scene(nullptr),renderer(renderer_){
 	camera = std::make_shared<Camera>();
 

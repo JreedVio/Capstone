@@ -22,7 +22,7 @@ private:
 	Matrix4 mariosModelMatrix;
 	
 public:
-	explicit Scene0(Renderer* renderer_);
+	explicit Scene0(VulkanRenderer* renderer_);
 	virtual ~Scene0();
 
 	virtual bool OnCreate() override;

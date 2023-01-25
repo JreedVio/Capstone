@@ -9,6 +9,7 @@
 #include <mutex>
 #include "SceneManager.h"
 #include "Scene.h"
+#include "Room.h"
 
 #define BUFFER_SIZE 128
 
@@ -49,19 +50,18 @@ void AssetManager::LoadAssets(const char* fileName_) {
 	Debug::Info("Succeed to Load Asset " + std::string(fileName_), __FILE__, __LINE__);
 }
 
-void AssetManager::LoadScene(const char* sceneName_) {
+Ref<Room> AssetManager::LoadRoom(const char* sceneName_) {
 
 	XMLElement* fileData = ReadManiFest(LoadType::SCENE, sceneName_);
 	if (!fileData) {
 		Debug::Info("Fail to Load Scene " + std::string(sceneName_), __FILE__, __LINE__);
-		return;
+		return nullptr;
 	}
 	//Load Room data 
-	CreateRoom(fileData);
-	
+	Ref<Room> room_ = CreateRoom(fileData);
 
 	Debug::Info("Succeed to Load Scene " + std::string(sceneName_), __FILE__, __LINE__);
-
+	return room_;
 }
 
 void AssetManager::OnDestroy() {
@@ -216,7 +216,7 @@ void AssetManager::AddActorData(XMLElement* actorData) {
 			newActor->AddComponent<MeshComponent>(actorMesh);
 			newActor->AddComponent<MaterialComponent>(actorMaterial);
 			newActor->AddComponent<ShaderComponent>(actorShader);
-			newActor->OnCreate();
+			//newActor->OnCreate();
 			AddActor(actorName, newActor);
 		}
 		actorData = actorData->NextSiblingElement("Actor");
@@ -233,58 +233,59 @@ bool AssetManager::CreateActors(){
 	return true;
 }
 
-void AssetManager::CreateRoom(XMLElement* roomData){
+Ref<Room> AssetManager::CreateRoom(XMLElement* roomData){
 
-		//Get information for room
+	//Get information for room
+	Ref<Room> room_ = std::make_shared<Room>(100, 100, 1000);
+	//Get possible actor in the room
 
-		//Get Actor location and store in the room
+	//Get First child element and check if it exists;
+	XMLElement* actorData = roomData->FirstChildElement("Actor");
+	while (actorData) {
 
-		//Get First child element and check if it exists;
-		XMLElement* actorData = roomData->FirstChildElement("Actor");
-		while (actorData) {
-
-			//Get Actor from list
-			const char* actorName = actorData->FindAttribute("name")->Value();
-			//Get the data of the actor from the actor list
-			Ref<Actor> actorData_ = GetActor(actorName);
-			Ref<Actor> actor_ = std::make_shared<Actor>(*actorData_.get());
-			//Get data for transform
-			XMLElement* componentTransformElement = actorData->FirstChildElement("Transform");
-			//Position data
-			float posX = componentTransformElement->FloatAttribute("posX");
-			float posY = componentTransformElement->FloatAttribute("posY");
-			float posZ = componentTransformElement->FloatAttribute("posZ");
-			//Orientation data
-			float angle = componentTransformElement->FloatAttribute("angle");
-			float axisX = componentTransformElement->FloatAttribute("axisX");
-			float axisY = componentTransformElement->FloatAttribute("axisY");
-			float axisZ = componentTransformElement->FloatAttribute("axisZ");
-			Quaternion orientation = Quaternion();
-			if (VMath::mag(Vec3(axisX, axisY, axisZ)) > VERY_SMALL) {
-				orientation = QMath::angleAxisRotation(angle, Vec3(axisX, axisY, axisZ));
-			}
-			//Scale data
-			float scaleX = componentTransformElement->FloatAttribute("scaleX");
-			float scaleY = componentTransformElement->FloatAttribute("scaleY");
-			float scaleZ = componentTransformElement->FloatAttribute("scaleZ");
-			if (scaleX < VERY_SMALL) {
-				scaleX = 0.0f;
-			}
-			if (scaleY < VERY_SMALL) {
-				scaleY = 0.0f;
-			}
-			if (scaleZ < VERY_SMALL) {
-				scaleZ = 0.0f;
-			}
-			//Set transform component
-			Ref<TransformComponent> tranform = std::make_shared<TransformComponent>(actor_.get(), Vec3(posX, posY, posZ), orientation, Vec3(scaleX, scaleY, scaleZ));
-			actor_->AddComponent(tranform);
-			actor_->OnCreate();
-			//Add Actor to current scene
-			SceneManager::GetInstance()->GetCurrentScene()->AddActor(actorName, actor_);
-			actorData = actorData->NextSiblingElement("Actor");
+		//Get Actor from list
+		const char* actorName = actorData->FindAttribute("name")->Value();
+		//Get the data of the actor from the actor list
+		Ref<Actor> actorData_ = GetActor(actorName);
+		Ref<Actor> actor_ = std::make_shared<Actor>(*actorData_.get());
+		//Get data for transform
+		XMLElement* componentTransformElement = actorData->FirstChildElement("Transform");
+		//Position data
+		float posX = componentTransformElement->FloatAttribute("posX");
+		float posY = componentTransformElement->FloatAttribute("posY");
+		float posZ = componentTransformElement->FloatAttribute("posZ");
+		//Orientation data
+		float angle = componentTransformElement->FloatAttribute("angle");
+		float axisX = componentTransformElement->FloatAttribute("axisX");
+		float axisY = componentTransformElement->FloatAttribute("axisY");
+		float axisZ = componentTransformElement->FloatAttribute("axisZ");
+		Quaternion orientation = Quaternion();
+		if (VMath::mag(Vec3(axisX, axisY, axisZ)) > VERY_SMALL) {
+			orientation = QMath::angleAxisRotation(angle, Vec3(axisX, axisY, axisZ));
 		}
+		//Scale data
+		float scaleX = componentTransformElement->FloatAttribute("scaleX");
+		float scaleY = componentTransformElement->FloatAttribute("scaleY");
+		float scaleZ = componentTransformElement->FloatAttribute("scaleZ");
+		if (scaleX < VERY_SMALL) {
+			scaleX = 0.0f;
+		}
+		if (scaleY < VERY_SMALL) {
+			scaleY = 0.0f;
+		}
+		if (scaleZ < VERY_SMALL) {
+			scaleZ = 0.0f;
+		}
+		//Set transform component
+		Ref<TransformComponent> tranform = std::make_shared<TransformComponent>(actor_.get(), Vec3(posX, posY, posZ), orientation, Vec3(scaleX, scaleY, scaleZ));
+		actor_->AddComponent(tranform);
+		actor_->OnCreate();
+		//Add Actor to current scene
+		room_->AddActor(actorName, actor_);
+		actorData = actorData->NextSiblingElement("Actor");
+	}
 
+	return room_;
 }
 
 bool AssetManager::OnCreate(){
