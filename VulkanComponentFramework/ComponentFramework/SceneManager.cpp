@@ -12,7 +12,7 @@ SceneManager* SceneManager::Instance(nullptr);
 SceneManager::SceneManager(): 
 	currentScene(nullptr), timer(nullptr),
 	fps(60), isRunning(false), rendererType(RendererType::VULKAN), 
-	renderer(nullptr), assetManager(nullptr) {}
+	renderer(nullptr), assetManager(nullptr), networkManager(nullptr) {}
 
 SceneManager* SceneManager::GetInstance(){
 	if (!Instance) {
@@ -78,6 +78,9 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 		Debug::FatalError("Failed to initialize Timer object", __FILE__, __LINE__);
 		return false;
 	}
+
+	networkManager = new NetworkManager();
+	networkManager->OnCreate();
 	
 	BuildScene(SCENE0);
 	

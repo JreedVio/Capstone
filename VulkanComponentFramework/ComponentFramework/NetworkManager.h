@@ -1,13 +1,20 @@
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
 
-#include "enet/enet.h"
+#include "Client.h"
+#include "Server.h"
+#include "NetworkUnit.h"
+
 
 class NetworkManager
 {
+private:
+	NetworkUnit* unit;
 public:
+	NetworkManager();
+	~NetworkManager();
+	bool OnCreate();
+	void OnDestroy();
 	void Update();
 };
 

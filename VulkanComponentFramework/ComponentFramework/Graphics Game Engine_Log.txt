@@ -2,4 +2,6 @@
 [INFO]: AssetManager Created
 [INFO]: Succeed to Load Asset RendererAssets
 [INFO]: Created Scene0: 
+[INFO]: Created Scene0: 
+[INFO]: Succeed to Load Scene Scene0
 [INFO]: Succeed to Load Scene Scene0
