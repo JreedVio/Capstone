@@ -38,6 +38,8 @@ using namespace MATH;
 template<typename T>
 using Ref = std::shared_ptr<T>;
 
+
+
 const std::vector<const char*> validationLayers = {
     "VK_LAYER_KHRONOS_validation"
 };
@@ -105,7 +107,7 @@ struct QueueFamilyIndices {
         void OnDestroy();
         void Render();
         void SetUBO(const Matrix4& projection, const Matrix4& view);
-        void SetGLightsUbo(const GlobalLighting& glights);
+        void SetGLightsUbo(const std::vector<Ref<LightActor>>& lights);
         void SetPushConst(const Matrix4& model);
         SDL_Window* GetWindow() {
             return window;

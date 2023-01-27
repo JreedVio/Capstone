@@ -129,7 +129,7 @@
     <ClCompile Include="CameraActor.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="EMath.cpp" />
-    <ClCompile Include="GlobalLightning.cpp" />
+    <ClCompile Include="GlobalLighting.cpp" />
     <ClCompile Include="Hash.cpp" />
     <ClCompile Include="MaterialComponent.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
