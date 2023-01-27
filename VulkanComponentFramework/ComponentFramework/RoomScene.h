@@ -3,6 +3,9 @@
 
 #include "Scene.h"
 #include "Room.h"
+#include <vector>
+
+class LightActor;
 
 class RoomScene : public Scene{
 
@@ -23,7 +26,7 @@ public:
 
 private:
 	Ref<Room> room;
-	GlobalLighting globalLights;
+	std::vector<Ref<LightActor>> globalLights;
 };
 
 #endif

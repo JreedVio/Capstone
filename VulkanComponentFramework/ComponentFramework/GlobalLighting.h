@@ -8,8 +8,6 @@ using namespace MATH;
 
 constexpr int MAX_LIGHTS = 24;
 
-
-
 struct GlobalLighting
 {
 	Vec4 position[2];
