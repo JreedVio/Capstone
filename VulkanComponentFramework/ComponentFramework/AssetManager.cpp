@@ -1,5 +1,6 @@
 #include "AssetManager.h"
 #include "VulkanRenderer.h"
+#include <math.h>
 #include <fstream>
 #include "MeshComponent.h"
 #include "ShaderComponent.h"
@@ -235,18 +236,58 @@ bool AssetManager::CreateActors(){
 
 Ref<Room> AssetManager::CreateRoom(XMLElement* roomData){
 
+	//Ref<Room> room_ = std::make_shared<Room>(100, 100, 1000);
 	//Get information for room
-	Ref<Room> room_ = std::make_shared<Room>(100, 100, 1000);
+	XMLElement* sizeData = roomData->FirstChildElement("Size");
+	float width = sizeData->FloatAttribute("x");
+	float length = sizeData->FloatAttribute("y");
+	float height = sizeData->FloatAttribute("z");
+	Ref<Room> room_ = std::make_shared<Room>(width, length, height);
 	//Get possible actor in the room
+	//Store a temp list for refecrenced actor
+	std::unordered_map<const char*, Ref<Actor>> actorRefList;
+	XMLElement* referenceData = roomData->FirstChildElement("ReferenceActor");
+	XMLElement* refActorData = referenceData->FirstChildElement("RefName");
+	while (refActorData) {
+		//Get the actor data and add it to the reference list
+		const char* refActorName_ = refActorData->FindAttribute("name")->Value();
+		Ref<Actor> actorData_ = GetActor(refActorName_);
+		actorRefList[refActorName_] = actorData_;
+
+		refActorData = refActorData->NextSiblingElement("RefName");
+	}
 
 	//Get First child element and check if it exists;
 	XMLElement* actorData = roomData->FirstChildElement("Actor");
+
 	while (actorData) {
 
-		//Get Actor from list
+		//Get Actor ref from list
+		const char* actorRefName = actorData->FindAttribute("ref")->Value();
 		const char* actorName = actorData->FindAttribute("name")->Value();
-		//Get the data of the actor from the actor list
-		Ref<Actor> actorData_ = GetActor(actorName);
+		//If Ref name is Random, it means that it is generated randomly
+		Ref<Actor> actorData_;
+		if (strcmp(actorRefName, "Random") == 0) {
+			//Generate a random number, and use this as index to grab actor data from list
+			int listSize = actorRefList.size();
+			int randomIndex = rand() % listSize;
+			std::cout << randomIndex << "\n";
+			/*DONT USE FIND FUNCTION
+			* To avoid problems where the program is comparing address, instead of values within pointers
+			* Do a for loop 
+			*/
+			int currentIndex = 0;
+			for (auto element_ : actorRefList) {
+				if (currentIndex == randomIndex) {
+					actorData_ = element_.second;
+				}
+				currentIndex++;
+			}
+		}
+		else {
+			actorData_ = GetActor(actorRefName);
+		}
+
 		Ref<Actor> actor_ = std::make_shared<Actor>(*actorData_.get());
 		//Get data for transform
 		XMLElement* componentTransformElement = actorData->FirstChildElement("Transform");
