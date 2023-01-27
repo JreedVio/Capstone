@@ -87,9 +87,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GlobalLightning.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MaterialComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -128,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="Room.cpp">
       <Filter>Source Files\Scenes\Room</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalLighting.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

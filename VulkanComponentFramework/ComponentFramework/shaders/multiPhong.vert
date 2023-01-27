@@ -12,7 +12,7 @@ layout (binding = 0) uniform UniformBufferObject {
 
 layout (binding = 1) uniform GlobalLightingUBO {
 	vec4 lightPos[2];
-	vec4 diffuse;
+	vec4 diffuse[2];
 } glights;
 
 layout (push_constant) uniform PushConst {
@@ -36,7 +36,7 @@ void main() {
 	vec3 vertPos = vec3(ubo.view * pushConst.model * inPosition);
 	vec3 vertDir = normalize(vertPos);
 	eyeDir = -vertDir;
-	for(int i = 0; i < 2; ++i){
+	for(int i = 0; i < 2; i++){
 		lightDir[i] = normalize(vec3(glights.lightPos[i]) - vertPos);
 	}
 	gl_Position = ubo.proj * ubo.view * pushConst.model * inPosition;
