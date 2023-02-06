@@ -132,9 +132,11 @@
     <ClCompile Include="EMath.cpp" />
     <ClCompile Include="GlobalLighting.cpp" />
     <ClCompile Include="Hash.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="MaterialComponent.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
+    <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="QMath.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RoomScene.cpp" />
@@ -161,9 +163,11 @@
     <ClInclude Include="Euler.h" />
     <ClInclude Include="GlobalLighting.h" />
     <ClInclude Include="Hash.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="MaterialComponent.h" />
     <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="OpenGLRenderer.h" />
+    <ClInclude Include="PlayerController.h" />
     <ClInclude Include="QMath.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Renderer.h" />
