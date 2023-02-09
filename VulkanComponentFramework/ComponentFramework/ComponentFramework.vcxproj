@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\GameDev\OpenGL\include;C:\GameDev\SDL\include;C:\GameDev\Vulkan\include;$(SolutionDir)ENet\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\GameDev\OpenGL\include;C:\GameDev\SDL\include;C:\GameDev\Vulkan\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -79,11 +79,11 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)ENet\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\GameDev\OpenGL\lib;C:\GameDev\SDL\lib;C:\GameDev\Vulkan\lib32;$(SolutionDir)ENet;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2main.lib;glew32.lib;glew32s.lib;opengl32.lib;vulkan-1.lib;enet.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\GameDev\OpenGL\lib;C:\GameDev\SDL\lib;C:\GameDev\Vulkan\lib32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2main.lib;glew32.lib;glew32s.lib;opengl32.lib;vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -93,7 +93,6 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -129,15 +128,15 @@
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraActor.cpp" />
-    <ClCompile Include="Client.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="EMath.cpp" />
-    <ClCompile Include="GlobalLightning.cpp" />
+    <ClCompile Include="GlobalLighting.cpp" />
     <ClCompile Include="Hash.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="MaterialComponent.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
-    <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
+    <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="QMath.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RoomScene.cpp" />
@@ -145,7 +144,6 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MMath.cpp" />
     <ClCompile Include="Scene0.cpp" />
-    <ClCompile Include="Server.cpp" />
     <ClCompile Include="ShaderComponent.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="tinyxml2.cpp" />
@@ -159,18 +157,17 @@
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraActor.h" />
-    <ClInclude Include="Client.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="EMath.h" />
     <ClInclude Include="Euler.h" />
     <ClInclude Include="GlobalLighting.h" />
     <ClInclude Include="Hash.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="MaterialComponent.h" />
     <ClInclude Include="MeshComponent.h" />
-    <ClInclude Include="NetworkManager.h" />
-    <ClInclude Include="NetworkUnit.h" />
     <ClInclude Include="OpenGLRenderer.h" />
+    <ClInclude Include="PlayerController.h" />
     <ClInclude Include="QMath.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Renderer.h" />
@@ -182,7 +179,6 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene0.h" />
-    <ClInclude Include="Server.h" />
     <ClInclude Include="ShaderComponent.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Timer.h" />
@@ -214,6 +210,8 @@
   <ItemGroup>
     <Xml Include="RendererAssets.xml" />
     <Xml Include="Scene0.xml" />
+    <Xml Include="TestScene.xml" />
+    <Xml Include="TestScene2.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

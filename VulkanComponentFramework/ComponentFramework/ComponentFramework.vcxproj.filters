@@ -87,9 +87,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GlobalLightning.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MaterialComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -129,13 +126,13 @@
     <ClCompile Include="Room.cpp">
       <Filter>Source Files\Scenes\Room</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkManager.cpp">
+    <ClCompile Include="GlobalLighting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Client.cpp">
+    <ClCompile Include="Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Server.cpp">
+    <ClCompile Include="PlayerController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -242,16 +239,10 @@
     <ClInclude Include="Room.h">
       <Filter>Header Files\Scenes\Room</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkManager.h">
+    <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Client.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Server.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkUnit.h">
+    <ClInclude Include="PlayerController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -303,6 +294,12 @@
       <Filter>XML</Filter>
     </Xml>
     <Xml Include="Scene0.xml">
+      <Filter>XML</Filter>
+    </Xml>
+    <Xml Include="TestScene.xml">
+      <Filter>XML</Filter>
+    </Xml>
+    <Xml Include="TestScene2.xml">
       <Filter>XML</Filter>
     </Xml>
   </ItemGroup>

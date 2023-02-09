@@ -1,7 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "Renderer.h"
+#include "VulkanRenderer.h"
 #include "Actor.h"
 #include <unordered_map>
 
@@ -10,7 +10,7 @@ class Camera;
 
 class Scene {
 public:
-	explicit Scene(Renderer* renderer_):renderer(nullptr){};
+	explicit Scene(VulkanRenderer* renderer_):renderer(renderer_){};
 	virtual ~Scene() {}
 
 	virtual bool OnCreate() = 0;
@@ -18,7 +18,7 @@ public:
 	virtual void Update(const float deltaTime) = 0;
 	virtual void Render() const  = 0 ;
 	virtual void HandleEvents(const SDL_Event &sdlEvent) = 0;
-	std::unordered_map<const char*, Ref<Actor>> GetActorList() { return actorList; }
+	virtual std::unordered_map<const char*, Ref<Actor>> GetActorList() { return actorList; }
 
 	template<typename ActorTemplate>
 	void AddActor(const char* name_, Ref<ActorTemplate> actor_) {
@@ -36,7 +36,7 @@ public:
 	}
 
 protected:
-	Renderer *renderer;
+	VulkanRenderer* renderer;
 	Ref<Camera> camera;
 	std::unordered_map<const char*, Ref<Actor>> actorList;
 };
