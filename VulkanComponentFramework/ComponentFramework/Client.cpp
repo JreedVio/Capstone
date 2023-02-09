@@ -1,5 +1,8 @@
 #include "Client.h"
 #include "Debug.h"
+#include "MMath.h"
+
+using namespace MATH;
 
 Client::Client() : NetworkUnit(UnitType::CLIENT)
 {
@@ -32,10 +35,18 @@ bool Client::OnCreate()
 
     ENetAddress address;
     ENetEvent event;
-    ENetPeer* peer;
     /* Connect to some.server.net:1234. */
-    enet_address_set_host_ip(&address, "172.17.1.203");
-    address.port = 7777;
+    enet_address_set_host(&address, "127.0.0.1"); 
+
+    const size_t s = 1000;
+    char hostName[s];
+    char hostIp[s];
+    enet_address_get_host_ip(&address, hostIp, s);
+    enet_address_get_host(&address, hostName, s);
+
+    std::cout << "Host Ip: " << hostIp << " | Host Name: " << hostName << std::endl;
+
+    address.port = 27015;
     /* Initiate the connection, allocating the two channels 0 and 1. */
     peer = enet_host_connect(client, &address, 2, 0);
     if (peer == NULL)
@@ -47,8 +58,9 @@ bool Client::OnCreate()
     if (enet_host_service(client, &event, 5000) > 0 &&
         event.type == ENET_EVENT_TYPE_CONNECT)
     {
-        std::cout << "Connection to 172.17.1.203 succeeded.\n";
-        //return true;
+        std::cout << "Connection to " << hostName << " succeeded.\n";
+        Update();
+        return true;
     }
     else
     {
@@ -56,54 +68,10 @@ bool Client::OnCreate()
         /* received. Reset the peer in the event the 5 seconds   */
         /* had run out without any significant event.            */
         enet_peer_reset(peer);
-        std::cout << "Connection to 172.17.1.203 failed.\n";
+        std::cout << "Connection to " << hostName << " failed.\n";
+
         return false;
     }
-
-
-    // Game loop (Not Working)
-
-    //ENetEvent event;
-    /* Wait up to 1000 milliseconds for an event. */
-    while (enet_host_service(client, &event, 1000) > 0)
-    {
-        switch (event.type)
-        {
-        case ENET_EVENT_TYPE_RECEIVE:
-            printf("A packet of length %u containing %s was received from %x:%u on channel %u.\n",
-                event.packet->dataLength,
-                event.packet->data,
-                event.peer->address.host,
-                event.peer->address.port,
-                event.channelID);
-            /* Clean up the packet now that we're done using it. */
-            enet_packet_destroy(event.packet);
-
-            break;
-        }
-    }
-
-    enet_peer_disconnect(peer, 0);
-    /* Allow up to 3 seconds for the disconnect to succeed
-     * and drop any packets received packets.
-     */
-    while (enet_host_service(client, &event, 3000) > 0)
-    {
-        switch (event.type)
-        {
-        case ENET_EVENT_TYPE_RECEIVE:
-            enet_packet_destroy(event.packet);
-            break;
-        case ENET_EVENT_TYPE_DISCONNECT:
-            std::cout << "Disconnection succeeded.\n";
-            return false;
-        }
-    }
-    /* We've arrived here, so the disconnect attempt didn't */
-    /* succeed yet.  Force the connection down.             */
-    enet_peer_reset(peer);
-
-	return true;
 }
 
 void Client::OnDestroy()
@@ -112,5 +80,53 @@ void Client::OnDestroy()
 
 void Client::Update()
 {
-    
+    // Game loop (Not Working)
+
+    ENetEvent event;
+    Vec3 newData;
+    Vec3 pos = Vec3(100.0f, 1100.0f, 2200.0f);
+    int eventStatus = 1;
+        
+    /* Wait up to 1000 milliseconds for an event. */
+    eventStatus = enet_host_service(client, &event, 1000);
+    if (eventStatus > 0)
+    {
+        switch (event.type)
+        {
+        case ENET_EVENT_TYPE_RECEIVE:
+            std::memcpy(&newData, event.packet->data, event.packet->dataLength);
+            std::cout << newData.x << " " << newData.y << " " << newData.z << std::endl;
+
+
+            /* Clean up the packet now that we're done using it. */
+            enet_packet_destroy(event.packet);
+
+            break;
+        }
+    }
+    ENetPacket* tempPacket = enet_packet_create(pos,
+        sizeof(Vec3) + 1,
+        ENET_PACKET_FLAG_RELIABLE);
+
+    enet_peer_send(peer, 0, tempPacket); 
 }
+
+//enet_peer_disconnect(peer, 0);
+    ///* Allow up to 3 seconds for the disconnect to succeed
+    // * and drop any packets received packets.
+    // */
+    //while (enet_host_service(client, &event, 3000) > 0)
+    //{
+    //    switch (event.type)
+    //    {
+    //    case ENET_EVENT_TYPE_RECEIVE:
+    //        enet_packet_destroy(event.packet);
+    //        break;
+    //    case ENET_EVENT_TYPE_DISCONNECT:
+    //        std::cout << "Disconnection succeeded.\n";
+    //        //return false;
+    //    }
+    //}
+    ///* We've arrived here, so the disconnect attempt didn't */
+    ///* succeed yet.  Force the connection down.             */
+    //enet_peer_reset(peer);

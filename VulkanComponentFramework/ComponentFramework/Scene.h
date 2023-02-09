@@ -31,6 +31,9 @@ public:
 #endif
 		}
 	}
+	Vec3 getPlayerPos() {
+
+	}
 
 protected:
 	Renderer *renderer;

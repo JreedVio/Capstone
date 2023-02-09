@@ -93,10 +93,11 @@ void SceneManager::Run() {
 	isRunning = true;
 	while (isRunning) {
 		timer->UpdateFrameTicks();
+		networkManager->Update();
 		currentScene->Update(timer->GetDeltaTime());
 		currentScene->Render();
 		GetEvents();
-		SDL_Delay(timer->GetSleepTime(fps));	
+		SDL_Delay(timer->GetSleepTime(fps));
 	}
 }
 

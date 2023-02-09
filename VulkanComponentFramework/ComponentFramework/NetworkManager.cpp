@@ -32,16 +32,12 @@ bool NetworkManager::OnCreate()
             unit = new Client();
             if (!unit->OnCreate()) return false;
 
-            std::cout << "Created a Client\n";
-
             break;
         }
         else if (isServer == 1) {
             // Create Server
             unit = new Server();
             if (!unit->OnCreate()) return false;
-
-            std::cout << "Created a Server\n";
 
             break;
         }
@@ -58,5 +54,5 @@ void NetworkManager::OnDestroy()
 
 void NetworkManager::Update()
 {
-    
+    unit->Update();
 }

@@ -10,6 +10,8 @@ class Client : public NetworkUnit
 {
 public:
 	ENetHost* client;
+	ENetPeer* peer;
+
 
 	Client();
 	~Client();

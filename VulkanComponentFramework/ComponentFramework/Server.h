@@ -13,6 +13,8 @@ public:
 
 	ENetAddress address;
 	ENetHost* server;
+	ENetPeer* peer;
+
 
 
 	Server();

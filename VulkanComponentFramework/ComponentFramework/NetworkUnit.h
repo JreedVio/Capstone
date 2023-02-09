@@ -13,6 +13,7 @@ public:
 	NetworkUnit(UnitType type_) : unitType(type_) {}
 	virtual ~NetworkUnit() {}
 	virtual bool OnCreate() = 0;
+	virtual void Update() = 0;
 	virtual void OnDestroy() = 0;
 	UnitType unitType;
 };
