@@ -1,6 +1,9 @@
 #include "Server.h"
 #include "Debug.h"
 #include "MMath.h"
+#include "SceneManager.h"
+#include "RoomScene.h"
+
 
 #include <WS2tcpip.h>
 
@@ -49,8 +52,6 @@ bool Server::OnCreate()
         return false;
     }
 
-    Update();
-
 	return true;
 }
 
@@ -63,7 +64,12 @@ void Server::Update()
     // Wait for connection and diconnection
 
     ENetEvent event;
-    Vec3 pos = Vec3(1.0f, 11.0f, 22.0f);
+
+    SceneManager* sceneManager = SceneManager::GetInstance();
+    Ref<Actor> mario = sceneManager->GetCurrentScene()->GetActor("Mario1");
+    Ref<TransformComponent> tComp = mario->GetComponent<TransformComponent>();
+    Vec3 pos = tComp->GetPosition();
+
     Vec3 newData;
     int eventStatus = 1;
     

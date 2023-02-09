@@ -31,9 +31,8 @@ public:
 #endif
 		}
 	}
-	Vec3 getPlayerPos() {
+	virtual Ref<Actor> GetActor(const char* name_) = 0;
 
-	}
 
 protected:
 	VulkanRenderer* renderer;

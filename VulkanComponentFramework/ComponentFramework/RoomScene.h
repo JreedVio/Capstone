@@ -23,6 +23,7 @@ public:
 	virtual std::unordered_map<const char*, Ref<Actor>> GetActorList() override{ 
 		return room->GetActorList();
 	}
+	Ref<Actor> GetActor(const char* name_);
 
 private:
 	Ref<Room> room;

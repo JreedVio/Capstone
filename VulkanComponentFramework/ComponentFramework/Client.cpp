@@ -59,7 +59,6 @@ bool Client::OnCreate()
         event.type == ENET_EVENT_TYPE_CONNECT)
     {
         std::cout << "Connection to " << hostName << " succeeded.\n";
-        Update();
         return true;
     }
     else

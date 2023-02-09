@@ -6,7 +6,6 @@
 #include "Timer.h"
 #include "RoomScene.h"
 #include "Debug.h"
-#include "Actor.h"
 
 SceneManager* SceneManager::Instance(nullptr);
 
@@ -100,13 +99,13 @@ void SceneManager::Run() {
 		currentScene->Update(timer->GetDeltaTime());
 		currentScene->Render();
 		
-		/*/Ref<Actor> mario = assetManager->GetActor("Mario");
+		std::unordered_map<const char*, Ref<Actor>> actorList = currentScene->GetActorList();
 
-		Ref<TransformComponent> tranform = std::make_shared<TransformComponent>(nullptr, Vec3(1, 2, 3), Quaternion());
-		mario->AddComponent<TransformComponent>(tranform);
+		Ref<Actor> mario = currentScene->GetActor("Mario1");
+
 
 		Ref<TransformComponent> tComp = mario->GetComponent<TransformComponent>();
-		Vec3 pos = tComp->GetPosition();*/
+		Vec3 pos = tComp->GetPosition();
 
 		networkManager->Update();
 

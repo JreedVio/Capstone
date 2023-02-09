@@ -109,7 +109,7 @@ struct QueueFamilyIndices {
             }
             return Instance;
         }
-        SDL_Window* CreateWindow(std::string name_, int width, int height);
+        SDL_Window* CreateSDLWindow(std::string name_, int width, int height);
         bool OnCreate();
         void OnDestroy();
         void Render();
