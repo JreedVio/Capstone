@@ -40,7 +40,7 @@
 		<Actor name="Cube">
 			<Parent componentName="None"/>
 			<Mesh componentName="CubeModel"/>
-			<Material componentName="MarioBlack"/>
+			<Material componentName="SkullNormal"/>
 			<Shader componentName="PhongShader"/>
 		</Actor>
 		

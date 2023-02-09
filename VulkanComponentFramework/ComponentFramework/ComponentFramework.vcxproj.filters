@@ -52,18 +52,6 @@
     <Filter Include="Source Files\Scenes\Room">
       <UniqueIdentifier>{5aaf668a-a3c0-4338-9c01-07725fa873f0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Geometry">
-      <UniqueIdentifier>{180f794e-629f-4480-825b-c51629d1d673}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Geometry">
-      <UniqueIdentifier>{140a9e50-aa4b-41ae-bf83-507761f311df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Physics">
-      <UniqueIdentifier>{aa939dc6-0e1a-4d18-b25f-40637b557f90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Physics">
-      <UniqueIdentifier>{5984a0d4-d93f-4eab-b3c5-9ea15269ed6e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -76,6 +64,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MMath.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="VMath.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
     <ClCompile Include="Scene0.cpp">
@@ -94,9 +85,6 @@
       <Filter>Source Files\Math</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GlobalLightning.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MaterialComponent.cpp">
@@ -138,11 +126,14 @@
     <ClCompile Include="Room.cpp">
       <Filter>Source Files\Scenes\Room</Filter>
     </ClCompile>
-    <ClCompile Include="VMath.cpp">
-      <Filter>Source Files\Math</Filter>
+    <ClCompile Include="GlobalLighting.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Physics.cpp">
-      <Filter>Source Files\Physics</Filter>
+    <ClCompile Include="Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -158,7 +149,13 @@
     <ClInclude Include="MMath.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
     <ClInclude Include="VMath.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
@@ -242,20 +239,11 @@
     <ClInclude Include="Room.h">
       <Filter>Header Files\Scenes\Room</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsComponent.h">
-      <Filter>Header Files\Components</Filter>
+    <ClInclude Include="Input.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Ray.h">
-      <Filter>Header Files\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics.h">
-      <Filter>Header Files\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Plane.h">
-      <Filter>Header Files\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="Sphere.h">
-      <Filter>Header Files\Geometry</Filter>
+    <ClInclude Include="PlayerController.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -306,6 +294,12 @@
       <Filter>XML</Filter>
     </Xml>
     <Xml Include="Scene0.xml">
+      <Filter>XML</Filter>
+    </Xml>
+    <Xml Include="TestScene.xml">
+      <Filter>XML</Filter>
+    </Xml>
+    <Xml Include="TestScene2.xml">
       <Filter>XML</Filter>
     </Xml>
   </ItemGroup>
