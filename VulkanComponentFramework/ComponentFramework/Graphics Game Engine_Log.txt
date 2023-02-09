@@ -5,11 +5,3 @@
 [INFO]: Succeed to Load Scene Scene0
 [INFO]: Created Scene0: 
 [INFO]: Succeed to Load Scene Scene0
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting the GameSceneManager
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting the GameSceneManager
