@@ -3,6 +3,14 @@
 	<TestScene>
 	
 	<Size x="100" y="100" z="100"/>
+	<LightActor>
+		<Light posX ="5.0" poYX ="0.0" posZ ="-3.0"
+			   r="0.0" g="1.0" b="0.0" a="1.0"/>
+		<Light posX ="1.0" poYX ="1.0" posZ ="0.0"
+			   r="1.0" g="" b="0.0" a="1.0"/>
+	</LightActor>
+		
+		
 	<ReferenceActor>
 		<RefName name="Mario"/>
 		<RefName name="Skull"/>

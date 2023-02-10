@@ -26,7 +26,7 @@ public:
 
 private:
 	Ref<Room> room;
-	std::vector<Ref<LightActor>> globalLights;
+
 };
 
 #endif
