@@ -3,7 +3,10 @@
 
 #include "Renderer.h"
 #include "Actor.h"
+#include "GlobalLighting.h"
 #include <unordered_map>
+
+#define LIGHT_NUM 2
 
 union SDL_Event;
 class Camera;
@@ -19,6 +22,16 @@ public:
 	virtual void Render() const  = 0 ;
 	virtual void HandleEvents(const SDL_Event &sdlEvent) = 0;
 	std::unordered_map<const char*, Ref<Actor>> GetActorList() { return actorList; }
+
+	void AddLight(Vec4 pos_, Vec4 colour_) {
+		//Don't add light if exceeds max light number
+		if (globalLights.size() >= LIGHT_NUM) return;
+
+		Ref<LightActor> light_ = std::make_shared<LightActor>(nullptr);
+		light_->SetPosition(pos_);
+		light_->SetDiffuse(colour_);
+		globalLights.push_back(light_);
+	}
 
 	template<typename ActorTemplate>
 	void AddActor(const char* name_, Ref<ActorTemplate> actor_) {
@@ -36,5 +49,6 @@ protected:
 	Renderer *renderer;
 	Ref<Camera> camera;
 	std::unordered_map<const char*, Ref<Actor>> actorList;
+	std::vector<Ref<LightActor>> globalLights;
 };
 #endif
