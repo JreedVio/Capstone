@@ -4,9 +4,9 @@
 	
 	<Size x="100" y="100" z="100"/>
 	<LightActor>
-		<Light posX ="5.0" poYX ="0.0" posZ ="-3.0"
+		<Light posX ="5.0" posY ="0.0" posZ ="-3.0"
 			   r="0.0" g="1.0" b="0.0" a="1.0"/>
-		<Light posX ="1.0" poYX ="1.0" posZ ="0.0"
+		<Light posX ="1.0" posY ="1.0" posZ ="0.0"
 			   r="1.0" g="" b="0.0" a="1.0"/>
 	</LightActor>
 		
@@ -19,10 +19,18 @@
 		
 		
 	<Actor ref="Mario" name="Mario1">
-		<Transform componentName="MarioTransform"
+	<Transform componentName="MarioTransform"
 				   posX ="1.0" posY ="0.0" posZ ="1.0"
 				   angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
-				   scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
+				   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
+	</Actor>
+
+		
+	<Actor ref="Mario" name="Mario2">
+		<Transform componentName="MarioTransform"
+					posX ="0.0" posY ="0.0" posZ ="0.0"
+					angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+					scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
 	</Actor>
 
 	
