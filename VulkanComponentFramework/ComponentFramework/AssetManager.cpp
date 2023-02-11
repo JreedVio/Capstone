@@ -11,6 +11,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Room.h"
+#include "RoomScene.h"
 
 #define BUFFER_SIZE 128
 
@@ -51,7 +52,7 @@ void AssetManager::LoadAssets(const char* fileName_) {
 	Debug::Info("Succeed to Load Asset " + std::string(fileName_), __FILE__, __LINE__);
 }
 
-Ref<Room> AssetManager::LoadRoom(const char* sceneName_) {
+Scene* AssetManager::LoadRoom(const char* sceneName_) {
 
 	XMLElement* fileData = ReadManiFest(LoadType::SCENE, sceneName_);
 	if (!fileData) {
@@ -59,7 +60,7 @@ Ref<Room> AssetManager::LoadRoom(const char* sceneName_) {
 		return nullptr;
 	}
 	//Load Room data 
-	Ref<Room> room_ = CreateRoom(fileData);
+	Scene* room_ = CreateRoom(fileData);
 
 	Debug::Info("Succeed to Load Scene " + std::string(sceneName_), __FILE__, __LINE__);
 	return room_;
@@ -234,7 +235,7 @@ bool AssetManager::CreateActors(){
 	return true;
 }
 
-Ref<Room> AssetManager::CreateRoom(XMLElement* roomData){
+Scene* AssetManager::CreateRoom(XMLElement* roomData){
 
 	//Ref<Room> room_ = std::make_shared<Room>(100, 100, 1000);
 	//Get information for room
@@ -243,6 +244,25 @@ Ref<Room> AssetManager::CreateRoom(XMLElement* roomData){
 	float length = sizeData->FloatAttribute("y");
 	float height = sizeData->FloatAttribute("z");
 	Ref<Room> room_ = std::make_shared<Room>(width, length, height);
+	Scene* scene_ = new RoomScene(renderer, room_);
+	//Add light data
+	XMLElement* lightData = roomData->FirstChildElement("LightActor");
+	XMLElement* light_ = lightData->FirstChildElement("Light");
+	while (light_) {
+		//Get position of the light
+		float posX = light_->FloatAttribute("posX");
+		float posY = light_->FloatAttribute("posY");
+		float posZ = light_->FloatAttribute("posZ");
+		//Get diffuse if the light
+		float r_ = light_->FloatAttribute("r");
+		float g_ = light_->FloatAttribute("g");
+		float b_ = light_->FloatAttribute("b");
+		float a_ = light_->FloatAttribute("a");
+		//Add light to the scene
+		scene_->AddLight(Vec4(posX, posY, posZ, 0.0f), Vec4(r_, g_, b_, a_));
+		light_ = light_->NextSiblingElement("Light");
+	}
+
 	//Get possible actor in the room
 	//Store a temp list for refecrenced actor
 	std::unordered_map<const char*, Ref<Actor>> actorRefList;
@@ -326,8 +346,9 @@ Ref<Room> AssetManager::CreateRoom(XMLElement* roomData){
 		actorData = actorData->NextSiblingElement("Actor");
 	}
 
-	return room_;
+	return scene_;
 }
+
 
 bool AssetManager::OnCreate(){
 	return true;

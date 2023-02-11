@@ -26,13 +26,13 @@ bool RoomScene::OnCreate(){
     camera->Perspective(45.0f, aspectRatio, 0.5f, 20.0f);
     camera->LookAt(Vec3(0.0f, 0.0f, 5.0f), Vec3(0.0f, 0.0f, -3.0f), Vec3(0.0f, 1.0f, 0.0f)); 
     
-    globalLights.push_back(std::make_shared<LightActor>(nullptr));
-    globalLights.push_back(std::make_shared<LightActor>(nullptr));
+    //globalLights.push_back(std::make_shared<LightActor>(nullptr));
+    //globalLights.push_back(std::make_shared<LightActor>(nullptr));
 
-    globalLights[0]->SetPosition(Vec4(5.0f, 0.0f, -3.0f, 0.0f));
-    globalLights[0]->SetDiffuse(Vec4(0.0f, 0.1f, 0.0f, 1.0f));
-    globalLights[1]->SetPosition(Vec4(-5.0f, 0.0f, -3.0f, 0.0f));
-    globalLights[0]->SetDiffuse(Vec4(0.6f, 0.0f, 0.0f, 1.0f));
+    //globalLights[0]->SetPosition(Vec4(5.0f, 0.0f, -3.0f, 0.0f));
+    //globalLights[0]->SetDiffuse(Vec4(0.0f, 0.1f, 0.0f, 1.0f));
+    //globalLights[1]->SetPosition(Vec4(-5.0f, 0.0f, -3.0f, 0.0f));
+    //globalLights[0]->SetDiffuse(Vec4(0.6f, 0.0f, 0.0f, 1.0f));
     //globalLights.diffuse = Vec4(0.0f, 0.1f, 0.0f, 1.0f);
 
     return false;

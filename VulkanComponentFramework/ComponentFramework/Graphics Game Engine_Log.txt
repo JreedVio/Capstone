@@ -2,4 +2,7 @@
 [INFO]: AssetManager Created
 [INFO]: Succeed to Load Asset RendererAssets
 [INFO]: Succeed to Load Scene TestScene
-[INFO]: Succeed to Load Scene TestScene
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting the GameSceneManager

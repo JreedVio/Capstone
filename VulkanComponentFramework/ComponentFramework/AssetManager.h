@@ -15,6 +15,7 @@ class MeshComponent;
 class MaterialComponent;
 class ShaderComponent;
 class Room;
+class Scene;
 
 enum LoadType {
 	ASSETS,
@@ -29,8 +30,6 @@ private:
 	XMLDocument sceneDoc;
 	std::unordered_map<const char*, Ref<Actor>> actorList;
 	std::unordered_map<const char*, Ref<Component>> componentCatalog;
-	//std::unordered_map<const char*, Ref<MeshComponent>> meshList;
-	//std::unordered_map<const char*, Ref<MaterialComponent>> materialList;
 	std::unordered_map<const char*, Ref<ShaderComponent>> shaderList;
 
 	XMLElement* ReadManiFest(LoadType loadType, const char* fileName_);
@@ -39,7 +38,7 @@ private:
 	bool CreateComponents();
 	void AddActorData(XMLElement* actorData);
 	bool CreateActors();
-	Ref<Room> CreateRoom(XMLElement* roomData);
+	Scene* CreateRoom(XMLElement* roomData);
 
 public:
 	static AssetManager* GetInstance();
@@ -47,13 +46,11 @@ public:
 	~AssetManager();
 	bool OnCreate();
 	void LoadAssets(const char* fileName_);
-	Ref<Room> LoadRoom(const char* sceneName_);
+	Scene* LoadRoom(const char* sceneName_);
 	void OnDestroy();
 
 	std::unordered_map<const char*, Ref<Component>> GetComponentList() { return componentCatalog; }
 	std::unordered_map<const char*, Ref<Actor>> GetActorList() { return actorList; }
-	//std::unordered_map<const char*, Ref<MeshComponent>> GetMeshList() { return meshList; }
-	//std::unordered_map<const char*, Ref<MaterialComponent>> GetMaterialList() { return materialList; }
 	std::unordered_map<const char*, Ref<ShaderComponent>> GetShaderList() { return shaderList; }
 
 	Ref<Actor> GetActor(const char* name_);

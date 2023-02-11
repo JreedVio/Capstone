@@ -189,7 +189,7 @@ void SceneManager::BuildScene(SCENETYPE scenetype_, const char* fileName) {
 	case ROOMSCENE:
 		//currentScene = new RoomScene(renderer);
 		
-		currentScene = new RoomScene(renderer, assetManager->LoadRoom(fileName));
+		currentScene = assetManager->LoadRoom(fileName);
 		status = currentScene->OnCreate();
 		break;
 
