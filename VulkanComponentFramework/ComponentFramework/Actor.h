@@ -27,7 +27,7 @@ class Actor : public Component {
 
 private:
 	std::vector<Ref<Component>> components;
-	
+	bool visible;
 	VulkanRenderer* renderer;
 
 public:
@@ -43,6 +43,9 @@ public:
 	void OnDestroy();
 	void Update(const float deltaTime_);
 	void Render() const;
+
+	bool GetVisible() const { return visible; }
+	void SetVisible(bool visible_) { visible = visible_; }
 
 	std::vector<Ref<Component>> GetComponentList() const { return components; }
 
