@@ -32,6 +32,7 @@ public:
 	virtual void Update(const float deltaTime) override;
 	virtual void Render() const override;
 	virtual void HandleEvents(const SDL_Event &sdlEvent) override;
+	Renderer* getRenderer() { return renderer; }
 };
 
 

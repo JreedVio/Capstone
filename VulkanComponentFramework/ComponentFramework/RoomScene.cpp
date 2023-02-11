@@ -59,3 +59,16 @@ void RoomScene::Render() const{
 void RoomScene::HandleEvents(const SDL_Event& sdlEvent)
 {
 }
+
+Ref<Actor> RoomScene::GetActor(const char* name_)
+{
+    for (auto actor_ : GetActorList()) {
+        if (strcmp(actor_.first, name_) == 0) {
+            return actor_.second;
+        }
+    }
+    //Debug message when fail
+    std::string message = std::string(name_) + " -> Actor not found in AssetManager";
+    Debug::FatalError(message, __FILE__, __LINE__);
+    return nullptr;
+}

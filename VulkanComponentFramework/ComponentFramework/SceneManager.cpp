@@ -6,6 +6,10 @@
 #include "Timer.h"
 #include "RoomScene.h"
 #include "Debug.h"
+#include "ChronoTimer.h"
+#include <future>
+#include <thread>
+
 
 SceneManager* SceneManager::Instance(nullptr);
 
@@ -57,6 +61,13 @@ SceneManager::~SceneManager() {
 		player2 = nullptr;
 	}
 
+	if (networkManager) {
+		//networkManager->OnDestroy();
+		delete networkManager;
+		networkManager = nullptr;
+
+	}
+
 	Debug::Info("Deleting the GameSceneManager", __FILE__, __LINE__);
 
 }
@@ -65,7 +76,7 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 
 	renderer = VulkanRenderer::GetInstance();
 	renderer->setRendererType(RendererType::VULKAN);
-	renderer->CreateWindow(name_, width_, height_);
+	renderer->CreateSDLWindow(name_, width_, height_);
 	renderer->OnCreate();
 
 	//Create asset manager
@@ -82,6 +93,9 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 		Debug::FatalError("Failed to initialize Timer object", __FILE__, __LINE__);
 		return false;
 	}
+
+	networkManager = new NetworkManager();
+	networkManager->OnCreate();
 	
 	BuildScene(ROOMSCENE, "TestScene");
 	
@@ -94,13 +108,32 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 void SceneManager::Run() {
 	timer->Start();
 	isRunning = true;
+
+	
+	std::thread networking(&NetworkManager::Update, this->networkManager);
+	networking.detach();
+
+
 	while (isRunning) {
-		timer->UpdateFrameTicks();
-		currentScene->Update(timer->GetDeltaTime());
-		currentScene->Render();
-		GetEvents();
-		SDL_Delay(timer->GetSleepTime(fps));	
+		{
+			//ChronoTimer chronoTimer;
+
+			timer->UpdateFrameTicks();
+			currentScene->Update(timer->GetDeltaTime());
+			currentScene->Render();
+
+			//networkManager->Update();
+			//std::async(std::launch::async, RunNetworkUpdate, networkManager);
+
+			GetEvents();
+		}
+		SDL_Delay(timer->GetSleepTime(fps));
 	}
+}
+
+void SceneManager::RunNetworkUpdate(NetworkManager* networkManager_) {
+	
+	networkManager_->Update();
 }
 
 void SceneManager::GetEvents() {
@@ -181,5 +214,7 @@ void SceneManager::BuildScene(SCENETYPE scenetype_, const char* fileName) {
 		break;
 	}	
 }
+
+
 
 

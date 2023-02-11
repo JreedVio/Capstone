@@ -3,6 +3,8 @@
 
 #include <string>
 #include "VulkanRenderer.h"
+#include "NetworkManager.h"
+
 
 class AssetManager;
 class Scene;
@@ -16,6 +18,8 @@ public:
 	void Run();
 	bool Initialize(std::string name_, int width_, int height_);
 	void GetEvents();
+	static void RunNetworkUpdate(NetworkManager*);
+	bool GetIsRunning() { return isRunning; }
 	Scene* GetCurrentScene() { return currentScene; }
 	
 private:
@@ -27,6 +31,8 @@ private:
 
 	SceneManager();
 	static SceneManager* Instance;
+
+	NetworkManager* networkManager;
 
 	enum class RendererType rendererType;
 	Scene* currentScene;

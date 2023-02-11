@@ -44,6 +44,8 @@ public:
 #endif
 		}
 	}
+	virtual Ref<Actor> GetActor(const char* name_) = 0;
+
 
 protected:
 	VulkanRenderer* renderer;

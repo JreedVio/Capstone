@@ -19,7 +19,7 @@ VulkanRenderer::~VulkanRenderer() {
 
 }
 
-SDL_Window* VulkanRenderer::CreateWindow(std::string name_, int width_, int height_) {
+SDL_Window* VulkanRenderer::CreateSDLWindow(std::string name_, int width_, int height_) {
     windowWidth = width_;
     windowHeight = height_;
     SDL_Init(SDL_INIT_VIDEO);
