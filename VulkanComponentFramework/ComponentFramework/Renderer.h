@@ -14,7 +14,7 @@ class Renderer {
 public:
 	Renderer():renderer(nullptr),rendererType(RendererType::NONE){}
 	virtual ~Renderer() {}
-	virtual SDL_Window* CreateWindow(std::string name_, int width_, int height_) = 0;
+	virtual SDL_Window* CreateSDLWindow(std::string name_, int width_, int height_) = 0;
 	virtual bool OnCreate() = 0;
 	virtual void OnDestroy() = 0;
 	virtual void Render() = 0;

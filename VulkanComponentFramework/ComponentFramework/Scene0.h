@@ -24,7 +24,7 @@ private:
 	std::vector<Ref<LightActor>> lights;
 	
 public:
-	explicit Scene0(Renderer* renderer_);
+	explicit Scene0(VulkanRenderer* renderer_);
 	virtual ~Scene0();
 
 	virtual bool OnCreate() override;
@@ -32,6 +32,7 @@ public:
 	virtual void Update(const float deltaTime) override;
 	virtual void Render() const override;
 	virtual void HandleEvents(const SDL_Event &sdlEvent) override;
+	Renderer* getRenderer() { return renderer; }
 };
 
 

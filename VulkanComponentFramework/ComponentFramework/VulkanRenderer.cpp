@@ -19,7 +19,7 @@ VulkanRenderer::~VulkanRenderer() {
 
 }
 
-SDL_Window* VulkanRenderer::CreateWindow(std::string name_, int width_, int height_) {
+SDL_Window* VulkanRenderer::CreateSDLWindow(std::string name_, int width_, int height_) {
     windowWidth = width_;
     windowHeight = height_;
     SDL_Init(SDL_INIT_VIDEO);
@@ -160,19 +160,18 @@ void VulkanRenderer::initVulkan() {
     AssetManager* assetManager = AssetManager::GetInstance();
  
     //Recreate shaders
-    for (auto pipeline : assetManager->GetShaderList()) {
-        pipeline.second->OnCreate();
-    }
-    
-    //Recreate Actors
-    SceneManager* sceneManager = SceneManager::GetInstance();
-    Scene* scene_ = sceneManager->GetCurrentScene();
-    if (scene_) {
-        for (auto actor : scene_->GetActorList()) {
-            actor.second->OnCreate();
-        }
-    }
-
+    //for (auto pipeline : assetManager->GetShaderList()) {
+    //    pipeline.second->OnCreate();
+    //}
+    //
+    ////Recreate Actors
+    //SceneManager* sceneManager = SceneManager::GetInstance();
+    //Scene* scene_ = sceneManager->GetCurrentScene();
+    //if (scene_) {
+    //    for (auto actor : scene_->GetActorList()) {
+    //        actor.second->OnCreate();
+    //    }
+    //}
 
     createCommandBuffers();
     recordCommandBuffer();
@@ -290,7 +289,6 @@ void VulkanRenderer::recreateSwapChain() {
     createSwapChain();
     createImageViews();
     createRenderPass();
-    //createGraphicsPipeline("shaders/phong.vert.spv", "shaders/phong.frag.spv");
 
     createDepthResources();
     createFramebuffers();

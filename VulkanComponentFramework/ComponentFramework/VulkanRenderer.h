@@ -102,7 +102,14 @@ struct QueueFamilyIndices {
 
 
         ~VulkanRenderer();
-        SDL_Window* CreateWindow(std::string name_, int width, int height);
+
+        static VulkanRenderer* GetInstance() {
+            if (Instance == nullptr) {
+                Instance = new VulkanRenderer();
+            }
+            return Instance;
+        }
+        SDL_Window* CreateSDLWindow(std::string name_, int width, int height);
         bool OnCreate();
         void OnDestroy();
         void Render();
@@ -133,12 +140,12 @@ struct QueueFamilyIndices {
         std::vector<VkBuffer> GetGLightingBuffers() {
             return glightingBuffers;
         }
+        uint32_t GetWidth() {
+            return windowWidth;
+        }
 
-        static VulkanRenderer* GetInstance() {
-            if (Instance == nullptr) {
-                Instance = new VulkanRenderer();
-            }
-            return Instance;
+        uint32_t GetHeight() {
+            return windowHeight;
         }
 
         void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
