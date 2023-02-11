@@ -6,17 +6,13 @@
 #include "Timer.h"
 #include "RoomScene.h"
 #include "Debug.h"
-#include "ChronoTimer.h"
-#include <future>
-#include <thread>
-
 
 SceneManager* SceneManager::Instance(nullptr);
 
 SceneManager::SceneManager(): 
 	currentScene(nullptr), timer(nullptr),
 	fps(60), isRunning(false), rendererType(RendererType::VULKAN), 
-	renderer(nullptr), assetManager(nullptr) {}
+	renderer(nullptr), assetManager(nullptr), player1(nullptr), player2(nullptr) {}
 
 SceneManager* SceneManager::GetInstance(){
 	if (!Instance) {
@@ -51,10 +47,14 @@ SceneManager::~SceneManager() {
 		currentScene = nullptr;
 	}
 
-	if (networkManager) {
-		//networkManager->OnDestroy();
-		delete networkManager;
-		networkManager = nullptr;
+	if (player1) {
+		delete player1;
+		player1 = nullptr;
+	}
+
+	if (player2) {
+		delete player2;
+		player2 = nullptr;
 	}
 
 	Debug::Info("Deleting the GameSceneManager", __FILE__, __LINE__);
@@ -65,7 +65,7 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 
 	renderer = VulkanRenderer::GetInstance();
 	renderer->setRendererType(RendererType::VULKAN);
-	renderer->CreateSDLWindow(name_, width_, height_);
+	renderer->CreateWindow(name_, width_, height_);
 	renderer->OnCreate();
 
 	//Create asset manager
@@ -82,12 +82,11 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 		Debug::FatalError("Failed to initialize Timer object", __FILE__, __LINE__);
 		return false;
 	}
-
-	networkManager = new NetworkManager();
-	networkManager->OnCreate();
 	
 	BuildScene(ROOMSCENE, "TestScene");
 	
+	//player1 = currentScene->Get
+
 	return true;
 }
 
@@ -95,32 +94,13 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 void SceneManager::Run() {
 	timer->Start();
 	isRunning = true;
-
-	
-	std::thread networking(&NetworkManager::Update, this->networkManager);
-	networking.detach();
-
-
 	while (isRunning) {
-		{
-			//ChronoTimer chronoTimer;
-
-			timer->UpdateFrameTicks();
-			currentScene->Update(timer->GetDeltaTime());
-			currentScene->Render();
-
-			//networkManager->Update();
-			//std::async(std::launch::async, RunNetworkUpdate, networkManager);
-
-			GetEvents();
-		}
-		SDL_Delay(timer->GetSleepTime(fps));
+		timer->UpdateFrameTicks();
+		currentScene->Update(timer->GetDeltaTime());
+		currentScene->Render();
+		GetEvents();
+		SDL_Delay(timer->GetSleepTime(fps));	
 	}
-}
-
-void SceneManager::RunNetworkUpdate(NetworkManager* networkManager_) {
-	
-	networkManager_->Update();
 }
 
 void SceneManager::GetEvents() {
@@ -138,11 +118,9 @@ void SceneManager::GetEvents() {
 				return;
 
 			case SDL_SCANCODE_F1:
-				BuildScene(ROOMSCENE, "TestScene");
 				break;
 
 			case SDL_SCANCODE_F2:
-				BuildScene(ROOMSCENE, "TestScene2");
 				break;
 
 			case SDL_SCANCODE_F3:
@@ -162,7 +140,6 @@ void SceneManager::GetEvents() {
 				break;
 
 			default:
-				//BuildScene(ROOMSCENE, "TestScene");
 				break;
 			}
 		}
@@ -204,7 +181,5 @@ void SceneManager::BuildScene(SCENETYPE scenetype_, const char* fileName) {
 		break;
 	}	
 }
-
-
 
 

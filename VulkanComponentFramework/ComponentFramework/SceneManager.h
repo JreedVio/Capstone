@@ -8,6 +8,7 @@
 
 class AssetManager;
 class Scene;
+class Actor;
 
 class SceneManager  {
 public:
@@ -20,7 +21,6 @@ public:
 	static void RunNetworkUpdate(NetworkManager*);
 	bool GetIsRunning() { return isRunning; }
 	Scene* GetCurrentScene() { return currentScene; }
-	
 	
 private:
 	
@@ -37,6 +37,9 @@ private:
 	enum class RendererType rendererType;
 	Scene* currentScene;
 	class Timer* timer;
+
+	Actor* player1;
+	Actor* player2;
 
 	VulkanRenderer* renderer;
 	AssetManager* assetManager;
