@@ -25,6 +25,8 @@ bool RoomScene::OnCreate(){
     float aspectRatio = static_cast<float>(renderer->GetWidth()) / static_cast<float>(renderer->GetHeight());
     camera->Perspective(45.0f, aspectRatio, 0.5f, 20.0f);
     camera->LookAt(Vec3(0.0f, 0.0f, 5.0f), Vec3(0.0f, 0.0f, -3.0f), Vec3(0.0f, 1.0f, 0.0f)); 
+
+    player = GetActor("Mario1");
     
     //globalLights.push_back(std::make_shared<LightActor>(nullptr));
     //globalLights.push_back(std::make_shared<LightActor>(nullptr));
@@ -58,6 +60,8 @@ void RoomScene::Render() const{
 
 void RoomScene::HandleEvents(const SDL_Event& sdlEvent)
 {
+    Ref<TransformComponent> tf = player->GetComponent<TransformComponent>();
+    player->GetComponent<PlayerController>()->GetPlayerInput(sdlEvent, tf.get());
 }
 
 Ref<Actor> RoomScene::GetActor(const char* name_)

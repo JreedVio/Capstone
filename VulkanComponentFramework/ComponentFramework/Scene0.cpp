@@ -14,6 +14,7 @@ Scene0::Scene0(VulkanRenderer* renderer_):
 	lights.push_back(light);
 	lights[0] = std::make_shared<LightActor>();
 	lights[1] = std::make_shared<LightActor>();	
+	
 
 	Debug::Info("Created Scene0: ", __FILE__, __LINE__);
 }
@@ -56,7 +57,7 @@ void Scene0::HandleEvents(const SDL_Event &sdlEvent) {
 
 		}
 	}
-
+	
 }
 
 void Scene0::Update(const float deltaTime) {
