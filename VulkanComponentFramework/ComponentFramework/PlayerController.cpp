@@ -7,25 +7,36 @@ PlayerController::PlayerController(Component* parent_): Component(parent_)
 
 }
 
-void PlayerController::GetPlayerInput(const SDL_Event& Event)
+void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent* TF_Component)
 {		
-	
+	if (!TF_Component)
+		return;
+
+	// temp var(s)	
+	float moveSpeed = 0.5f;
+	Vec3 pos = TF_Component->GetPosition();
+	Quaternion orient = TF_Component->GetOrientation();
+
 	// Key DOWN
 	if (KeyDown(KeyCode::W, Event))
-	{		
-		printf("Key Pressed\n");
+	{	
+		pos.z -= moveSpeed;
+		TF_Component->SetTransform(pos, orient);
 	}
 	else if (KeyDown(KeyCode::A, Event))
 	{
-		printf("Key Pressed\n");
+		pos.x -= moveSpeed;
+		TF_Component->SetTransform(pos, orient);
 	}
 	if (KeyDown(KeyCode::S, Event))
 	{
-		printf("Key Pressed\n");
+		pos.z += moveSpeed;
+		TF_Component->SetTransform(pos, orient);
 	}
 	else if (KeyDown(KeyCode::D, Event))
 	{
-		printf("Key Pressed\n");
+		pos.x += moveSpeed;
+		TF_Component->SetTransform(pos, orient);
 	}
 	if (KeyDown(KeyCode::ESC, Event))
 	{
@@ -50,6 +61,7 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event)
 		printf("Key Released\n");
 	}	
 
+	printf("pos.x: %f, pos.y: %f, pos.z: %f\n", pos.x, pos.y, pos.z);
 }
 
 PlayerController::~PlayerController()

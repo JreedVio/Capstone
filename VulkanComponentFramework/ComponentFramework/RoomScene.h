@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Room.h"
 #include <vector>
+#include "PlayerController.h"
 
 class LightActor;
 
@@ -24,6 +25,8 @@ public:
 		return room->GetActorList();
 	}
 	Ref<Actor> GetActor(const char* name_);
+
+	Ref<Actor> player;
 
 private:
 	Ref<Room> room;
