@@ -5,7 +5,6 @@
 #include "VulkanRenderer.h"
 #include "NetworkManager.h"
 
-
 class AssetManager;
 class Scene;
 class Actor;
@@ -38,8 +37,8 @@ private:
 	Scene* currentScene;
 	class Timer* timer;
 
-	Actor* player1;
-	Actor* player2;
+	Ref<Actor> player1;
+	Ref<Actor> player2;
 
 	VulkanRenderer* renderer;
 	AssetManager* assetManager;

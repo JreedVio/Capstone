@@ -51,15 +51,15 @@ SceneManager::~SceneManager() {
 		currentScene = nullptr;
 	}
 
-	if (player1) {
-		delete player1;
-		player1 = nullptr;
-	}
+	//if (player1) {
+	//	delete player1;
+	//	player1 = nullptr;
+	//}
 
-	if (player2) {
-		delete player2;
-		player2 = nullptr;
-	}
+	//if (player2) {
+	//	delete player2;
+	//	player2 = nullptr;
+	//}
 
 	if (networkManager) {
 		//networkManager->OnDestroy();
@@ -99,8 +99,9 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 	
 	BuildScene(ROOMSCENE, "TestScene");
 	
-	//player1 = currentScene->Get
-
+	player1 = currentScene->GetActor("Mario1");
+	player2 = currentScene->GetActor("Mario2");
+	player2->SetVisible(false);
 	return true;
 }
 
