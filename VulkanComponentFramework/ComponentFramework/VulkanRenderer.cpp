@@ -951,6 +951,7 @@ void VulkanRenderer::recordCommandBuffer() {
             for (auto actorElement : actorList) {
                 //Get components for actor
                 Ref<Actor> actor = actorElement.second;
+                if (!actor->GetVisible()) continue;
                 Ref<ShaderComponent> actorShader = actor->GetComponent<ShaderComponent>();
                 Ref<MeshComponent> actorMesh = actor->GetComponent<MeshComponent>();
                 Ref<MaterialComponent> actorMaterial = actor->GetComponent<MaterialComponent>();

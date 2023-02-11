@@ -57,6 +57,7 @@ SceneManager::~SceneManager() {
 		networkManager = nullptr;
 	}
 
+
 	Debug::Info("Deleting the GameSceneManager", __FILE__, __LINE__);
 
 }
@@ -85,9 +86,13 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 
 	networkManager = new NetworkManager();
 	networkManager->OnCreate();
-	
+
+
 	BuildScene(ROOMSCENE, "TestScene");
-	
+
+	player1 = currentScene->GetActor("Mario1");
+	player2 = currentScene->GetActor("Mario2");
+	player2->SetVisible(false);
 	return true;
 }
 
