@@ -6,6 +6,7 @@
 
 class AssetManager;
 class Scene;
+class Actor;
 
 class SceneManager  {
 public:
@@ -16,7 +17,6 @@ public:
 	bool Initialize(std::string name_, int width_, int height_);
 	void GetEvents();
 	Scene* GetCurrentScene() { return currentScene; }
-	
 	
 private:
 	
@@ -31,6 +31,9 @@ private:
 	enum class RendererType rendererType;
 	Scene* currentScene;
 	class Timer* timer;
+
+	Actor* player1;
+	Actor* player2;
 
 	VulkanRenderer* renderer;
 	AssetManager* assetManager;

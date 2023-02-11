@@ -12,7 +12,7 @@ SceneManager* SceneManager::Instance(nullptr);
 SceneManager::SceneManager(): 
 	currentScene(nullptr), timer(nullptr),
 	fps(60), isRunning(false), rendererType(RendererType::VULKAN), 
-	renderer(nullptr), assetManager(nullptr) {}
+	renderer(nullptr), assetManager(nullptr), player1(nullptr), player2(nullptr) {}
 
 SceneManager* SceneManager::GetInstance(){
 	if (!Instance) {
@@ -47,6 +47,16 @@ SceneManager::~SceneManager() {
 		currentScene = nullptr;
 	}
 
+	if (player1) {
+		delete player1;
+		player1 = nullptr;
+	}
+
+	if (player2) {
+		delete player2;
+		player2 = nullptr;
+	}
+
 	Debug::Info("Deleting the GameSceneManager", __FILE__, __LINE__);
 
 }
@@ -75,6 +85,8 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 	
 	BuildScene(ROOMSCENE, "TestScene");
 	
+	//player1 = currentScene->Get
+
 	return true;
 }
 
@@ -106,11 +118,9 @@ void SceneManager::GetEvents() {
 				return;
 
 			case SDL_SCANCODE_F1:
-				BuildScene(ROOMSCENE, "TestScene");
 				break;
 
 			case SDL_SCANCODE_F2:
-				BuildScene(ROOMSCENE, "TestScene2");
 				break;
 
 			case SDL_SCANCODE_F3:
@@ -130,7 +140,6 @@ void SceneManager::GetEvents() {
 				break;
 
 			default:
-				BuildScene(ROOMSCENE, "TestScene");
 				break;
 			}
 		}
