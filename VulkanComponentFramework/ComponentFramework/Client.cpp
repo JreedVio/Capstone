@@ -1,6 +1,8 @@
 #include "Client.h"
 #include "Debug.h"
 #include "MMath.h"
+#include "SceneManager.h"
+#include "RoomScene.h"
 
 using namespace MATH;
 
@@ -82,8 +84,21 @@ void Client::Update()
     // Game loop (Not Working)
 
     ENetEvent event;
-    Vec3 newData;
-    Vec3 pos = Vec3(100.0f, 1100.0f, 2200.0f);
+    Vec3 pos;
+    Vec3 recievedData;
+
+    SceneManager* sceneManager = SceneManager::GetInstance();
+    if (sceneManager != nullptr) {
+        Ref<Actor> mario = sceneManager->GetCurrentScene()->GetActor("Mario1");
+        if (mario != nullptr) {
+            Ref<TransformComponent> transform = mario->GetComponent<TransformComponent>();
+            pos = transform->GetPosition();
+        }
+        else {
+            pos = Vec3(10, 10, 10);
+        }
+    }
+
     int eventStatus = 1;
         
     /* Wait up to 1000 milliseconds for an event. */
@@ -93,8 +108,8 @@ void Client::Update()
         switch (event.type)
         {
         case ENET_EVENT_TYPE_RECEIVE:
-            std::memcpy(&newData, event.packet->data, event.packet->dataLength);
-            std::cout << newData.x << " " << newData.y << " " << newData.z << std::endl;
+            std::memcpy(&recievedData, event.packet->data, event.packet->dataLength);
+            std::cout << recievedData.x << " " << recievedData.y << " " << recievedData.z << std::endl;
 
 
             /* Clean up the packet now that we're done using it. */

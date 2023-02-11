@@ -65,6 +65,7 @@ void Server::Update()
 
     ENetEvent event;
     Vec3 pos;
+    Vec3 recievedData;
 
     SceneManager* sceneManager = SceneManager::GetInstance();
     if (sceneManager != nullptr) {
@@ -78,7 +79,6 @@ void Server::Update()
         }
     }
 
-    Vec3 recievedData;
     int eventStatus = 1;
     
     /* Wait up to 1000 milliseconds for an event. */
