@@ -1,6 +1,8 @@
 #include "Server.h"
 #include "Debug.h"
 #include "MMath.h"
+#include "SceneManager.h"
+#include "RoomScene.h"
 
 
 #include <WS2tcpip.h>
@@ -64,15 +66,17 @@ void Server::Update()
     ENetEvent event;
     Vec3 pos;
 
-    /*SceneManager* sceneManager = SceneManager::GetInstance();
-    Ref<Actor> mario = sceneManager->GetCurrentScene()->GetActor("Mario1");
-    if (mario != nullptr) {
-        Ref<TransformComponent> transform = mario->GetComponent<TransformComponent>();
-        pos = transform->GetPosition();
+    SceneManager* sceneManager = SceneManager::GetInstance();
+    if (sceneManager != nullptr) {
+        Ref<Actor> mario = sceneManager->GetCurrentScene()->GetActor("Mario1");
+        if (mario != nullptr) {
+            Ref<TransformComponent> transform = mario->GetComponent<TransformComponent>();
+            pos = transform->GetPosition();
+        }
+        else {
+            pos = Vec3(0, 0, 0);
+        }
     }
-    else {*/
-        pos = Vec3(0, 0, 0);
-    //}
 
     Vec3 recievedData;
     int eventStatus = 1;

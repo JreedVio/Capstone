@@ -291,7 +291,7 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 			//Generate a random number, and use this as index to grab actor data from list
 			int listSize = actorRefList.size();
 			int randomIndex = rand() % listSize;
-			std::cout << randomIndex << "\n";
+			//std::cout << randomIndex << "\n";
 			/*DONT USE FIND FUNCTION
 			* To avoid problems where the program is comparing address, instead of values within pointers
 			* Do a for loop 

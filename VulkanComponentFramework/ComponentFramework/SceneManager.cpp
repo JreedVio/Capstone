@@ -162,7 +162,7 @@ void SceneManager::GetEvents() {
 				break;
 
 			default:
-				BuildScene(ROOMSCENE, "TestScene");
+				//BuildScene(ROOMSCENE, "TestScene");
 				break;
 			}
 		}
