@@ -4,14 +4,13 @@
 
 Actor::Actor(Component* parent_) :
     pool(0), sets(0), renderer(nullptr),
-    Component(parent_), visible(true) {}
+    Component(parent_) {}
 
 Actor::Actor(const Actor& actor_){
     //std::cout << "Copying actor\n";
     std::vector<Ref<Component>> new_List = std::vector<Ref<Component>>();
     new_List = actor_.GetComponentList();
     components = new_List;
-    visible = actor_.GetVisible();
     parent = actor_.GetParent();
 }
 

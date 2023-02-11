@@ -949,9 +949,8 @@ void VulkanRenderer::recordCommandBuffer() {
         if (scene_) {
             std::unordered_map<const char*, Ref<Actor>> actorList = scene_->GetActorList();
             for (auto actorElement : actorList) {
-                     //Get components for actor
+                //Get components for actor
                 Ref<Actor> actor = actorElement.second;
-                if (!actor->GetVisible()) continue;
                 Ref<ShaderComponent> actorShader = actor->GetComponent<ShaderComponent>();
                 Ref<MeshComponent> actorMesh = actor->GetComponent<MeshComponent>();
                 Ref<MaterialComponent> actorMaterial = actor->GetComponent<MaterialComponent>();
