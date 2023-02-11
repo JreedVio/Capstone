@@ -46,7 +46,7 @@ bool Client::OnCreate()
 
     std::cout << "Host Ip: " << hostIp << " | Host Name: " << hostName << std::endl;
 
-    address.port = 27015;
+    address.port = 6699;
     /* Initiate the connection, allocating the two channels 0 and 1. */
     peer = enet_host_connect(client, &address, 2, 0);
     if (peer == NULL)
@@ -105,9 +105,10 @@ void Client::Update()
     }
     ENetPacket* tempPacket = enet_packet_create(pos,
         sizeof(Vec3) + 1,
-        ENET_PACKET_FLAG_RELIABLE);
-
+        ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
     enet_peer_send(peer, 0, tempPacket); 
+    //std::cout << "Send a packet\n";
+
 }
 
 //enet_peer_disconnect(peer, 0);

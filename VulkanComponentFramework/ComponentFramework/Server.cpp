@@ -1,8 +1,6 @@
 #include "Server.h"
 #include "Debug.h"
 #include "MMath.h"
-#include "SceneManager.h"
-#include "RoomScene.h"
 
 
 #include <WS2tcpip.h>
@@ -30,7 +28,7 @@ bool Server::OnCreate()
 
     //enet_address_set_host(&address, "142.214.83.88");
     address.host = ENET_HOST_ANY;
-    address.port = 27015;
+    address.port = 6699;
 
     const size_t s = 1000;
     char hostName[s];
@@ -64,17 +62,23 @@ void Server::Update()
     // Wait for connection and diconnection
 
     ENetEvent event;
+    Vec3 pos;
 
-    SceneManager* sceneManager = SceneManager::GetInstance();
+    /*SceneManager* sceneManager = SceneManager::GetInstance();
     Ref<Actor> mario = sceneManager->GetCurrentScene()->GetActor("Mario1");
-    Ref<TransformComponent> tComp = mario->GetComponent<TransformComponent>();
-    Vec3 pos = tComp->GetPosition();
+    if (mario != nullptr) {
+        Ref<TransformComponent> transform = mario->GetComponent<TransformComponent>();
+        pos = transform->GetPosition();
+    }
+    else {*/
+        pos = Vec3(0, 0, 0);
+    //}
 
-    Vec3 newData;
+    Vec3 recievedData;
     int eventStatus = 1;
     
-        /* Wait up to 1000 milliseconds for an event. */
-        eventStatus = enet_host_service(server, &event, 1000);
+    /* Wait up to 1000 milliseconds for an event. */
+    eventStatus = enet_host_service(server, &event, 1000);
         
     if (eventStatus > 0)
     {
@@ -86,6 +90,7 @@ void Server::Update()
                 event.peer->address.port);
             if(peer == nullptr)
                 peer = event.peer;
+
             /* Store any relevant client information here. */
 
             //enet_packet_resize(tempPacket, strlen("packetfoo") + 1);
@@ -96,8 +101,8 @@ void Server::Update()
 
             break;
         case ENET_EVENT_TYPE_RECEIVE:
-            std::memcpy(&newData, event.packet->data, event.packet->dataLength);
-            std::cout << newData.x << " " << newData.y << " " << newData.z << std::endl;
+            std::memcpy(&recievedData, event.packet->data, event.packet->dataLength);
+            std::cout << recievedData.x << " " << recievedData.y << " " << recievedData.z << std::endl;
 
             /* Clean up the packet now that we're done using it. */
             enet_packet_destroy(event.packet);
@@ -115,9 +120,9 @@ void Server::Update()
     if (peer != nullptr) {
         ENetPacket* tempPacket = enet_packet_create(pos,
             sizeof(Vec3) + 1,
-            ENET_PACKET_FLAG_RELIABLE);
+            ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
         enet_peer_send(peer, 0, tempPacket);
-
+        //std::cout << "Send a packet\n";
     }
 }
 

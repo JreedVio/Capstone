@@ -6,13 +6,17 @@
 #include "Timer.h"
 #include "RoomScene.h"
 #include "Debug.h"
+#include "ChronoTimer.h"
+#include <future>
+#include <thread>
+
 
 SceneManager* SceneManager::Instance(nullptr);
 
 SceneManager::SceneManager(): 
 	currentScene(nullptr), timer(nullptr),
 	fps(60), isRunning(false), rendererType(RendererType::VULKAN), 
-	renderer(nullptr), assetManager(nullptr), networkManager(nullptr) {}
+	renderer(nullptr), assetManager(nullptr) {}
 
 SceneManager* SceneManager::GetInstance(){
 	if (!Instance) {
@@ -91,28 +95,32 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 void SceneManager::Run() {
 	timer->Start();
 	isRunning = true;
+
+	
+	std::thread networking(&NetworkManager::Update, this->networkManager);
+	networking.detach();
+
+
 	while (isRunning) {
-		timer->UpdateFrameTicks();
+		{
+			//ChronoTimer chronoTimer;
 
-		
+			timer->UpdateFrameTicks();
+			currentScene->Update(timer->GetDeltaTime());
+			currentScene->Render();
 
-		currentScene->Update(timer->GetDeltaTime());
-		currentScene->Render();
-		
-		std::unordered_map<const char*, Ref<Actor>> actorList = currentScene->GetActorList();
+			//networkManager->Update();
+			//std::async(std::launch::async, RunNetworkUpdate, networkManager);
 
-		Ref<Actor> mario = currentScene->GetActor("Mario1");
-
-
-		Ref<TransformComponent> tComp = mario->GetComponent<TransformComponent>();
-		Vec3 pos = tComp->GetPosition();
-
-		networkManager->Update();
-
-
-		GetEvents();
+			GetEvents();
+		}
 		SDL_Delay(timer->GetSleepTime(fps));
 	}
+}
+
+void SceneManager::RunNetworkUpdate(NetworkManager* networkManager_) {
+	
+	networkManager_->Update();
 }
 
 void SceneManager::GetEvents() {
@@ -196,5 +204,7 @@ void SceneManager::BuildScene(SCENETYPE scenetype_, const char* fileName) {
 		break;
 	}	
 }
+
+
 
 

@@ -1,5 +1,8 @@
 #include "NetworkManager.h"
 #include "Debug.h"
+#include "ChronoTimer.h"
+#include "SceneManager.h"
+
 
 
 NetworkManager::NetworkManager()
@@ -54,5 +57,9 @@ void NetworkManager::OnDestroy()
 
 void NetworkManager::Update()
 {
-    unit->Update();
+    //ChronoTimer chronoTimer;
+    while (SceneManager::GetInstance()->GetIsRunning()) {
+        unit->Update();
+        //std::cout << "NetworkUpdate...\n";
+    }
 }
