@@ -38,8 +38,6 @@ using namespace MATH;
 template<typename T>
 using Ref = std::shared_ptr<T>;
 
-
-
 const std::vector<const char*> validationLayers = {
     "VK_LAYER_KHRONOS_validation"
 };
@@ -102,19 +100,12 @@ struct QueueFamilyIndices {
 
 
         ~VulkanRenderer();
-
-        static VulkanRenderer* GetInstance() {
-            if (Instance == nullptr) {
-                Instance = new VulkanRenderer();
-            }
-            return Instance;
-        }
         SDL_Window* CreateWindow(std::string name_, int width, int height);
         bool OnCreate();
         void OnDestroy();
         void Render();
         void SetUBO(const Matrix4& projection, const Matrix4& view);
-        void SetGLightsUbo(const std::vector<Ref<LightActor>>& lights);
+        void SetGLightsUbo(const GlobalLighting& glights);
         void SetPushConst(const Matrix4& model);
         SDL_Window* GetWindow() {
             return window;
@@ -140,12 +131,12 @@ struct QueueFamilyIndices {
         std::vector<VkBuffer> GetGLightingBuffers() {
             return glightingBuffers;
         }
-        uint32_t GetWidth() {
-            return windowWidth;
-        }
 
-        uint32_t GetHeight() {
-            return windowHeight;
+        static VulkanRenderer* GetInstance() {
+            if (Instance == nullptr) {
+                Instance = new VulkanRenderer();
+            }
+            return Instance;
         }
 
         void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);

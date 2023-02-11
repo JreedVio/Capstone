@@ -14,7 +14,6 @@ class VulkanRenderer;
 class MeshComponent;
 class MaterialComponent;
 class ShaderComponent;
-class Room;
 
 enum LoadType {
 	ASSETS,
@@ -39,7 +38,7 @@ private:
 	bool CreateComponents();
 	void AddActorData(XMLElement* actorData);
 	bool CreateActors();
-	Ref<Room> CreateRoom(XMLElement* roomData);
+	void CreateRoom(XMLElement* roomData);
 
 public:
 	static AssetManager* GetInstance();
@@ -47,7 +46,7 @@ public:
 	~AssetManager();
 	bool OnCreate();
 	void LoadAssets(const char* fileName_);
-	Ref<Room> LoadRoom(const char* sceneName_);
+	void LoadScene(const char* sceneName_);
 	void OnDestroy();
 
 	std::unordered_map<const char*, Ref<Component>> GetComponentList() { return componentCatalog; }

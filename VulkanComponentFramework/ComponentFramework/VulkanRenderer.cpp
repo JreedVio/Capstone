@@ -37,6 +37,7 @@ void VulkanRenderer::OnDestroy() {
 }
 
 void VulkanRenderer::Render() {
+    recordCommandBuffer();
 
     vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
@@ -51,9 +52,8 @@ void VulkanRenderer::Render() {
         throw std::runtime_error("failed to acquire swap chain image!");
     }
 
-    updateGLightsUniformBuffer(imageIndex);
     updateUniformBuffer(imageIndex);
-    recordCommandBuffer();
+    updateGLightsUniformBuffer(imageIndex);
 
     if (imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
         vkWaitForFences(device, 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
@@ -160,18 +160,19 @@ void VulkanRenderer::initVulkan() {
     AssetManager* assetManager = AssetManager::GetInstance();
  
     //Recreate shaders
-    //for (auto pipeline : assetManager->GetShaderList()) {
-    //    pipeline.second->OnCreate();
-    //}
-    //
-    ////Recreate Actors
-    //SceneManager* sceneManager = SceneManager::GetInstance();
-    //Scene* scene_ = sceneManager->GetCurrentScene();
-    //if (scene_) {
-    //    for (auto actor : scene_->GetActorList()) {
-    //        actor.second->OnCreate();
-    //    }
-    //}
+    for (auto pipeline : assetManager->GetShaderList()) {
+        pipeline.second->OnCreate();
+    }
+    
+    //Recreate Actors
+    SceneManager* sceneManager = SceneManager::GetInstance();
+    Scene* scene_ = sceneManager->GetCurrentScene();
+    if (scene_) {
+        for (auto actor : scene_->GetActorList()) {
+            actor.second->OnCreate();
+        }
+    }
+
 
     createCommandBuffers();
     recordCommandBuffer();
@@ -289,6 +290,7 @@ void VulkanRenderer::recreateSwapChain() {
     createSwapChain();
     createImageViews();
     createRenderPass();
+    //createGraphicsPipeline("shaders/phong.vert.spv", "shaders/phong.frag.spv");
 
     createDepthResources();
     createFramebuffers();
@@ -1001,14 +1003,10 @@ void VulkanRenderer::SetUBO(const Matrix4& projection, const Matrix4& view) {
     ubo.proj[5] *= -1.0f;
 }
 
-void VulkanRenderer::SetGLightsUbo(const std::vector<Ref<LightActor>>& lights) {
-    
-    for (int i = 0; i < lights.size(); i++)
-    {        
-        glightsUBO.position[i] = lights[i]->GetPosition();
-        glightsUBO.diffuse[i] = lights[i]->GetDiffuse();
-    }
-    
+void VulkanRenderer::SetGLightsUbo(const GlobalLighting& glights) {
+    glightsUBO.position[0] = glights.position[0];
+    glightsUBO.position[1] = glights.position[1];
+    glightsUBO.diffuse = glights.diffuse;
 }
 
 void VulkanRenderer::SetPushConst(const Matrix4& model) {

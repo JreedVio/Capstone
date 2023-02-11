@@ -17,14 +17,12 @@ using Ref = std::shared_ptr<T>;
 class Scene0 : public Scene {
 private:
 	Renderer *renderer;
-	//Ref<Camera> camera;	
+	//Ref<Camera> camera;
+	GlobalLighting globalLights;
 	Matrix4 mariosModelMatrix;
-
-	Ref<LightActor> light;
-	std::vector<Ref<LightActor>> lights;
 	
 public:
-	explicit Scene0(VulkanRenderer* renderer_);
+	explicit Scene0(Renderer* renderer_);
 	virtual ~Scene0();
 
 	virtual bool OnCreate() override;

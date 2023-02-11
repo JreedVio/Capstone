@@ -7,7 +7,7 @@ Actor::Actor(Component* parent_) :
     Component(parent_) {}
 
 Actor::Actor(const Actor& actor_){
-    //std::cout << "Copying actor\n";
+    std::cout << "Copying actor\n";
     std::vector<Ref<Component>> new_List = std::vector<Ref<Component>>();
     new_List = actor_.GetComponentList();
     components = new_List;

@@ -4,7 +4,7 @@
 #include "OpenGLRenderer.h"
 #include "AssetManager.h"
 #include "Timer.h"
-#include "RoomScene.h"
+#include "Scene0.h"
 #include "Debug.h"
 
 SceneManager* SceneManager::Instance(nullptr);
@@ -73,7 +73,7 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 		return false;
 	}
 	
-	BuildScene(ROOMSCENE, "TestScene");
+	BuildScene(SCENE0);
 	
 	return true;
 }
@@ -106,11 +106,11 @@ void SceneManager::GetEvents() {
 				return;
 
 			case SDL_SCANCODE_F1:
-				BuildScene(ROOMSCENE, "TestScene");
+				///BuildScene(SCENE1);
 				break;
 
 			case SDL_SCANCODE_F2:
-				BuildScene(ROOMSCENE, "TestScene2");
+				///BuildScene(SCENE2);
 				break;
 
 			case SDL_SCANCODE_F3:
@@ -130,7 +130,7 @@ void SceneManager::GetEvents() {
 				break;
 
 			default:
-				BuildScene(ROOMSCENE, "TestScene");
+				BuildScene(SCENE0);
 				break;
 			}
 		}
@@ -144,26 +144,50 @@ void SceneManager::GetEvents() {
 	}
 }
 
-void SceneManager::BuildScene(SCENETYPE scenetype_, const char* fileName) {
+void SceneManager::BuildScene(SCENE_NUMBER scene) {
 	bool status; 
 
-	//Cleanup current scene
 	if (currentScene != nullptr) {
+		//Cleanup scene
 		delete currentScene;
 		currentScene = nullptr;
 	}
 
-	switch (scenetype_) {
-	case ROOMSCENE:
-		//currentScene = new RoomScene(renderer);
-		
-		currentScene = new RoomScene(renderer, assetManager->LoadRoom(fileName));
+	switch (scene) {
+	case SCENE0:
+		currentScene = new Scene0(renderer);
+		assetManager->LoadScene("Scene0");
 		status = currentScene->OnCreate();
 		break;
 
-	case MENUSCENE:
+	case SCENE1:
+		///currentScene = new Scene1();
+		status = currentScene->OnCreate();
+		break;
 
+	case SCENE2:
+		///currentScene = new Scene2();
+		status = currentScene->OnCreate();
+		break;
+
+	case SCENE3:
+		///currentScene = new Scene3();
+		status = currentScene->OnCreate();
+		break;
+
+	case SCENE4:
+		///currentScene = new Scene4();
 		//status = currentScene->OnCreate();
+		break;
+
+	case SCENE5:
+		///currentScene = new Scene5();
+		status = currentScene->OnCreate();
+		break;
+
+	case SCENE6:
+		///currentScene = new Scene6();
+		status = currentScene->OnCreate();
 		break;
 
 	default:
