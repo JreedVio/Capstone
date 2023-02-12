@@ -38,8 +38,8 @@ private:
 	Scene* currentScene;
 	class Timer* timer;
 
-	Ref<Actor> player1;
-	Ref<Actor> player2;
+	Ref<Actor> localPlayer;
+	Ref<Actor> remotePlayer;
 
 	VulkanRenderer* renderer;
 	AssetManager* assetManager;

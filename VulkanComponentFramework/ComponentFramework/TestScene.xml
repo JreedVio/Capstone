@@ -22,7 +22,7 @@
 	<Transform componentName="MarioTransform"
 				   posX ="1.0" posY ="0.0" posZ ="1.0"
 				   angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
-				   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
+				   scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
 	</Actor>
 
 		
@@ -30,7 +30,7 @@
 		<Transform componentName="MarioTransform"
 					posX ="0.0" posY ="0.0" posZ ="0.0"
 					angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
-					scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
+					scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
 	</Actor>
 
 	
