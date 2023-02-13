@@ -59,7 +59,7 @@ void NetworkManager::Update()
 {
     //ChronoTimer chronoTimer;
     while (SceneManager::GetInstance()->GetIsRunning()) {
-        unit->Update();
+        if(unit != nullptr) unit->Update();
         //std::cout << "NetworkUpdate...\n";
     }
 }
