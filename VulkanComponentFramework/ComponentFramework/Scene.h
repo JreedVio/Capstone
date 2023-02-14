@@ -33,17 +33,7 @@ public:
 		globalLights.push_back(light_);
 	}
 
-	template<typename ActorTemplate>
-	void AddActor(const char* name_, Ref<ActorTemplate> actor_) {
-		if (std::dynamic_pointer_cast<Actor>(actor_)) {
-			actorList[name_] = actor_;
-		}
-		else {
-#ifdef _DEBUG
-			std::cerr << "WARNING: Trying to add a non-actor type to actor list - ignored\n";
-#endif
-		}
-	}
+
 	virtual Ref<Actor> GetActor(const char* name_) = 0;
 
 

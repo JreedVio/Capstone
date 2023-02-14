@@ -5,7 +5,7 @@
 #include "VulkanRenderer.h"
 #include "NetworkManager.h"
 
-class Actor;
+class PlayerController;
 class AssetManager;
 class Scene;
 
@@ -20,7 +20,9 @@ public:
 	static void RunNetworkUpdate(NetworkManager*);
 	bool GetIsRunning() { return isRunning; }
 	Scene* GetCurrentScene() { return currentScene; }
-	
+	Ref<PlayerController> GetRemotePlayer() { return remotePlayer; }
+	Ref<PlayerController> GetLocalPlayer() { return localPlayer; }
+
 	
 private:
 	
@@ -38,8 +40,8 @@ private:
 	Scene* currentScene;
 	class Timer* timer;
 
-	Ref<Actor> localPlayer;
-	Ref<Actor> remotePlayer;
+	Ref<PlayerController> localPlayer;
+	Ref<PlayerController> remotePlayer;
 
 	VulkanRenderer* renderer;
 	AssetManager* assetManager;

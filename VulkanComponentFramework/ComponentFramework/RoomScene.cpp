@@ -6,6 +6,7 @@
 #include "VulkanRenderer.h"
 #include "Camera.h"
 #include "GlobalLighting.h"
+#include "SceneManager.h"
 
 RoomScene::RoomScene(VulkanRenderer* renderer_):Scene(renderer_) {
     camera = std::make_shared<Camera>();
@@ -26,8 +27,13 @@ bool RoomScene::OnCreate(){
     camera->Perspective(45.0f, aspectRatio, 0.5f, 20.0f);
     camera->LookAt(Vec3(0.0f, 0.0f, 5.0f), Vec3(0.0f, 0.0f, -3.0f), Vec3(0.0f, 1.0f, 0.0f)); 
 
-    player = GetActor("Mario1");
-    
+    //Add the players to the scene, and spawn at the desired location
+    //TODO::Change the spawn location to player start position in the scene
+    remotePlayer = SceneManager::GetInstance()->GetRemotePlayer();
+    localPlayer = SceneManager::GetInstance()->GetLocalPlayer();
+    AddActor("RemotePlayer", remotePlayer->GetPawn());
+    AddActor("LocalPlayer", localPlayer->GetPawn());
+
     //globalLights.push_back(std::make_shared<LightActor>(nullptr));
     //globalLights.push_back(std::make_shared<LightActor>(nullptr));
 
@@ -61,8 +67,8 @@ void RoomScene::Render() const{
 void RoomScene::HandleEvents(const SDL_Event& sdlEvent)
 {
 
-    Ref<TransformComponent> tf = player->GetComponent<TransformComponent>();
-    player->GetComponent<PlayerController>()->GetPlayerInput(sdlEvent, tf.get());
+    //Ref<TransformComponent> tf = player->GetComponent<TransformComponent>();
+    localPlayer->GetPlayerInput(sdlEvent, nullptr);
 
 }
 

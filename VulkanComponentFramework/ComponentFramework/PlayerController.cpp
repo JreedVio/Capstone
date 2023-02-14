@@ -1,42 +1,47 @@
 #include "PlayerController.h"
+#include "Actor.h"
 
 
-
-PlayerController::PlayerController(Component* parent_): Component(parent_)
-{
+PlayerController::PlayerController(Component* parent_): Component(parent_), pawnActor(nullptr) {
 
 }
 
 void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent* TF_Component)
-{		
-	if (!TF_Component)
+{	
+
+	Ref<TransformComponent> transform = pawnActor->GetComponent<TransformComponent>();
+	//Ref<TransformComponent> transform = TF_Component;
+
+	if (!transform)
 		return;
 
-	// temp var(s)	
+	// temp var(s)
 	float moveSpeed = 0.5f;
-	Vec3 pos = TF_Component->GetPosition();
-	Quaternion orient = TF_Component->GetOrientation();
+	Vec3 pos = transform->GetPosition();
+	Quaternion orient = transform->GetOrientation();
 
 	// Key DOWN
 	if (KeyDown(KeyCode::W, Event))
 	{	
 		pos.z -= moveSpeed;
-		TF_Component->SetTransform(pos, orient);
+		transform->SetTransform(pos, orient);
+		transform->GetPosition().print();
+
 	}
 	else if (KeyDown(KeyCode::A, Event))
 	{
 		pos.x -= moveSpeed;
-		TF_Component->SetTransform(pos, orient);
+		transform->SetTransform(pos, orient);
 	}
 	if (KeyDown(KeyCode::S, Event))
 	{
 		pos.z += moveSpeed;
-		TF_Component->SetTransform(pos, orient);
+		transform->SetTransform(pos, orient);
 	}
 	else if (KeyDown(KeyCode::D, Event))
 	{
 		pos.x += moveSpeed;
-		TF_Component->SetTransform(pos, orient);
+		transform->SetTransform(pos, orient);
 	}
 	if (KeyDown(KeyCode::ESC, Event))
 	{

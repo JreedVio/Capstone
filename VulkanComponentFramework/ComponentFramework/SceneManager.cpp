@@ -9,6 +9,7 @@
 #include "ChronoTimer.h"
 #include <future>
 #include <thread>
+#include "PlayerController.h"
 
 
 SceneManager* SceneManager::Instance(nullptr);
@@ -84,11 +85,22 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 		return false;
 	}
 
+	//Create Players
+	localPlayer = std::make_shared<PlayerController>(nullptr);
+	Ref<Actor> localActor = assetManager->GetActor("LocalPlayer");
+	localActor->AddComponent<TransformComponent>(nullptr, Vec3(), Quaternion());
+	localActor->OnCreate();
+	localPlayer->SetPawn(localActor);
+
+	Ref<Actor> remoteActor = assetManager->GetActor("RemotePlayer");
+	remoteActor->AddComponent<TransformComponent>(nullptr, Vec3(), Quaternion());
+	remoteActor->OnCreate();
+	remotePlayer = std::make_shared<PlayerController>(nullptr);
+	remotePlayer->SetPawn(remoteActor);
+	remotePlayer->GetPawn()->SetVisible(false);
+
 	BuildScene(ROOMSCENE, "TestScene");
 
-	localPlayer = currentScene->GetActor("Mario1");
-	remotePlayer = currentScene->GetActor("Mario2");
-	remotePlayer->SetVisible(false);
 
 	networkManager = new NetworkManager();
 	if (!networkManager->OnCreate()) {

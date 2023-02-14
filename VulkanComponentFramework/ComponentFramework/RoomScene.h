@@ -26,10 +26,12 @@ public:
 	}
 	Ref<Actor> GetActor(const char* name_);
 
-	Ref<Actor> player;
+	void AddActor(const char* name_, Ref<Actor> actor_) { room->AddActor(name_, actor_); }
 
 private:
 	Ref<Room> room;
+	Ref<PlayerController> remotePlayer;
+	Ref<PlayerController> localPlayer;
 
 };
 
