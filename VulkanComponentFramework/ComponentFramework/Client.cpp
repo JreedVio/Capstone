@@ -12,7 +12,7 @@ Client::Client() : NetworkUnit(UnitType::CLIENT)
 
 Client::~Client()
 {
-    enet_host_destroy(client);
+    if (client != nullptr) enet_host_destroy(client);
 }
 
 bool Client::ConnectToServer()
@@ -46,7 +46,7 @@ bool Client::OnCreate()
     enet_address_get_host_ip(&address, hostIp, s);
     enet_address_get_host(&address, hostName, s);
 
-    std::cout << "Host Ip: " << hostIp << " | Host Name: " << hostName << std::endl;
+    std::cout << "Trying to connect to: " << hostIp << " | " << hostName << std::endl;
 
     address.port = 6699;
     /* Initiate the connection, allocating the two channels 0 and 1. */
@@ -56,11 +56,28 @@ bool Client::OnCreate()
         Debug::Error("No available peers for initiating an ENet connection.\n", __FILE__, __LINE__);
         return false;
     }
+
+    // Get scene and actors
+    Scene* scene = SceneManager::GetInstance()->GetCurrentScene();
+    if (scene == nullptr) {
+        Debug::FatalError("Failed to get Current Scene", __FILE__, __LINE__);
+        return false;
+    }
+
+    localPlayer = scene->GetActor("Mario1");
+    remotePlayer = scene->GetActor("Mario2");
+    if (localPlayer == nullptr || remotePlayer == nullptr) {
+        Debug::FatalError("Failed to get Player Actors", __FILE__, __LINE__);
+        return false;
+    }
+
     /* Wait up to 5 seconds for the connection attempt to succeed. */
     if (enet_host_service(client, &event, 5000) > 0 &&
         event.type == ENET_EVENT_TYPE_CONNECT)
     {
         std::cout << "Connection to " << hostName << " succeeded.\n";
+        remotePlayer->SetVisible(true);
+
         return true;
     }
     else
@@ -81,36 +98,40 @@ void Client::OnDestroy()
 
 void Client::Update()
 {
-    // Game loop (Not Working)
+}
 
+void Client::Send()
+{
+    // Set pos vector to pos of the Local Player Actor
+    Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
+
+    if (peer == nullptr) return;
+
+    ENetPacket* tempPacket = enet_packet_create(pos,
+        sizeof(Vec3) + 1,
+        ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
+    enet_peer_send(peer, 0, tempPacket);
+}
+
+void Client::Recieve()
+{
+    // Initialize variables
     ENetEvent event;
-    Vec3 pos;
     Vec3 recievedData;
-
-    SceneManager* sceneManager = SceneManager::GetInstance();
-    if (sceneManager != nullptr) {
-        Ref<Actor> mario = sceneManager->GetCurrentScene()->GetActor("Mario1");
-        if (mario != nullptr) {
-            Ref<TransformComponent> transform = mario->GetComponent<TransformComponent>();
-            pos = transform->GetPosition();
-        }
-        else {
-            pos = Vec3(10, 10, 10);
-        }
-    }
-
     int eventStatus = 1;
-        
+
     /* Wait up to 1000 milliseconds for an event. */
-    eventStatus = enet_host_service(client, &event, 1000);
+    eventStatus = enet_host_service(client, &event, 14);
     if (eventStatus > 0)
     {
         switch (event.type)
         {
         case ENET_EVENT_TYPE_RECEIVE:
+            // Unpack the received vector
             std::memcpy(&recievedData, event.packet->data, event.packet->dataLength);
-            std::cout << recievedData.x << " " << recievedData.y << " " << recievedData.z << std::endl;
 
+            // Set this vector to Remote Player Actor
+            remotePlayer->GetComponent<TransformComponent>()->pos = recievedData;
 
             /* Clean up the packet now that we're done using it. */
             enet_packet_destroy(event.packet);
@@ -118,12 +139,6 @@ void Client::Update()
             break;
         }
     }
-    ENetPacket* tempPacket = enet_packet_create(pos,
-        sizeof(Vec3) + 1,
-        ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
-    enet_peer_send(peer, 0, tempPacket); 
-    //std::cout << "Send a packet\n";
-
 }
 
 //enet_peer_disconnect(peer, 0);

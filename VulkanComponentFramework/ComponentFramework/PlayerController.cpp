@@ -40,28 +40,28 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 	}
 	if (KeyDown(KeyCode::ESC, Event))
 	{
-		printf("Key Pressed\n");
+		//printf("Key Pressed\n");
 	}	
 
 	// KEY UP
 	else if (KeyUP(KeyCode::W, Event))
 	{
-		printf("Key Released\n");
+		//printf("Key Released\n");
 	}
 	if (KeyUP(KeyCode::A, Event))
 	{
-		printf("Key Released\n");
+		//printf("Key Released\n");
 	}
 	else if (KeyUP(KeyCode::S, Event))
 	{
-		printf("Key Released\n");
+		//printf("Key Released\n");
 	}
 	if (KeyUP(KeyCode::D, Event))
 	{
-		printf("Key Released\n");
+		//printf("Key Released\n");
 	}	
 
-	printf("pos.x: %f, pos.y: %f, pos.z: %f\n", pos.x, pos.y, pos.z);
+	//printf("pos.x: %f, pos.y: %f, pos.z: %f\n", pos.x, pos.y, pos.z);
 }
 
 PlayerController::~PlayerController()

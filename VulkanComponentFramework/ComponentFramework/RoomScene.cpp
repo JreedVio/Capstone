@@ -60,8 +60,10 @@ void RoomScene::Render() const{
 
 void RoomScene::HandleEvents(const SDL_Event& sdlEvent)
 {
+
     Ref<TransformComponent> tf = player->GetComponent<TransformComponent>();
     player->GetComponent<PlayerController>()->GetPlayerInput(sdlEvent, tf.get());
+
 }
 
 Ref<Actor> RoomScene::GetActor(const char* name_)

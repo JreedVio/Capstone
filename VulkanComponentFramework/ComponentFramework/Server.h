@@ -5,6 +5,7 @@
 
 #include "enet/enet.h"
 #include "NetworkUnit.h"
+#include "Actor.h"
 
 
 class Server : public NetworkUnit
@@ -14,6 +15,7 @@ public:
 	ENetAddress address;
 	ENetHost* server;
 	ENetPeer* peer;
+	Ref<Actor> localPlayer, remotePlayer;
 
 
 
@@ -22,5 +24,7 @@ public:
 	bool OnCreate();
 	void OnDestroy();
 	void Update();
+	void Send();
+	void Recieve();
 };
 

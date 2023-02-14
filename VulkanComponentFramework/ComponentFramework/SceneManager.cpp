@@ -57,6 +57,7 @@ SceneManager::~SceneManager() {
 		networkManager = nullptr;
 	}
 
+
 	Debug::Info("Deleting the GameSceneManager", __FILE__, __LINE__);
 
 }
@@ -83,11 +84,18 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 		return false;
 	}
 
-	networkManager = new NetworkManager();
-	networkManager->OnCreate();
-	
 	BuildScene(ROOMSCENE, "TestScene");
-	
+
+	localPlayer = currentScene->GetActor("Mario1");
+	remotePlayer = currentScene->GetActor("Mario2");
+	remotePlayer->SetVisible(false);
+
+	networkManager = new NetworkManager();
+	if (!networkManager->OnCreate()) {
+		Debug::FatalError("Failed to initialize Network Manager", __FILE__, __LINE__);
+		return false;
+	}
+
 	return true;
 }
 

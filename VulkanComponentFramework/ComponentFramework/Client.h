@@ -5,12 +5,16 @@
 
 #include "enet/enet.h"
 #include "NetworkUnit.h"
+#include "Actor.h"
 
 class Client : public NetworkUnit
 {
 public:
 	ENetHost* client;
 	ENetPeer* peer;
+	Ref<Actor> localPlayer, remotePlayer;
+
+
 
 
 	Client();
@@ -20,5 +24,7 @@ public:
 	bool OnCreate();
 	void OnDestroy();
 	void Update();
+	void Send();
+	void Recieve();
 };
 

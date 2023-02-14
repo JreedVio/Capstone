@@ -4,13 +4,11 @@
 #include "SceneManager.h"
 #include "RoomScene.h"
 
-
 #include <WS2tcpip.h>
 
 // Include the Winsock library (lib) file
 #pragma comment (lib, "ws2_32.lib")
 
-using namespace std;
 using namespace MATH;
 
 Server::Server() : NetworkUnit(UnitType::SERVER)
@@ -38,7 +36,7 @@ bool Server::OnCreate()
     enet_address_get_host_ip(&address, hostIp, s);
     enet_address_get_host(&address, hostName, s);
 
-    std::cout << "Host Ip: " << hostIp << " | Host Name: " << hostName << std::endl;
+    std::cout << "Creating a server: " << hostIp << " | " << hostName << std::endl;
 
     /* Bind the server to port 1234. */
     server = enet_host_create(&address /* the address to bind the server host to */,
@@ -51,7 +49,21 @@ bool Server::OnCreate()
         Debug::Error("An error occurred while trying to create an ENet server host.\n", __FILE__, __LINE__);
         return false;
     }
+    std::cout << "Server is created\n";
 
+    // Get scene and actors
+    Scene* scene = SceneManager::GetInstance()->GetCurrentScene();
+    if (scene == nullptr) {
+        Debug::FatalError("Failed to get Current Scene", __FILE__, __LINE__);
+        return false;
+    }
+
+    localPlayer = scene->GetActor("Mario1");
+    remotePlayer = scene->GetActor("Mario2");
+    if (localPlayer == nullptr || remotePlayer == nullptr) {
+        Debug::FatalError("Failed to get Player Actors", __FILE__, __LINE__);
+        return false;
+    }
 	return true;
 }
 
@@ -60,30 +72,33 @@ void Server::OnDestroy()
 }
 
 void Server::Update()
+{   
+}
+
+void Server::Send()
 {
-    // Wait for connection and diconnection
+    // Set pos vector to pos of the Local Player Actor
+    Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
 
+    if (peer == nullptr) return;
+
+    ENetPacket* tempPacket = enet_packet_create(pos,
+        sizeof(Vec3) + 1,
+        ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
+    enet_peer_send(peer, 0, tempPacket);
+}
+
+void Server::Recieve()
+{
+    // Initialize variables
     ENetEvent event;
-    Vec3 pos;
     Vec3 recievedData;
-
-    SceneManager* sceneManager = SceneManager::GetInstance();
-    if (sceneManager != nullptr) {
-        Ref<Actor> mario = sceneManager->GetCurrentScene()->GetActor("Mario1");
-        if (mario != nullptr) {
-            Ref<TransformComponent> transform = mario->GetComponent<TransformComponent>();
-            pos = transform->GetPosition();
-        }
-        else {
-            pos = Vec3(0, 0, 0);
-        }
-    }
-
     int eventStatus = 1;
-    
+
     /* Wait up to 1000 milliseconds for an event. */
-    eventStatus = enet_host_service(server, &event, 1000);
-        
+    eventStatus = enet_host_service(server, &event, 14);
+
+    // Wait for connection, diconnection and package receival
     if (eventStatus > 0)
     {
         switch (event.type)
@@ -92,10 +107,9 @@ void Server::Update()
             printf("A new client connected from %x:%u.\n",
                 event.peer->address.host,
                 event.peer->address.port);
-            if(peer == nullptr)
+            if (peer == nullptr)
                 peer = event.peer;
-
-            /* Store any relevant client information here. */
+            remotePlayer->SetVisible(true);
 
             //enet_packet_resize(tempPacket, strlen("packetfoo") + 1);
             //memcpy???
@@ -105,8 +119,11 @@ void Server::Update()
 
             break;
         case ENET_EVENT_TYPE_RECEIVE:
+            // Unpack the received vector
             std::memcpy(&recievedData, event.packet->data, event.packet->dataLength);
-            std::cout << recievedData.x << " " << recievedData.y << " " << recievedData.z << std::endl;
+
+            // Set this vector to Remote Player Actor
+            remotePlayer->GetComponent<TransformComponent>()->pos = recievedData;
 
             /* Clean up the packet now that we're done using it. */
             enet_packet_destroy(event.packet);
@@ -116,17 +133,10 @@ void Server::Update()
         case ENET_EVENT_TYPE_DISCONNECT:
             printf("%x:%u disconnected.\n", event.peer->address.host, event.peer->address.port);
             /* Reset the peer's client information. */
+            enet_peer_reset(peer);
             //event.peer->data = NULL;
-            //return true;
             break;
         }
-    }
-    if (peer != nullptr) {
-        ENetPacket* tempPacket = enet_packet_create(pos,
-            sizeof(Vec3) + 1,
-            ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
-        enet_peer_send(peer, 0, tempPacket);
-        //std::cout << "Send a packet\n";
     }
 }
 

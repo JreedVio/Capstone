@@ -5,7 +5,7 @@
 #include "VulkanRenderer.h"
 #include "NetworkManager.h"
 
-
+class Actor;
 class AssetManager;
 class Scene;
 
@@ -37,6 +37,9 @@ private:
 	enum class RendererType rendererType;
 	Scene* currentScene;
 	class Timer* timer;
+
+	Ref<Actor> localPlayer;
+	Ref<Actor> remotePlayer;
 
 	VulkanRenderer* renderer;
 	AssetManager* assetManager;

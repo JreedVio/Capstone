@@ -2,10 +2,11 @@
 #include "Debug.h"
 #include "ChronoTimer.h"
 #include "SceneManager.h"
+#include "Timer.h"
 
 
 
-NetworkManager::NetworkManager()
+NetworkManager::NetworkManager() : tickrate(64)
 {
 }
 
@@ -13,17 +14,27 @@ NetworkManager::~NetworkManager()
 {
     delete unit;
     unit = nullptr;
+
+    if (timer) {
+        delete timer;
+        timer = nullptr;
+    }
 }
 
 bool NetworkManager::OnCreate()
 {
+    timer = new Timer();
+    if (timer == nullptr) {
+        Debug::FatalError("Failed to initialize Timer object", __FILE__, __LINE__);
+        return false;
+    }
+
     if (enet_initialize() != 0)
     {
         Debug::Error("An error occurred while initializing ENet.\n", __FILE__, __LINE__);
         return false;
     }
     atexit(enet_deinitialize);
-    
 
     int isServer = 0;
 
@@ -57,9 +68,19 @@ void NetworkManager::OnDestroy()
 
 void NetworkManager::Update()
 {
-    //ChronoTimer chronoTimer;
+    timer->Start();
+
     while (SceneManager::GetInstance()->GetIsRunning()) {
-        unit->Update();
-        //std::cout << "NetworkUpdate...\n";
+        {
+            //ChronoTimer chronoTimer;
+
+            timer->UpdateFrameTicks();
+
+            if (unit == nullptr) return;
+
+            unit->Send();
+            unit->Recieve();
+        }
+        SDL_Delay(timer->GetSleepTime(tickrate));
     }
 }
