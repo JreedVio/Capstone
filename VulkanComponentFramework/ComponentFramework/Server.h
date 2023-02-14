@@ -24,5 +24,7 @@ public:
 	bool OnCreate();
 	void OnDestroy();
 	void Update();
+	void Send();
+	void Recieve();
 };
 

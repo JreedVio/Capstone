@@ -10,6 +10,7 @@ class NetworkManager
 {
 private:
 	NetworkUnit* unit;
+	class Timer* timer;
 public:
 	NetworkManager();
 	~NetworkManager();

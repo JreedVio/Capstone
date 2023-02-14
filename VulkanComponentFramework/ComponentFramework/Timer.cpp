@@ -1,5 +1,6 @@
 #include "SDL.h"
 #include "Timer.h"
+#include <iostream>
 
 Timer::Timer() {
 	prevTicks = 0;
@@ -28,10 +29,17 @@ unsigned int Timer::GetSleepTime(const unsigned int fps) const {
 		return 0;
 	}
 
-	unsigned int sleepTime = milliSecsPerFrame - (SDL_GetTicks() - currTicks);
-	if (sleepTime > milliSecsPerFrame) {
-		return milliSecsPerFrame;
+	if (fps == 64) {
+		//std::cout << "YO";
 	}
 
+	unsigned int sleepTime = milliSecsPerFrame - (SDL_GetTicks() - currTicks);
+	if (sleepTime > milliSecsPerFrame) {
+		//return milliSecsPerFrame; 
+		// Add more delay if it already takes too long?
+		//Makes no sense to me:)
+		return 0;
+	}
+	//std::cout << sleepTime << std::endl;
 	return sleepTime;
 }

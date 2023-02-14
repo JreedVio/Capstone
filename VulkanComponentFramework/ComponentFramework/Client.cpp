@@ -98,20 +98,30 @@ void Client::OnDestroy()
 
 void Client::Update()
 {
+}
+
+void Client::Send()
+{
+    // Set pos vector to pos of the Local Player Actor
+    Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
+
+    if (peer == nullptr) return;
+
+    ENetPacket* tempPacket = enet_packet_create(pos,
+        sizeof(Vec3) + 1,
+        ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
+    enet_peer_send(peer, 0, tempPacket);
+}
+
+void Client::Recieve()
+{
     // Initialize variables
     ENetEvent event;
-    Vec3 pos;
     Vec3 recievedData;
     int eventStatus = 1;
 
-    remotePlayer->SetVisible(true);
-
-
-    // Set pos vector to pos of the Local Player Actor
-    pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
-        
     /* Wait up to 1000 milliseconds for an event. */
-    eventStatus = enet_host_service(client, &event, 1000);
+    eventStatus = enet_host_service(client, &event, 14);
     if (eventStatus > 0)
     {
         switch (event.type)
@@ -119,8 +129,7 @@ void Client::Update()
         case ENET_EVENT_TYPE_RECEIVE:
             // Unpack the received vector
             std::memcpy(&recievedData, event.packet->data, event.packet->dataLength);
-            std::cout << recievedData.x << " " << recievedData.y << " " << recievedData.z << std::endl;
-           
+
             // Set this vector to Remote Player Actor
             remotePlayer->GetComponent<TransformComponent>()->pos = recievedData;
 
@@ -130,10 +139,6 @@ void Client::Update()
             break;
         }
     }
-    ENetPacket* tempPacket = enet_packet_create(pos,
-        sizeof(Vec3) + 1,
-        ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
-    enet_peer_send(peer, 0, tempPacket); 
 }
 
 //enet_peer_disconnect(peer, 0);

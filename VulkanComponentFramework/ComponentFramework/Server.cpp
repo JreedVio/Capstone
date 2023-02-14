@@ -72,20 +72,32 @@ void Server::OnDestroy()
 }
 
 void Server::Update()
+{   
+}
+
+void Server::Send()
+{
+    // Set pos vector to pos of the Local Player Actor
+    Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
+
+    if (peer == nullptr) return;
+
+    ENetPacket* tempPacket = enet_packet_create(pos,
+        sizeof(Vec3) + 1,
+        ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
+    enet_peer_send(peer, 0, tempPacket);
+}
+
+void Server::Recieve()
 {
     // Initialize variables
     ENetEvent event;
-    Vec3 pos;
     Vec3 recievedData;
     int eventStatus = 1;
 
-    // Set pos vector to pos of the Local Player Actor
-    pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
-
-    
     /* Wait up to 1000 milliseconds for an event. */
-    eventStatus = enet_host_service(server, &event, 1000);
-    
+    eventStatus = enet_host_service(server, &event, 14);
+
     // Wait for connection, diconnection and package receival
     if (eventStatus > 0)
     {
@@ -95,7 +107,7 @@ void Server::Update()
             printf("A new client connected from %x:%u.\n",
                 event.peer->address.host,
                 event.peer->address.port);
-            if(peer == nullptr)
+            if (peer == nullptr)
                 peer = event.peer;
             remotePlayer->SetVisible(true);
 
@@ -109,7 +121,6 @@ void Server::Update()
         case ENET_EVENT_TYPE_RECEIVE:
             // Unpack the received vector
             std::memcpy(&recievedData, event.packet->data, event.packet->dataLength);
-            std::cout << recievedData.x << " " << recievedData.y << " " << recievedData.z << std::endl;
 
             // Set this vector to Remote Player Actor
             remotePlayer->GetComponent<TransformComponent>()->pos = recievedData;
@@ -126,13 +137,6 @@ void Server::Update()
             //event.peer->data = NULL;
             break;
         }
-    }
-    if (peer != nullptr) {
-        ENetPacket* tempPacket = enet_packet_create(pos,
-            sizeof(Vec3) + 1,
-            ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
-        enet_peer_send(peer, 0, tempPacket);
-        //std::cout << "Send a packet\n";
     }
 }
 
