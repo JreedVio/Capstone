@@ -6,7 +6,7 @@
 
 
 
-NetworkManager::NetworkManager()
+NetworkManager::NetworkManager() : tickrate(64)
 {
 }
 
@@ -81,6 +81,6 @@ void NetworkManager::Update()
             unit->Send();
             unit->Recieve();
         }
-        SDL_Delay(timer->GetSleepTime(64));
+        SDL_Delay(timer->GetSleepTime(tickrate));
     }
 }

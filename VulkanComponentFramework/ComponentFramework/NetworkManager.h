@@ -11,6 +11,8 @@ class NetworkManager
 private:
 	NetworkUnit* unit;
 	class Timer* timer;
+	unsigned int tickrate;
+
 public:
 	NetworkManager();
 	~NetworkManager();
