@@ -1,5 +1,0 @@
-[INFO]: Starting the GameSceneManager
-[INFO]: AssetManager Created
-[INFO]: Succeed to Load Asset RendererAssets
-[INFO]: Succeed to Load Scene TestScene
-[INFO]: Succeed to Load Scene TestScene
