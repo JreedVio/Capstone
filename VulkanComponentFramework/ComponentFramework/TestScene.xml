@@ -11,7 +11,7 @@
 		<Wall name="Forward" actor="Wall"/>
 		<Wall name="Backward" actor="Wall"/>
 		<Wall name="Top" actor="Wall"/>
-		<Wall name="Bottom" actor="Wall"/> <-->
+		<Wall name="Bottom" actor="Wall"/><-->
 	</WallActor>
 
 		

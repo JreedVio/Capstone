@@ -21,7 +21,7 @@ void Room::Update(float deltaTime){
 
     //Update timer for the room
     currentTime -= deltaTime;
-    printf("Current Time: %f\n", currentTime);
+    //printf("Current Time: %f\n", currentTime);
 
 }
 
@@ -41,5 +41,5 @@ void Room::TimeOver(){
 
     //TODO: Do something when time over
 
-    printf("TimeOver\n");
+    //printf("TimeOver\n");
 }

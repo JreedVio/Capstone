@@ -3,6 +3,8 @@
 #include "Matrix.h"
 using namespace MATH;
 
+union SDL_Event;
+
 class CameraActor:public Actor {
 private:
 	Matrix4 projectionMatrix;
@@ -14,6 +16,9 @@ public:
 
 	bool OnCreate() override;
 	void OnDestroy() override;
+	void Render() const;
+	void Update(const float deltaTime) override;
+	void HandleEvents(const SDL_Event& sdlEvent);
 	Matrix4 GetProjectionMatrix() const { return projectionMatrix; }
 	Matrix4 GetViewMatrix() const { return viewMatrix; }
 

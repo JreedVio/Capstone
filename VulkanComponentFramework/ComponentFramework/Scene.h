@@ -9,7 +9,7 @@
 #define LIGHT_NUM 2
 
 union SDL_Event;
-class Camera;
+class CameraActor;
 
 class Scene {
 public:
@@ -39,7 +39,7 @@ public:
 
 protected:
 	VulkanRenderer* renderer;
-	Ref<Camera> camera;
+	Ref<CameraActor> camera;
 	std::unordered_map<const char*, Ref<Actor>> actorList;
 	std::vector<Ref<LightActor>> globalLights;
 };

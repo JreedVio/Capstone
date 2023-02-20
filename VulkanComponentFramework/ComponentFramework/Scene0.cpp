@@ -30,8 +30,8 @@ bool Scene0::OnCreate() {
 	case RendererType::VULKAN:
 		SDL_GetWindowSize(dynamic_cast<VulkanRenderer*>(renderer)->GetWindow(), &width, &height);
 		aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-		camera->Perspective(45.0f, aspectRatio, 0.5f, 20.0f);
-		camera->LookAt(Vec3(0.0f, 0.0f, 5.0f), Vec3(0.0f, 0.0f, -3.0f), Vec3(0.0f, 1.0f, 0.0f));
+		//camera->Perspective(45.0f, aspectRatio, 0.5f, 20.0f);
+		//camera->LookAt(Vec3(0.0f, 0.0f, 5.0f), Vec3(0.0f, 0.0f, -3.0f), Vec3(0.0f, 1.0f, 0.0f));
 		lights[0]->SetPosition(Vec4(5.0f, 0.0f, -5.0f, 0.0f));
 		lights[1]->SetPosition(Vec4(-5.0f, 0.0f, -5.0f, 0.0f));
 		lights[0]->SetDiffuse(Vec4(0.0f, 0.0f, 1.0f, 1.0f));		

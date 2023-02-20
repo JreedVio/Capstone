@@ -7,13 +7,15 @@
 #include "Camera.h"
 #include "GlobalLighting.h"
 #include "SceneManager.h"
+#include "CameraActor.h"
+#include "TransformComponent.h"
 
 RoomScene::RoomScene(VulkanRenderer* renderer_):Scene(renderer_) {
-    camera = std::make_shared<Camera>();
+    camera = std::make_shared<CameraActor>(nullptr);
 }
 
 RoomScene::RoomScene(VulkanRenderer* renderer_, Ref<Room> room_):Scene(renderer_), room(room_){
-    camera = std::make_shared<Camera>();
+    camera = std::make_shared<CameraActor>(nullptr);
 
 }
 
@@ -24,8 +26,8 @@ RoomScene::~RoomScene(){
 bool RoomScene::OnCreate(){
 
     float aspectRatio = static_cast<float>(renderer->GetWidth()) / static_cast<float>(renderer->GetHeight());
-    camera->Perspective(45.0f, aspectRatio, 0.5f, 20.0f);
-    camera->LookAt(Vec3(0.0f, 0.0f, 5.0f), Vec3(0.0f, 0.0f, -3.0f), Vec3(0.0f, 1.0f, 0.0f)); 
+    camera->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, 0.0f, -5.0f), Quaternion());
+    camera->OnCreate();
 
     //Add the players to the scene, and spawn at the desired location
     //TODO: Change the spawn location to player start position in the scene
@@ -73,6 +75,7 @@ void RoomScene::Render() const{
 void RoomScene::HandleEvents(const SDL_Event& sdlEvent){
     //Ref<TransformComponent> tf = player->GetComponent<TransformComponent>();
     localPlayer->GetPlayerInput(sdlEvent, nullptr);
+    camera->HandleEvents(sdlEvent);
 }
 
 Ref<Actor> RoomScene::GetActor(const char* name_){
