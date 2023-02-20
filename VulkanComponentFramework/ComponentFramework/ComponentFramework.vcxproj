@@ -130,6 +130,7 @@
     <ClCompile Include="CameraActor.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="DoorActor.cpp" />
     <ClCompile Include="EMath.cpp" />
     <ClCompile Include="GlobalLighting.cpp" />
     <ClCompile Include="Hash.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="DoorActor.h" />
     <ClInclude Include="EMath.h" />
     <ClInclude Include="Euler.h" />
     <ClInclude Include="GlobalLighting.h" />

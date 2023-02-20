@@ -14,6 +14,8 @@ class PlayerController : public Input, public Component {
 private:
 
     Ref<Actor> pawnActor;
+    const char* checkPoint;
+    int roomSurvived;
 
 public:   
 
@@ -33,5 +35,11 @@ public:
     Ref<Actor> GetPawn() { return pawnActor; }
     void SetPawn(Ref<Actor> pawn_) { pawnActor = pawn_; }
 
+    const char* GetCheckPoint() { return checkPoint; }
+    void SetCheckPoint(const char* checkPoint_) { checkPoint = checkPoint_; }
+
+    int GetSurvivedRoom() { return roomSurvived; }
+    /*Add the value to the survived room*/
+    void AddSurvivedRoom(int value_) { roomSurvived += value_; }
 };
 

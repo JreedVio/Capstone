@@ -2,7 +2,7 @@
 #include "Actor.h"
 
 
-PlayerController::PlayerController(Component* parent_): Component(parent_), pawnActor(nullptr) {
+PlayerController::PlayerController(Component* parent_): Component(parent_), pawnActor(nullptr), roomSurvived(0) {
 
 }
 
@@ -25,7 +25,6 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 	{	
 		pos.z -= moveSpeed;
 		transform->SetTransform(pos, orient);
-		transform->GetPosition().print();
 
 	}
 	else if (KeyDown(KeyCode::A, Event))

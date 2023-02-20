@@ -28,7 +28,7 @@ bool RoomScene::OnCreate(){
     camera->LookAt(Vec3(0.0f, 0.0f, 5.0f), Vec3(0.0f, 0.0f, -3.0f), Vec3(0.0f, 1.0f, 0.0f)); 
 
     //Add the players to the scene, and spawn at the desired location
-    //TODO::Change the spawn location to player start position in the scene
+    //TODO: Change the spawn location to player start position in the scene
     remotePlayer = SceneManager::GetInstance()->GetRemotePlayer();
     localPlayer = SceneManager::GetInstance()->GetLocalPlayer();
     AddActor("RemotePlayer", remotePlayer->GetPawn());
@@ -55,25 +55,28 @@ void RoomScene::OnDestroy(){
 
 void RoomScene::Update(const float deltaTime){
 
+    /*TODO: 
+      Check for collision and update actors, room
+      When door collision happens, call RoomTransittion()
+    */
+
+    //
+    room->Update(deltaTime);
 }
 
 void RoomScene::Render() const{
     renderer->SetUBO(camera->GetProjectionMatrix(), camera->GetViewMatrix());
     renderer->SetGLightsUbo(globalLights);
-    //renderer->SetPushConst(mariosModelMatrix);
     renderer->Render();
 }
 
-void RoomScene::HandleEvents(const SDL_Event& sdlEvent)
-{
-
+void RoomScene::HandleEvents(const SDL_Event& sdlEvent){
     //Ref<TransformComponent> tf = player->GetComponent<TransformComponent>();
     localPlayer->GetPlayerInput(sdlEvent, nullptr);
-
 }
 
-Ref<Actor> RoomScene::GetActor(const char* name_)
-{
+Ref<Actor> RoomScene::GetActor(const char* name_){
+
     for (auto actor_ : GetActorList()) {
         if (strcmp(actor_.first, name_) == 0) {
             return actor_.second;

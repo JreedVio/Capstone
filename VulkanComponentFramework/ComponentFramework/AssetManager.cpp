@@ -237,14 +237,70 @@ bool AssetManager::CreateActors(){
 
 Scene* AssetManager::CreateRoom(XMLElement* roomData){
 
-	//Ref<Room> room_ = std::make_shared<Room>(100, 100, 1000);
-	//Get information for room
+	//Get information for room (size, time)
 	XMLElement* sizeData = roomData->FirstChildElement("Size");
 	float width = sizeData->FloatAttribute("x");
 	float length = sizeData->FloatAttribute("y");
 	float height = sizeData->FloatAttribute("z");
 	Ref<Room> room_ = std::make_shared<Room>(width, length, height);
+
 	Scene* scene_ = new RoomScene(renderer, room_);
+	XMLElement* timeData = roomData->FirstChildElement("RoomTime");
+	float time_ = timeData->FloatAttribute("time");
+	room_->SetRoomTime(time_);
+	
+	//Add WallData
+	XMLElement* wallData = roomData->FirstChildElement("WallActor");
+	XMLElement* wall_ = wallData->FirstChildElement("Wall");
+	while (wall_) {
+		//Get Wall name and the actor
+		const char* wallName_ = wall_->FindAttribute("name")->Value();
+		const char* wallActorName = wall_->FindAttribute("actor")->Value();
+		Ref<Actor> wallActorData_ = GetActor(wallActorName);
+		//Copy the actor
+		Ref<Actor> wallActor_ = std::make_shared<Actor>(*wallActorData_.get());
+		/*Calculate tranform position
+		  Left, Right is width calculation
+		  Forward, backward is length calculation
+		  Top, Bottom is height calcultion */
+		Vec3 position;
+		Quaternion rotation;
+		if (strcmp(wallName_, "Left") == 0) {
+			float x_ = 0.0f - width / 2.0f;
+			position = Vec3(x_, 0.0f, 0.0f);
+			rotation = QMath::angleAxisRotation(90.0f, Vec3(0.0f, 1.0f, 0.0f));
+		}
+		else if (strcmp(wallName_, "Right") == 0) {
+			float x_ = 0.0f + width / 2.0f;
+			position = Vec3(x_, 0.0f, 0.0f);
+			rotation = QMath::angleAxisRotation(90.0f, Vec3(0.0f, 1.0f, 0.0f));
+		}
+		else if (strcmp(wallName_, "Forward") == 0) {
+			float z_ = 0.0f - length / 2.0f;
+			position = Vec3(0.0f, 0.0f, z_);
+		}
+		else if (strcmp(wallName_, "Backward") == 0) {
+			float z_ = 0.0f + length / 2.0f;
+			position = Vec3(0.0f, 0.0f, z_);
+
+		}
+		else if (strcmp(wallName_, "Top") == 0) {
+			float y_ = 0.0f + height / 2.0f;
+			position = Vec3(0.0f, y_, 0.0f);
+			rotation = QMath::angleAxisRotation(90.0f, Vec3(1.0f, 0.0f, 0.0f));
+		}
+		else if (strcmp(wallName_, "Bottom") == 0) {
+			float y_ = 0.0f - width / 2.0f;
+			position = Vec3(0.0f, y_, 0.0f);
+			rotation = QMath::angleAxisRotation(90.0f, Vec3(1.0f, 0.0f, 0.0f));
+		}
+		Ref<TransformComponent> tranform_ = std::make_shared<TransformComponent>(wallActor_.get(), position, rotation, Vec3(0.5f, 5.0f, 5.0f));
+		wallActor_->AddComponent(tranform_);
+		wallActor_->OnCreate();
+		room_->AddActor(wallActorName, wallActor_);
+		wall_ = wall_->NextSiblingElement("Wall");
+	}
+
 	//Add light data
 	XMLElement* lightData = roomData->FirstChildElement("LightActor");
 	XMLElement* light_ = lightData->FirstChildElement("Light");
@@ -261,6 +317,24 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 		//Add light to the scene
 		scene_->AddLight(Vec4(posX, posY, posZ, 0.0f), Vec4(r_, g_, b_, a_));
 		light_ = light_->NextSiblingElement("Light");
+	}
+
+	//Add door actors;
+	XMLElement* doorData = roomData->FirstChildElement("DoorActor");
+	XMLElement* door_ = doorData->FirstChildElement("Door");
+	while (door_) {
+		//Get Wall name and the actor
+		const char* doorConnection_ = door_->FindAttribute("connection")->Value();
+		const char* doorActorName = door_->FindAttribute("actor")->Value();
+		Ref<Actor> doorActorData_ = GetActor(doorActorName);
+		//Copy the actor
+		Ref<Actor> doorActor_ = std::make_shared<Actor>(*doorActorData_.get());
+		//Get tranform
+		XMLElement* transformElement = door_->FirstChildElement("Transform");
+		doorActor_->AddComponent(LoadTransform(doorActor_.get(), transformElement));
+		doorActor_->OnCreate();
+		room_->AddActor(doorConnection_, doorActor_);
+		door_ = door_->NextSiblingElement("Door");
 	}
 
 	//Get possible actor in the room
@@ -310,35 +384,8 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 		Ref<Actor> actor_ = std::make_shared<Actor>(*actorData_.get());
 		//Get data for transform
 		XMLElement* componentTransformElement = actorData->FirstChildElement("Transform");
-		//Position data
-		float posX = componentTransformElement->FloatAttribute("posX");
-		float posY = componentTransformElement->FloatAttribute("posY");
-		float posZ = componentTransformElement->FloatAttribute("posZ");
-		//Orientation data
-		float angle = componentTransformElement->FloatAttribute("angle");
-		float axisX = componentTransformElement->FloatAttribute("axisX");
-		float axisY = componentTransformElement->FloatAttribute("axisY");
-		float axisZ = componentTransformElement->FloatAttribute("axisZ");
-		Quaternion orientation = Quaternion();
-		if (VMath::mag(Vec3(axisX, axisY, axisZ)) > VERY_SMALL) {
-			orientation = QMath::angleAxisRotation(angle, Vec3(axisX, axisY, axisZ));
-		}
-		//Scale data
-		float scaleX = componentTransformElement->FloatAttribute("scaleX");
-		float scaleY = componentTransformElement->FloatAttribute("scaleY");
-		float scaleZ = componentTransformElement->FloatAttribute("scaleZ");
-		if (scaleX < VERY_SMALL) {
-			scaleX = 0.0f;
-		}
-		if (scaleY < VERY_SMALL) {
-			scaleY = 0.0f;
-		}
-		if (scaleZ < VERY_SMALL) {
-			scaleZ = 0.0f;
-		}
 		//Set transform component
-		Ref<TransformComponent> tranform = std::make_shared<TransformComponent>(actor_.get(), Vec3(posX, posY, posZ), orientation, Vec3(scaleX, scaleY, scaleZ));
-		actor_->AddComponent(tranform);
+		actor_->AddComponent(LoadTransform(actor_.get(), componentTransformElement));
 		actor_->OnCreate();
 		//Add Actor to current scene
 		room_->AddActor(actorName, actor_);
@@ -346,6 +393,36 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 	}
 
 	return scene_;
+}
+
+Ref<TransformComponent> AssetManager::LoadTransform(Actor* actor_, XMLElement* transformElement_){
+	float posX = transformElement_->FloatAttribute("posX");
+	float posY = transformElement_->FloatAttribute("posY");
+	float posZ = transformElement_->FloatAttribute("posZ");
+	//Orientation data
+	float angle = transformElement_->FloatAttribute("angle");
+	float axisX = transformElement_->FloatAttribute("axisX");
+	float axisY = transformElement_->FloatAttribute("axisY");
+	float axisZ = transformElement_->FloatAttribute("axisZ");
+	Quaternion orientation = Quaternion();
+	if (VMath::mag(Vec3(axisX, axisY, axisZ)) > VERY_SMALL) {
+		orientation = QMath::angleAxisRotation(angle, Vec3(axisX, axisY, axisZ));
+	}
+	//Scale data
+	float scaleX = transformElement_->FloatAttribute("scaleX");
+	float scaleY = transformElement_->FloatAttribute("scaleY");
+	float scaleZ = transformElement_->FloatAttribute("scaleZ");
+	if (scaleX < VERY_SMALL) {
+		scaleX = 0.0f;
+	}
+	if (scaleY < VERY_SMALL) {
+		scaleY = 0.0f;
+	}
+	if (scaleZ < VERY_SMALL) {
+		scaleZ = 0.0f;
+	}
+
+	return std::make_shared<TransformComponent>(actor_, Vec3(posX, posY, posZ), orientation, Vec3(scaleX, scaleY, scaleZ));
 }
 
 

@@ -11,17 +11,27 @@
 			<Material name="MarioFire" filename="./textures/mario_fire.png"/>
 			<Material name="MarioBlack" filename="./textures/mario_mime.png"/>
 			<Material name="SkullNormal" filename="./textures/skull_texture.png"/>
-
+			<Material name="SkullRed" filename="./textures/skull_red.png"/>
+			<Material name="SkullBlue" filename="./textures/skull_blue.png"/>
+			<Material name="WallRed" filename="./textures/redWall.png"/>
+			
 			<Shader name ="PhongShader" vertFilename ="shaders/multiPhong.vert.spv" fragFilename="shaders/multiPhong.frag.spv"/>
 
-			<!-->
-			<Shader name ="PhongShader" vertFilename ="shaders/phong.vert.spv" fragFilename="shaders/phong.frag.spv"/>
-			<Shader name ="NormalShader" vertFilename ="shaders/drawNormals.vert.spv" fragFilename="shaders/drawNormals.frag.spv" geomFilename="shaders/drawNormals.geom.spv"/>
-			<Shader name ="LineShader" vertFilename ="shaders/drawLine.vert.spv" fragFilename="shaders/drawLine.frag.spv" geomFilename="shaders/drawLine.geom.spv"/>
-			<-->
-
 		</Component>
-		
+
+		<Actor name="Wall">
+			<Parent componentName="None"/>
+			<Mesh componentName="CubeModel"/>
+			<Material componentName="WallRed"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+
+		<Actor name="Door">
+			<Parent componentName="None"/>
+			<Mesh componentName="CubeModel"/>
+			<Material componentName="SkullBlue"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
 		
 		<Actor name="Mario">
 			<Parent componentName="None"/>

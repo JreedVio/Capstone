@@ -220,6 +220,7 @@ private:
     void destroyUniformBuffer(std::vector<VkBuffer>& uniformBuffer, std::vector<VkDeviceMemory>& uniformBufferMemory);
     void createCommandBuffers();
     void recordCommandBuffer();
+    void actorRender(Ref<Actor> actor_);
     void createSyncObjects();
     void cleanup();
     void cleanupSwapChain();

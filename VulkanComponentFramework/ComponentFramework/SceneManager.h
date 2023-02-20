@@ -9,6 +9,7 @@ class PlayerController;
 class AssetManager;
 class Scene;
 
+
 class SceneManager  {
 public:
 	
@@ -22,7 +23,9 @@ public:
 	Scene* GetCurrentScene() { return currentScene; }
 	Ref<PlayerController> GetRemotePlayer() { return remotePlayer; }
 	Ref<PlayerController> GetLocalPlayer() { return localPlayer; }
-
+	void RoomChange(const char* roomName_);
+	bool GameOver();
+	bool GameWin();
 	
 private:
 	
@@ -33,9 +36,7 @@ private:
 
 	SceneManager();
 	static SceneManager* Instance;
-
 	NetworkManager* networkManager;
-
 	enum class RendererType rendererType;
 	Scene* currentScene;
 	class Timer* timer;
@@ -48,6 +49,8 @@ private:
 	unsigned int fps;
 	bool isRunning;
 	void BuildScene(SCENETYPE scenetype_, const char* fileName);
+
+	int winCondition = 10;
 };
 
 

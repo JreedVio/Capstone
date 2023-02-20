@@ -144,6 +144,9 @@
     <ClCompile Include="Server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DoorActor.cpp">
+      <Filter>Source Files\Scenes\Room</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -268,6 +271,9 @@
     </ClInclude>
     <ClInclude Include="ChronoTimer.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DoorActor.h">
+      <Filter>Header Files\Scenes\Room</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -92,15 +92,14 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 	localActor->OnCreate();
 	localPlayer->SetPawn(localActor);
 
+	remotePlayer = std::make_shared<PlayerController>(nullptr);
 	Ref<Actor> remoteActor = assetManager->GetActor("RemotePlayer");
 	remoteActor->AddComponent<TransformComponent>(nullptr, Vec3(), Quaternion());
 	remoteActor->OnCreate();
-	remotePlayer = std::make_shared<PlayerController>(nullptr);
 	remotePlayer->SetPawn(remoteActor);
 	remotePlayer->GetPawn()->SetVisible(false);
 
 	BuildScene(ROOMSCENE, "TestScene");
-
 
 	networkManager = new NetworkManager();
 	if (!networkManager->OnCreate()) {
@@ -115,7 +114,6 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 void SceneManager::Run() {
 	timer->Start();
 	isRunning = true;
-
 	
 	std::thread networking(&NetworkManager::Update, this->networkManager);
 	networking.detach();
@@ -141,6 +139,29 @@ void SceneManager::Run() {
 void SceneManager::RunNetworkUpdate(NetworkManager* networkManager_) {
 	
 	networkManager_->Update();
+}
+
+
+void SceneManager::RoomChange(const char* roomName_){
+	//TODO: TEST
+	//When room change occurs, check the winning condition
+	if (GameWin()) return;
+	//Change room
+	BuildScene(ROOMSCENE, roomName_);
+}
+
+bool SceneManager::GameOver(){
+
+	//TODO: Change to the lose screen
+	return true;
+}
+
+bool SceneManager::GameWin(){
+
+	if (localPlayer->GetSurvivedRoom() >= winCondition) {
+		//TODO: Change to the winning screen
+	}
+	return true;
 }
 
 void SceneManager::GetEvents() {
