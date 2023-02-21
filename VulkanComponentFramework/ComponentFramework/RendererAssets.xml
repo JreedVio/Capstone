@@ -4,13 +4,13 @@
 
 		<Component>
 	
-			<Mesh name="MarioModel" filename= "./meshes/Mario.obj"/>
-			<Mesh name="SkullModel" filename= "./meshes/Skull.obj"/>
-			<Mesh name="CubeModel" filename= "./meshes/Cube.obj"/>
+			<Mesh name="MarioModel" filename= "./meshes/Robot.obj"/> <!--> Mario.obj <-->
+			<Mesh name="SkullModel" filename= "./meshes/Wall_Empty.obj"/> <!--> Skull.obj <-->
+			<Mesh name="CubeModel" filename= "./meshes/FloorTile_Empty.obj"/> 
 			
-			<Material name="MarioFire" filename="./textures/mario_fire.png"/>
+			<Material name="MarioFire" filename="./textures/ScifiColor.png"/> <!--> mario_fire.png <-->
 			<Material name="MarioBlack" filename="./textures/mario_mime.png"/>
-			<Material name="SkullNormal" filename="./textures/skull_texture.png"/>
+			<Material name="SkullNormal" filename="./textures/ScifiColor.png"/> <!--> skull_texture.png <-->
 
 			<Shader name ="PhongShader" vertFilename ="shaders/multiPhong.vert.spv" fragFilename="shaders/multiPhong.frag.spv"/>
 
