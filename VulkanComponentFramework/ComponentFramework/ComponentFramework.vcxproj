@@ -138,6 +138,7 @@
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
+    <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="QMath.cpp" />
     <ClCompile Include="Room.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="NetworkUnit.h" />
     <ClInclude Include="OpenGLRenderer.h" />
+    <ClInclude Include="Physics.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="QMath.h" />
     <ClInclude Include="Quaternion.h" />
