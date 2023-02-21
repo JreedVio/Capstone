@@ -14,7 +14,7 @@ int main(int argc, char* args[]) {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	{
-		std::string name = { "Graphics Game Engine" };
+		std::string name = { "Graphics_Game_Engine" };
 		Debug::DebugInit(name + "_Log");
 		Debug::Info("Starting the GameSceneManager", __FILE__, __LINE__);
 
