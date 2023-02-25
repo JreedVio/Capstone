@@ -41,6 +41,7 @@ void CameraActor::Update(const float deltaTime){
 }
 
 void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
+
 	switch (sdlEvent.type) {
 	case SDL_KEYDOWN:
 		if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_LEFT) {
@@ -114,6 +115,27 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 				transform_->GetPosition() + Vec3(0.0f, 0.0f, -0.1f), transform_->GetOrientation());
 			UpdateViewMatrix();
 		}
+		break;
+
+	case SDL_MOUSEMOTION:
+
+		if (true) {
+			Ref<TransformComponent> transform_ = GetComponent<TransformComponent>();
+			//Grab forward vector of the camera, and calculate the new forward vector, with the motion position
+			Vec3 destination = Vec3(sdlEvent.motion.x, sdlEvent.motion.y, 0.0f) - transform_->GetPosition();
+			Vec3 rotationAxis = VMath::cross(VMath::normalize(destination), Vec3(0.0f, 0.0f, 1.0f));
+			//Use the dot products and the magnitude to find the cosine
+			float magDesition = VMath::mag(destination);
+			float magAxis = VMath::mag(rotationAxis);
+			float cosine = VMath::dot(rotationAxis, destination) / magAxis * magDesition;
+			//float w = VMath::dot(destination, a);
+			transform_->SetTransform(transform_->GetPosition(), QMath::angleAxisRotation(cosine * 100.0f, rotationAxis) *
+						transform_->GetOrientation());
+			std::cout << cosine << "\n";
+			UpdateViewMatrix();
+		}
+
+		break;
 
 	default:
 		break;
