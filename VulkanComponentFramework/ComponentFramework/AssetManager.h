@@ -39,6 +39,7 @@ private:
 	void AddActorData(XMLElement* actorData);
 	bool CreateActors();
 	Scene* CreateRoom(XMLElement* roomData);
+	Ref<TransformComponent>LoadTransform(Actor* actor_, XMLElement* transformElement_);
 
 public:
 	static AssetManager* GetInstance();

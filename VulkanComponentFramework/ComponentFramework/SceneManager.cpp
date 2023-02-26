@@ -9,6 +9,7 @@
 #include "ChronoTimer.h"
 #include <future>
 #include <thread>
+#include "PlayerController.h"
 
 
 SceneManager* SceneManager::Instance(nullptr);
@@ -84,11 +85,21 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 		return false;
 	}
 
-	BuildScene(ROOMSCENE, "TestScene");
+	//Create Players
+	localPlayer = std::make_shared<PlayerController>(nullptr);
+	Ref<Actor> localActor = assetManager->GetActor("LocalPlayer");
+	localActor->AddComponent<TransformComponent>(nullptr, Vec3(), Quaternion());
+	localActor->OnCreate();
+	localPlayer->SetPawn(localActor);
 
-	localPlayer = currentScene->GetActor("Mario1");
-	remotePlayer = currentScene->GetActor("Mario2");
-	remotePlayer->SetVisible(false);
+	remotePlayer = std::make_shared<PlayerController>(nullptr);
+	Ref<Actor> remoteActor = assetManager->GetActor("RemotePlayer");
+	remoteActor->AddComponent<TransformComponent>(nullptr, Vec3(), Quaternion());
+	remoteActor->OnCreate();
+	remotePlayer->SetPawn(remoteActor);
+	remotePlayer->GetPawn()->SetVisible(false);
+
+	BuildScene(ROOMSCENE, "TestScene");
 
 	networkManager = new NetworkManager();
 	if (!networkManager->OnCreate()) {
@@ -103,7 +114,6 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 void SceneManager::Run() {
 	timer->Start();
 	isRunning = true;
-
 	
 	std::thread networking(&NetworkManager::Update, this->networkManager);
 	networking.detach();
@@ -129,6 +139,29 @@ void SceneManager::Run() {
 void SceneManager::RunNetworkUpdate(NetworkManager* networkManager_) {
 	
 	networkManager_->Update();
+}
+
+
+void SceneManager::RoomChange(const char* roomName_){
+	//TODO: TEST
+	//When room change occurs, check the winning condition
+	if (GameWin()) return;
+	//Change room
+	BuildScene(ROOMSCENE, roomName_);
+}
+
+bool SceneManager::GameOver(){
+
+	//TODO: Change to the lose screen
+	return true;
+}
+
+bool SceneManager::GameWin(){
+
+	if (localPlayer->GetSurvivedRoom() >= winCondition) {
+		//TODO: Change to the winning screen
+	}
+	return true;
 }
 
 void SceneManager::GetEvents() {

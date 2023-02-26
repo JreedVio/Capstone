@@ -9,7 +9,7 @@
 #define LIGHT_NUM 2
 
 union SDL_Event;
-class Camera;
+class CameraActor;
 
 class Scene {
 public:
@@ -33,23 +33,13 @@ public:
 		globalLights.push_back(light_);
 	}
 
-	template<typename ActorTemplate>
-	void AddActor(const char* name_, Ref<ActorTemplate> actor_) {
-		if (std::dynamic_pointer_cast<Actor>(actor_)) {
-			actorList[name_] = actor_;
-		}
-		else {
-#ifdef _DEBUG
-			std::cerr << "WARNING: Trying to add a non-actor type to actor list - ignored\n";
-#endif
-		}
-	}
+
 	virtual Ref<Actor> GetActor(const char* name_) = 0;
 
 
 protected:
 	VulkanRenderer* renderer;
-	Ref<Camera> camera;
+	Ref<CameraActor> camera;
 	std::unordered_map<const char*, Ref<Actor>> actorList;
 	std::vector<Ref<LightActor>> globalLights;
 };

@@ -5,9 +5,10 @@
 #include "VulkanRenderer.h"
 #include "NetworkManager.h"
 
-class Actor;
+class PlayerController;
 class AssetManager;
 class Scene;
+
 
 class SceneManager  {
 public:
@@ -20,7 +21,11 @@ public:
 	static void RunNetworkUpdate(NetworkManager*);
 	bool GetIsRunning() { return isRunning; }
 	Scene* GetCurrentScene() { return currentScene; }
-	
+	Ref<PlayerController> GetRemotePlayer() { return remotePlayer; }
+	Ref<PlayerController> GetLocalPlayer() { return localPlayer; }
+	void RoomChange(const char* roomName_);
+	bool GameOver();
+	bool GameWin();
 	
 private:
 	
@@ -31,21 +36,21 @@ private:
 
 	SceneManager();
 	static SceneManager* Instance;
-
 	NetworkManager* networkManager;
-
 	enum class RendererType rendererType;
 	Scene* currentScene;
 	class Timer* timer;
 
-	Ref<Actor> localPlayer;
-	Ref<Actor> remotePlayer;
+	Ref<PlayerController> localPlayer;
+	Ref<PlayerController> remotePlayer;
 
 	VulkanRenderer* renderer;
 	AssetManager* assetManager;
 	unsigned int fps;
 	bool isRunning;
 	void BuildScene(SCENETYPE scenetype_, const char* fileName);
+
+	int winCondition = 10;
 };
 
 

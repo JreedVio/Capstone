@@ -6,13 +6,16 @@
 #include "VulkanRenderer.h"
 #include "Camera.h"
 #include "GlobalLighting.h"
+#include "SceneManager.h"
+#include "CameraActor.h"
+#include "TransformComponent.h"
 
 RoomScene::RoomScene(VulkanRenderer* renderer_):Scene(renderer_) {
-    camera = std::make_shared<Camera>();
+    camera = std::make_shared<CameraActor>(nullptr);
 }
 
 RoomScene::RoomScene(VulkanRenderer* renderer_, Ref<Room> room_):Scene(renderer_), room(room_){
-    camera = std::make_shared<Camera>();
+    camera = std::make_shared<CameraActor>(nullptr);
 
 }
 
@@ -23,11 +26,22 @@ RoomScene::~RoomScene(){
 bool RoomScene::OnCreate(){
 
     float aspectRatio = static_cast<float>(renderer->GetWidth()) / static_cast<float>(renderer->GetHeight());
-    camera->Perspective(45.0f, aspectRatio, 0.5f, 20.0f);
-    camera->LookAt(Vec3(0.0f, 0.0f, 5.0f), Vec3(0.0f, 0.0f, -3.0f), Vec3(0.0f, 1.0f, 0.0f)); 
+    camera->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, 0.0f, -2.0f), Quaternion());
+    camera->OnCreate();
 
-    player = GetActor("Mario1");
-    
+    //Add the players to the scene, and spawn at the desired location
+    //TODO: Change the spawn location to player start position in the scene
+    remotePlayer = SceneManager::GetInstance()->GetRemotePlayer();
+    localPlayer = SceneManager::GetInstance()->GetLocalPlayer();
+    AddActor("RemotePlayer", remotePlayer->GetPawn());
+    AddActor("LocalPlayer", localPlayer->GetPawn());
+    camera->SetParent(localPlayer->GetPawn().get());
+    localPlayer->GetPawn()->AddComponent(camera);
+    camera->UpdateViewMatrix();
+    //localPlayer->GetPawn()->SetParent(camera.get());
+    //camera->AddComponent(localPlayer->GetPawn());
+    //camera->UpdateViewMatrix();
+
     //globalLights.push_back(std::make_shared<LightActor>(nullptr));
     //globalLights.push_back(std::make_shared<LightActor>(nullptr));
 
@@ -49,25 +63,29 @@ void RoomScene::OnDestroy(){
 
 void RoomScene::Update(const float deltaTime){
 
+    /*TODO: 
+      Check for collision and update actors, room
+      When door collision happens, call RoomTransittion()
+    */
+    //
+    room->Update(deltaTime);
+    camera->Update(deltaTime);
 }
 
 void RoomScene::Render() const{
     renderer->SetUBO(camera->GetProjectionMatrix(), camera->GetViewMatrix());
     renderer->SetGLightsUbo(globalLights);
-    //renderer->SetPushConst(mariosModelMatrix);
     renderer->Render();
 }
 
-void RoomScene::HandleEvents(const SDL_Event& sdlEvent)
-{
-
-    Ref<TransformComponent> tf = player->GetComponent<TransformComponent>();
-    player->GetComponent<PlayerController>()->GetPlayerInput(sdlEvent, tf.get());
-
+void RoomScene::HandleEvents(const SDL_Event& sdlEvent){
+    //Ref<TransformComponent> tf = player->GetComponent<TransformComponent>();
+    localPlayer->GetPlayerInput(sdlEvent, nullptr);
+    camera->HandleEvents(sdlEvent);
 }
 
-Ref<Actor> RoomScene::GetActor(const char* name_)
-{
+Ref<Actor> RoomScene::GetActor(const char* name_){
+
     for (auto actor_ : GetActorList()) {
         if (strcmp(actor_.first, name_) == 0) {
             return actor_.second;

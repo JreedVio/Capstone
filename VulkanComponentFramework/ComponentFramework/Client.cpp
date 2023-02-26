@@ -64,8 +64,8 @@ bool Client::OnCreate()
         return false;
     }
 
-    localPlayer = scene->GetActor("Mario1");
-    remotePlayer = scene->GetActor("Mario2");
+    localPlayer = scene->GetActor("LocalPlayer");
+    remotePlayer = scene->GetActor("RemotePlayer");
     if (localPlayer == nullptr || remotePlayer == nullptr) {
         Debug::FatalError("Failed to get Player Actors", __FILE__, __LINE__);
         return false;

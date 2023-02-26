@@ -2,14 +2,35 @@
 <Root>
 	<TestScene>
 	
-	<Size x="100" y="100" z="100"/>
+	<Size x="10" y="10" z="10"/>
+	<RoomTime time="5"/>
+	<WallActor>
+		<!-->
+		<Wall name="Left" actor="Wall"/>
+		<Wall name="Right" actor="Wall"/>
+		<Wall name="Forward" actor="Wall"/>
+		<Wall name="Backward" actor="Wall"/>
+		<Wall name="Top" actor="Wall"/>
+		<Wall name="Bottom" actor="Wall"/><-->
+	</WallActor>
+
+		
 	<LightActor>
 		<Light posX ="5.0" posY ="0.0" posZ ="-3.0"
 			   r="0.0" g="1.0" b="0.0" a="1.0"/>
 		<Light posX ="1.0" posY ="1.0" posZ ="0.0"
 			   r="1.0" g="" b="0.0" a="1.0"/>
 	</LightActor>
-		
+
+	<DoorActor>
+		<Door connection="TestScene2" actor="Door">
+			<Transform
+				posX ="-2.0" posY ="0.0" posZ ="-5.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.2" scaleY="0.2" scaleZ="0.2"/>
+		</Door>
+
+	</DoorActor>
 		
 	<ReferenceActor>
 		<RefName name="Mario"/>
@@ -20,34 +41,27 @@
 		
 	<Actor ref="Mario" name="Mario1">
 	<Transform componentName="MarioTransform"
-				   posX ="1.0" posY ="0.0" posZ ="1.0"
+				   posX ="1.0" posY ="0.0" posZ ="-5.0"
 				   angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 				   scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
-	</Actor>
-
-		
-	<Actor ref="Mario" name="Mario2">
-		<Transform componentName="MarioTransform"
-					posX ="0.0" posY ="0.0" posZ ="0.0"
-					angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
-					scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
 	</Actor>
 
 	
 	<Actor ref="Skull" name="Skull1">
 		<Transform componentName="SkullTransform"
-		   posX ="3.0" posY ="0.0" posZ ="0.0"
+		   posX ="3.0" posY ="0.0" posZ ="5.0"
 		   angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
 		   scaleX="0.3" scaleY="0.3" scaleZ="0.3"/>
 
 	</Actor>
 
-	<Actor ref="Random" name="Cube1">
+	<!-->
+		<Actor ref="Random" name="Cube1">
 		<Transform componentName="CubeTransform"
 			posX ="-3.0" posY ="0.0" posZ ="0.0"
 			angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
 			scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
-	</Actor>
+	</Actor><-->
 	
 		
 	</TestScene>

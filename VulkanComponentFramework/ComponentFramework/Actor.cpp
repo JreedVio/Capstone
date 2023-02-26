@@ -1,6 +1,7 @@
 #include "Actor.h"
 #include "Debug.h"
 #include "VulkanRenderer.h"
+#include "CameraActor.h"
 
 Actor::Actor(Component* parent_) :
     pool(0), sets(0), renderer(nullptr),
@@ -79,8 +80,14 @@ PushConst Actor::GetModelMatrix() {
         pushConst.model.loadIdentity();
 	}
 	if (parent) {
-        pushConst.model = dynamic_cast<Actor*>(parent)->pushConst.model * pushConst.model;
+        //pushConst.model = dynamic_cast<Actor*>(parent)->pushConst.model * pushConst.model;
+        pushConst.model = dynamic_cast<Actor*>(parent)->GetModelMatrix().model * pushConst.model;
 	}
+    Ref<CameraActor> camera = GetComponent<CameraActor>();
+    if (camera) {
+        pushConst.model = camera->GetModelMatrix().model * pushConst.model;
+    }
+
     pushConst.normal = MMath::transpose(MMath::inverse(pushConst.model));
 
 	return pushConst;
