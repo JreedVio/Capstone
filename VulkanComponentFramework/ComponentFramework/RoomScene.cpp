@@ -26,7 +26,7 @@ RoomScene::~RoomScene(){
 bool RoomScene::OnCreate(){
 
     float aspectRatio = static_cast<float>(renderer->GetWidth()) / static_cast<float>(renderer->GetHeight());
-    camera->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, 0.0f, 1.0f), Quaternion());
+    camera->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, 0.0f, -2.0f), Quaternion());
     camera->OnCreate();
 
     //Add the players to the scene, and spawn at the desired location
@@ -38,6 +38,10 @@ bool RoomScene::OnCreate(){
     camera->SetParent(localPlayer->GetPawn().get());
     localPlayer->GetPawn()->AddComponent(camera);
     camera->UpdateViewMatrix();
+    //localPlayer->GetPawn()->SetParent(camera.get());
+    //camera->AddComponent(localPlayer->GetPawn());
+    //camera->UpdateViewMatrix();
+
     //globalLights.push_back(std::make_shared<LightActor>(nullptr));
     //globalLights.push_back(std::make_shared<LightActor>(nullptr));
 
@@ -63,7 +67,6 @@ void RoomScene::Update(const float deltaTime){
       Check for collision and update actors, room
       When door collision happens, call RoomTransittion()
     */
-
     //
     room->Update(deltaTime);
     camera->Update(deltaTime);

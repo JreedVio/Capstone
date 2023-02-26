@@ -30,5 +30,6 @@ public:
 
 	void UpdateProjectionMatrix(const float fovy, const float aspectRatio, const float near, const float far);
 	void UpdateViewMatrix();
+	PushConst GetModelMatrix() override;
 };
 

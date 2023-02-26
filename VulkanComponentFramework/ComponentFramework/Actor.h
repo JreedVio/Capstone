@@ -99,7 +99,7 @@ public:
 
 	void ListComponents() const;
 
-	PushConst GetModelMatrix();
+	virtual PushConst GetModelMatrix();
 	void createDescriptorSets();
 	void SetPushConst(const Matrix4& model);
 };

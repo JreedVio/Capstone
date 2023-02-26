@@ -49,7 +49,7 @@
 	
 	<Actor ref="Skull" name="Skull1">
 		<Transform componentName="SkullTransform"
-		   posX ="3.0" posY ="0.0" posZ ="- 5.0"
+		   posX ="3.0" posY ="0.0" posZ ="5.0"
 		   angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
 		   scaleX="0.3" scaleY="0.3" scaleZ="0.3"/>
 

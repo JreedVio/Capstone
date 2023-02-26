@@ -18,6 +18,7 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 	if (camera) {
 		forward = QMath::rotate(forward, camera->GetComponent<TransformComponent>()->GetOrientation());
 		//DONT USE CAMERA FORWARD VEC, IT WONT WORK
+		//forward = camera->GetForward();
 	}
 
 	if (!transform)
@@ -73,9 +74,9 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 		//printf("Key Released\n");
 	}
 
-	if (camera) {
-		camera->UpdateViewMatrix();
-	}
+	//if (camera) {
+	//	camera->UpdateViewMatrix();
+	//}
 
 }
 
