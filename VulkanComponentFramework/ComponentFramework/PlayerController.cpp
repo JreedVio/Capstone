@@ -1,5 +1,6 @@
 #include "PlayerController.h"
 #include "Actor.h"
+#include "CameraActor.h"
 
 
 PlayerController::PlayerController(Component* parent_): Component(parent_), pawnActor(nullptr), roomSurvived(0) {
@@ -11,6 +12,13 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 
 	Ref<TransformComponent> transform = pawnActor->GetComponent<TransformComponent>();
 	//Ref<TransformComponent> transform = TF_Component;
+	Ref<CameraActor> camera = pawnActor->GetComponent<CameraActor>();
+
+	Vec3 forward = Vec3(0.0f, 0.0f, -1.0f);
+	if (camera) {
+		forward = QMath::rotate(forward, camera->GetComponent<TransformComponent>()->GetOrientation());
+		//DONT USE CAMERA FORWARD VEC, IT WONT WORK
+	}
 
 	if (!transform)
 		return;
@@ -23,9 +31,9 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 	// Key DOWN
 	if (KeyDown(KeyCode::W, Event))
 	{	
-		pos.z -= moveSpeed;
+		pos = transform->GetPosition() + (moveSpeed * forward);
+		//pos.z -= moveSpeed;
 		transform->SetTransform(pos, orient);
-
 	}
 	else if (KeyDown(KeyCode::A, Event))
 	{
@@ -34,7 +42,7 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 	}
 	if (KeyDown(KeyCode::S, Event))
 	{
-		pos.z += moveSpeed;
+		pos = transform->GetPosition() + (moveSpeed * -forward);
 		transform->SetTransform(pos, orient);
 	}
 	else if (KeyDown(KeyCode::D, Event))
@@ -63,9 +71,12 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 	if (KeyUP(KeyCode::D, Event))
 	{
 		//printf("Key Released\n");
-	}	
+	}
 
-	//printf("pos.x: %f, pos.y: %f, pos.z: %f\n", pos.x, pos.y, pos.z);
+	if (camera) {
+		camera->UpdateViewMatrix();
+	}
+
 }
 
 PlayerController::~PlayerController()

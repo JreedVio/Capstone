@@ -26,7 +26,7 @@ RoomScene::~RoomScene(){
 bool RoomScene::OnCreate(){
 
     float aspectRatio = static_cast<float>(renderer->GetWidth()) / static_cast<float>(renderer->GetHeight());
-    camera->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, 0.0f, -5.0f), Quaternion());
+    camera->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, 0.0f, 1.0f), Quaternion());
     camera->OnCreate();
 
     //Add the players to the scene, and spawn at the desired location
@@ -35,7 +35,9 @@ bool RoomScene::OnCreate(){
     localPlayer = SceneManager::GetInstance()->GetLocalPlayer();
     AddActor("RemotePlayer", remotePlayer->GetPawn());
     AddActor("LocalPlayer", localPlayer->GetPawn());
-
+    camera->SetParent(localPlayer->GetPawn().get());
+    localPlayer->GetPawn()->AddComponent(camera);
+    camera->UpdateViewMatrix();
     //globalLights.push_back(std::make_shared<LightActor>(nullptr));
     //globalLights.push_back(std::make_shared<LightActor>(nullptr));
 
@@ -64,6 +66,7 @@ void RoomScene::Update(const float deltaTime){
 
     //
     room->Update(deltaTime);
+    camera->Update(deltaTime);
 }
 
 void RoomScene::Render() const{
