@@ -23,6 +23,7 @@ public:
 	Matrix4 GetTransformMatrix() const;
 	Quaternion GetOrientation() { return orientation; }
 	Vec3 GetPosition() { return pos; }
+	Vec3 GetScale() { return scale; }
 	void SetTransform(Vec3 pos_, Quaternion orientation_, Vec3 scale_ = Vec3(1.0f, 1.0f, 1.0f)) {
 		pos = pos_;
 		orientation = orientation_;

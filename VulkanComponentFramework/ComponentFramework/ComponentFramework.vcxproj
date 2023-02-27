@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AABB.cpp" />
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -131,6 +132,7 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DoorActor.cpp" />
+    <ClCompile Include="DynamicLinearMovement.cpp" />
     <ClCompile Include="EMath.cpp" />
     <ClCompile Include="GlobalLighting.cpp" />
     <ClCompile Include="Hash.cpp" />
@@ -139,6 +141,7 @@
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
+    <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="QMath.cpp" />
     <ClCompile Include="Room.cpp" />
@@ -156,6 +159,7 @@
     <ClCompile Include="VulkanRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="Actor.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Camera.h" />
@@ -165,6 +169,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="DoorActor.h" />
+    <ClInclude Include="DynamicLinearMovement.h" />
     <ClInclude Include="EMath.h" />
     <ClInclude Include="Euler.h" />
     <ClInclude Include="GlobalLighting.h" />
@@ -175,6 +180,7 @@
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="NetworkUnit.h" />
     <ClInclude Include="OpenGLRenderer.h" />
+    <ClInclude Include="Physics.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="QMath.h" />
     <ClInclude Include="Quaternion.h" />
