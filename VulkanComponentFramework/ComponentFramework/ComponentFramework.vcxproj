@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AABB.cpp" />
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -131,6 +132,7 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DoorActor.cpp" />
+    <ClCompile Include="DynamicLinearMovement.cpp" />
     <ClCompile Include="EMath.cpp" />
     <ClCompile Include="GlobalLighting.cpp" />
     <ClCompile Include="Hash.cpp" />
@@ -157,6 +159,7 @@
     <ClCompile Include="VulkanRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="Actor.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Camera.h" />
@@ -166,6 +169,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="DoorActor.h" />
+    <ClInclude Include="DynamicLinearMovement.h" />
     <ClInclude Include="EMath.h" />
     <ClInclude Include="Euler.h" />
     <ClInclude Include="GlobalLighting.h" />

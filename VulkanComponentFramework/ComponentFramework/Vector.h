@@ -58,6 +58,10 @@ namespace  MATH {
 		inline Vec3( float x, float y, float z ){
 			set(x,y,z);
 		}
+
+		inline Vec3(float xyz) {
+			set(xyz, xyz, xyz);
+		}
 		
 		/// A copy constructor
 		inline Vec3( const Vec3& v ) { 

@@ -2,6 +2,8 @@
 #include "Debug.h"
 #include "VulkanRenderer.h"
 #include "CameraActor.h"
+#include "Physics.h"
+
 
 Actor::Actor(Component* parent_) :
     pool(0), sets(0), renderer(nullptr),
@@ -51,6 +53,14 @@ void Actor::OnDestroy() {
 
 
 void Actor::Update(const float deltaTime) {
+
+    auto dlm = GetComponent<PHYSICS::DynamicLinearMovement>();
+    auto ab = GetComponent<PHYSICS::AABB>();
+    if (dlm && ab)
+    {
+        PHYSICS::Physics::Update(deltaTime, dlm, ab);
+
+    }
 
 }
 void Actor::Render()const {}
