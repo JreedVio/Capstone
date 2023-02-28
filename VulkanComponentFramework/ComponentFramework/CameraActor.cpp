@@ -192,20 +192,25 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 		//Do separate rotation in x axis and y axis
 
 		if (abs(delta.x) >= VERY_SMALL) {
-			if (abs(delta.x) >= w_/2.0f) delta.x /= w_;
+			if (abs(delta.x) >= w_ / 2.0f) delta.x /= w_;
 			Quaternion newOrientation_ = QMath::angleAxisRotation(delta.x * cameraSpeed, upVector) * transform_->GetOrientation();
 			transform_->SetTransform(transform_->GetPosition(), newOrientation_);
-			//if (parent) {
-			//	Ref<TransformComponent> parentTransform = dynamic_cast<Actor*>(parent)->GetComponent<TransformComponent>();
-			//	/*parentTransform->SetTransform(parentTransform->GetPosition(), 
-			//						QMath::angleAxisRotation(-delta.x * cameraSpeed, upVector) * parentTransform->GetOrientation());
-			//*/	transform_->SetTransform(transform_->GetPosition(), transform_->GetOrientation() * parentTransform->GetOrientation());
-			//}
+			if (parent) {
+				Ref<TransformComponent> parentTransform = dynamic_cast<Actor*>(parent)->GetComponent<TransformComponent>();
+
+				/*parentTransform->SetTransform(parentTransform->GetPosition(), 
+									QMath::angleAxisRotation(-delta.x * cameraSpeed, upVector) * parentTransform->GetOrientation());
+			*/	transform_->SetTransform(transform_->GetPosition(), transform_->GetOrientation() * parentTransform->GetOrientation());
+				newOrientation_ = parentTransform->GetOrientation();
+				Vec3 ijk = newOrientation_.ijk;
+				newOrientation_.set(newOrientation_.w, ijk.x, ijk.y, 0.0f);
+				parentTransform->SetTransform(parentTransform->GetPosition(), newOrientation_);
+			}
 		}
 
 		if (abs(delta.y) >= VERY_SMALL) {
 			if (abs(delta.y) >= w_ / 2.0f) delta.y /= w_;
-			Quaternion newOrientation_ = QMath::angleAxisRotation(delta.y * cameraSpeed, rightDirection) * transform_->GetOrientation();
+			Quaternion newOrientation_ = QMath::angleAxisRotation(-delta.y * cameraSpeed, rightDirection) * transform_->GetOrientation();
 			Vec3 ijk = newOrientation_.ijk;
 			if (ijk.x >= -0.2f && ijk.x <= 0.1f) {
 				transform_->SetTransform(transform_->GetPosition(), newOrientation_);
@@ -214,10 +219,10 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 		}
 
 		//Calculate the rotational axis
-		rotationAxis = VMath::cross(VMath::normalize(destination), VMath::normalize(current));
+		//rotationAxis = VMath::cross(VMath::normalize(destination), VMath::normalize(current));
 		//Use the calculated angle and rotation axis to get the rotation
 		//Add the camera velocity as a factor to the angle,
-		Quaternion newOreintation = QMath::angleAxisRotation(cosine * cameraSpeed, rotationAxis) * transform_->GetOrientation();
+		//Quaternion newOreintation = QMath::angleAxisRotation(cosine * cameraSpeed, rotationAxis) * transform_->GetOrientation();
 		//Vec3 ijk = newOreintation.ijk;
 		//Make the rotation around z axis fixed
 		//newOreintation.set(newOreintation.w, ijk.x, ijk.y, 0.0f);
@@ -230,7 +235,7 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 		//Rotate the actor if there's one
 		
 		//transform_->SetTransform(transform_->GetPosition(), newOreintation);
-		newOreintation = transform_->GetOrientation();
+		Quaternion newOreintation = transform_->GetOrientation();
 		Vec3 ijk = newOreintation.ijk;
 		newOreintation.set(newOreintation.w, ijk.x, ijk.y, 0.0f);
 		transform_->SetTransform(transform_->GetPosition(), newOreintation);
@@ -286,6 +291,18 @@ PushConst CameraActor::GetModelMatrix(){
 	pushConst.normal = MMath::transpose(MMath::inverse(pushConst.model));
 
 	return pushConst;
+}
+
+Quaternion CameraActor::GetRotation(){
+
+	Ref<TransformComponent> transform = GetComponent<TransformComponent>();
+	Vec3 pos = transform->GetPosition();
+	Quaternion orientation_ = transform->GetOrientation();
+	Vec3 ijk = orientation_.ijk;
+	ijk.y *= -1.0f;
+	orientation_.set(orientation_.w, ijk.x, ijk.y, ijk.z);
+
+	return orientation_;
 }
 
 void CameraActor::UpdateProjectionMatrix(const float fovy, const float aspectRatio, const float near, const float far) {
