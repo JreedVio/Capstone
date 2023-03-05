@@ -15,10 +15,14 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 	Ref<CameraActor> camera = pawnActor->GetComponent<CameraActor>();
 
 	Vec3 forward = Vec3(0.0f, 0.0f, -1.0f);
+	Vec3 upVector = Vec3(0.0f, 1.0f, 0.0f);
+	Vec3 rightDirection = Vec3(1.0f, 0.0f, 0.0f);
 	if (camera) {
+		//Get forward direction
 		forward = QMath::rotate(forward, camera->GetComponent<TransformComponent>()->GetOrientation());
-		//DONT USE CAMERA FORWARD VEC, IT WONT WORK
-		//forward = camera->GetForward();
+		forward.y = 0.0f;
+		rightDirection = VMath::cross(forward, upVector);
+
 	}
 
 	if (!transform)
@@ -38,7 +42,7 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 	}
 	else if (KeyDown(KeyCode::A, Event))
 	{
-		pos.x -= moveSpeed;
+		pos = transform->GetPosition() + (moveSpeed * -rightDirection);
 		transform->SetTransform(pos, orient);
 	}
 	if (KeyDown(KeyCode::S, Event))
@@ -48,7 +52,8 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 	}
 	else if (KeyDown(KeyCode::D, Event))
 	{
-		pos.x += moveSpeed;
+		//pos.x += moveSpeed;
+		pos = transform->GetPosition() + (moveSpeed * rightDirection);
 		transform->SetTransform(pos, orient);
 	}
 	if (KeyDown(KeyCode::ESC, Event))

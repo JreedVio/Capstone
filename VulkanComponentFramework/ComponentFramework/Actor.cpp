@@ -93,10 +93,10 @@ PushConst Actor::GetModelMatrix() {
         //pushConst.model = dynamic_cast<Actor*>(parent)->pushConst.model * pushConst.model;
         pushConst.model = dynamic_cast<Actor*>(parent)->GetModelMatrix().model * pushConst.model;
 	}
-    Ref<CameraActor> camera = GetComponent<CameraActor>();
-    if (camera) {
-        pushConst.model = camera->GetModelMatrix().model * pushConst.model;
-    }
+    //Ref<CameraActor> camera = GetComponent<CameraActor>();
+    //if (camera) {
+    //    pushConst.model = camera->GetRotation() * pushConst.model;
+    //}
 
     pushConst.normal = MMath::transpose(MMath::inverse(pushConst.model));
 
