@@ -26,7 +26,7 @@ RoomScene::~RoomScene(){
 bool RoomScene::OnCreate(){
 
     float aspectRatio = static_cast<float>(renderer->GetWidth()) / static_cast<float>(renderer->GetHeight());
-    camera->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, 0.0f, 1.0f), Quaternion());
+    camera->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, -0.8f, 0.0f), Quaternion());
     camera->OnCreate();
 
     //Add the players to the scene, and spawn at the desired location

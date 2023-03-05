@@ -91,6 +91,7 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 	localActor->AddComponent<TransformComponent>(nullptr, Vec3(), Quaternion());
 	localActor->OnCreate();
 	localPlayer->SetPawn(localActor);
+	localPlayer->GetPawn()->SetVisible(false);
 
 	remotePlayer = std::make_shared<PlayerController>(nullptr);
 	Ref<Actor> remoteActor = assetManager->GetActor("RemotePlayer");

@@ -15,6 +15,8 @@ private:
 	float minZ;
 	float maxZ;
 
+	void reset();
+
 public:
 	CameraActor(Component* parent_);
 	virtual ~CameraActor();

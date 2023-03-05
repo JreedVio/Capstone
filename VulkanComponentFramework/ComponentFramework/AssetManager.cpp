@@ -265,39 +265,52 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 		  Top, Bottom is height calcultion */
 		Vec3 position;
 		Quaternion rotation;
+		Vec3 scale = Vec3(10.0f, 1.0f, 10.0f);
+		Vec3 scaleX = Vec3(0.1f, width, width);
+		Vec3 scaleY = Vec3(length, length, 0.1f);
+		Vec3 scaleZ = Vec3(height, 0.1f, height);
+		float floorY = -0.5f;
 		if (strcmp(wallName_, "Left") == 0) {
 			float x_ = 0.0f - width / 2.0f;
-			position = Vec3(x_, 0.0f, 0.0f);
+			position = Vec3(x_, floorY, 0.0f);
+			//scale = scaleX;
 			rotation = QMath::angleAxisRotation(90.0f, Vec3(0.0f, 1.0f, 0.0f));
 		}
 		else if (strcmp(wallName_, "Right") == 0) {
 			float x_ = 0.0f + width / 2.0f;
-			position = Vec3(x_, 0.0f, 0.0f);
-			rotation = QMath::angleAxisRotation(90.0f, Vec3(0.0f, 1.0f, 0.0f));
+			position = Vec3(x_, floorY, 0.0f);
+			//scale = scaleX;
+			rotation = QMath::angleAxisRotation(-90.0f, Vec3(0.0f, 1.0f, 0.0f));
 		}
 		else if (strcmp(wallName_, "Forward") == 0) {
 			float z_ = 0.0f - length / 2.0f;
-			position = Vec3(0.0f, 0.0f, z_);
+			position = Vec3(0.0f, floorY, z_);
+			//scale = scaleY;
 		}
 		else if (strcmp(wallName_, "Backward") == 0) {
 			float z_ = 0.0f + length / 2.0f;
-			position = Vec3(0.0f, 0.0f, z_);
-
+			position = Vec3(0.0f, floorY, z_);
+			//scale = scaleY;
+			rotation = QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f));
 		}
 		else if (strcmp(wallName_, "Top") == 0) {
-			float y_ = 0.0f + height / 2.0f;
+			float y_ = floorY + height / 2.0f;
 			position = Vec3(0.0f, y_, 0.0f);
-			rotation = QMath::angleAxisRotation(90.0f, Vec3(1.0f, 0.0f, 0.0f));
+			rotation = QMath::angleAxisRotation(180.0f, Vec3(1.0f, 0.0f, 0.0f));
+
+			//scale = scaleZ;
 		}
 		else if (strcmp(wallName_, "Bottom") == 0) {
-			float y_ = 0.0f - width / 2.0f;
-			position = Vec3(0.0f, y_, 0.0f);
-			rotation = QMath::angleAxisRotation(90.0f, Vec3(1.0f, 0.0f, 0.0f));
+			float y_ = 0.0f;
+			position = Vec3(0.0f, floorY, 0.0f);
+			//rotation = QMath::angleAxisRotation(180.0f, Vec3(0.0f, 0.0f, 0.0f));
+
+			//scale = scaleZ;
 		}
-		Ref<TransformComponent> tranform_ = std::make_shared<TransformComponent>(wallActor_.get(), position, rotation, Vec3(0.5f, 5.0f, 5.0f));
+		Ref<TransformComponent> tranform_ = std::make_shared<TransformComponent>(wallActor_.get(), position, rotation, scale);
 		wallActor_->AddComponent(tranform_);
 		wallActor_->OnCreate();
-		room_->AddActor(wallActorName, wallActor_);
+		room_->AddActor(wallName_, wallActor_);
 		wall_ = wall_->NextSiblingElement("Wall");
 	}
 
