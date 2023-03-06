@@ -144,6 +144,15 @@
     <ClCompile Include="CameraActor.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicLinearMovement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -272,6 +281,15 @@
     <ClInclude Include="CameraActor.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicLinearMovement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Graphics Game Engine_Log.txt">
@@ -327,6 +345,9 @@
       <Filter>XML</Filter>
     </Xml>
     <Xml Include="TestScene2.xml">
+      <Filter>XML</Filter>
+    </Xml>
+    <Xml Include="Scene1.xml">
       <Filter>XML</Filter>
     </Xml>
   </ItemGroup>

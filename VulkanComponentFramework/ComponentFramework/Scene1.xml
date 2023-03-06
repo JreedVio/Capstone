@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Root>
+
+	<Scene1>
+
+		<Size x="10" y="10" z="10"/>
+		<RoomTime time="5"/>
+		
+		<WallActor>
+
+			<Wall name="TopLeft1" actor="Wall"/>
+			<Wall name="TopLeft2" actor="Wall"/>
+			<Wall name="MiddleTop" actor="Wall"/>
+			<Wall name="TopRight1" actor="Wall"/>
+			<Wall name="TopRight2" actor="Wall"/>
+			<Wall name="MiddleRight" actor="Wall"/>
+			<Wall name="BottomRight1" actor="Wall"/>
+			<Wall name="BottomRight2" actor="Wall"/>
+			<Wall name="MiddleBottom" actor="Wall"/>
+			<Wall name="BottomLeft1" actor="Wall"/>
+			<Wall name="BottomLeft2" actor="Wall"/>
+			<Wall name="MiddleLeft" actor="Wall"/>
+			
+		</WallActor>
+
+		<FloorActor>
+
+			<Floor name="TopLeft" actor="Floor"/>
+			<Floor name="MiddleTop" actor="Floor"/>
+			<Floor name="TopRight" actor="Floor"/>
+			<Floor name="MiddleLeft" actor="Floor"/>
+			<Floor name="MiddleCenter" actor="Floor"/>
+			<Floor name="MiddleRight" actor="Floor"/>
+			<Floor name="BottomLeft" actor="Floor"/>
+			<Floor name="MiddleBottom" actor="Floor"/>
+			<Floor name="BottomRight" actor="Floor"/>
+
+		</FloorActor>
+
+		<LightActor>
+			<Light posX ="5.0" posY ="0.0" posZ ="-3.0"
+				   r="0.0" g="1.0" b="0.0" a="1.0"/>
+			<Light posX ="1.0" posY ="1.0" posZ ="0.0"
+				   r="1.0" g="" b="0.0" a="1.0"/>
+		</LightActor>
+
+		<DoorActor>
+			<Door connection="TestScene" actor="Door">
+				<Transform
+					posX ="-2.0" posY ="0.0" posZ ="-5.0"
+					angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+					scaleX="0.2" scaleY="0.2" scaleZ="0.2"/>
+			</Door>
+
+		</DoorActor>
+
+		<ReferenceActor>
+			<RefName name="Wall_Empty"/>
+			<RefName name="FloorTile_Empty"/>
+			<RefName name="SingleDoor"/>
+		</ReferenceActor>
+
+		<Actor ref="Wall_Empty" name="Wall">
+			<Transform componentName="MarioTransform"
+						   posX ="1.0" posY ="0.0" posZ ="-5.0"
+						   angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+						   scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
+		</Actor>
+
+
+		<Actor ref="FloorTile_Empty" name="Floor">
+			<Transform componentName="SkullTransform"
+			   posX ="3.0" posY ="0.0" posZ ="5.0"
+			   angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+			   scaleX="0.3" scaleY="0.3" scaleZ="0.3"/>
+
+		</Actor>
+
+
+		<Actor ref="SingleDoor" name="Door">
+			<Transform componentName="CubeTransform"
+				posX ="-3.0" posY ="0.0" posZ ="0.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
+		</Actor>
+		
+	</Scene1>	
+	
+</Root>
