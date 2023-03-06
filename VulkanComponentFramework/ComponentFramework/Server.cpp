@@ -3,6 +3,11 @@
 #include "MMath.h"
 #include "SceneManager.h"
 #include "RoomScene.h"
+#include "Message.h"
+#include "Packets.h"
+#include <string>
+#include "cereal/archives/binary.hpp"
+#include <cereal/types/vector.hpp>
 
 #include <WS2tcpip.h>
 
@@ -10,6 +15,11 @@
 #pragma comment (lib, "ws2_32.lib")
 
 using namespace MATH;
+
+enum class CustomMessageType : uint32_t {
+    Position,
+    Name
+};
 
 Server::Server() : NetworkUnit(UnitType::SERVER)
 {
@@ -93,6 +103,13 @@ void Server::Recieve()
     // Initialize variables
     ENetEvent event;
     Vec3 recievedData;
+    Message<CustomMessageType> msg;
+    //PacketPosition msg(0.0f, 0.0f, 0.0f);
+    std::stringstream ss;
+    const char* temp;
+    std::string tempString;
+    cereal::BinaryInputArchive archive(ss);
+
     int eventStatus = 1;
 
     /* Wait up to 1000 milliseconds for an event. */
@@ -111,16 +128,24 @@ void Server::Recieve()
                 peer = event.peer;
             remotePlayer->SetVisible(true);
 
-            //enet_packet_resize(tempPacket, strlen("packetfoo") + 1);
-            //memcpy???
-            //strcpy_s(reinterpret_cast<char*>(temptemp->data[strlen("packet")]), strlen("packetfoo") + 1, "foo");
-            //strcpy(reinterpret_cast<char*>(tempPacket->data[strlen("packet")]), "foo");
-            //strcpy(reinterpret_cast<char*>(temptemp->data[strlen("packet")]), "foo");
-
             break;
         case ENET_EVENT_TYPE_RECEIVE:
             // Unpack the received vector
-            std::memcpy(&recievedData, event.packet->data, event.packet->dataLength);
+            //std::memcpy(&recievedData, event.packet->data, event.packet->dataLength);
+
+            //std::memcpy(&temp, event.packet->data, event.packet->dataLength);
+            
+            ss.write(reinterpret_cast<const char*>(event.packet->data), event.packet->dataLength);
+            //ss << std::string(event.packet->data, event.packet->dataLength);
+            archive(msg);
+
+            if (msg.header.id == CustomMessageType::Position) {
+                float x = 0.0f;
+                msg >> x;
+                //std::cout << x << std::endl;
+            }
+
+            //if(msg.header.type == PacketType::Position)
 
             // Set this vector to Remote Player Actor
             remotePlayer->GetComponent<TransformComponent>()->pos = recievedData;
@@ -146,3 +171,9 @@ void Server::Recieve()
                 event.peer->address.host,
                 event.peer->address.port,
                 event.channelID);*/
+
+/*//enet_packet_resize(tempPacket, strlen("packetfoo") + 1);
+//memcpy???
+//strcpy_s(reinterpret_cast<char*>(temptemp->data[strlen("packet")]), strlen("packetfoo") + 1, "foo");
+//strcpy(reinterpret_cast<char*>(tempPacket->data[strlen("packet")]), "foo");
+//strcpy(reinterpret_cast<char*>(temptemp->data[strlen("packet")]), "foo");*/

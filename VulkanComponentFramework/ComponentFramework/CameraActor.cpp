@@ -114,7 +114,7 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 			//	parentTransform->SetTransform(parentTransform->GetPosition(), QMath::angleAxisRotation(-5.0f, Vec3(0.0f, 1.0f, 0.0f)) * parentTransform->GetOrientation());
 			//}
 
-			transform_->GetOrientation().print();
+			//transform_->GetOrientation().print();
 			UpdateViewMatrix();
 		}
 		break;
@@ -235,7 +235,7 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 		newOreintation.set(newOreintation.w, ijk.x, ijk.y, 0.0f);
 		transform_->SetTransform(transform_->GetPosition(), newOreintation);
 
-		transform_->GetOrientation().print();
+		//transform_->GetOrientation().print();
 		UpdateViewMatrix();
 		break;
 	}

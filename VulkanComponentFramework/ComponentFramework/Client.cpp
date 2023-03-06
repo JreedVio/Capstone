@@ -3,8 +3,17 @@
 #include "MMath.h"
 #include "SceneManager.h"
 #include "RoomScene.h"
+#include "Packets.h"
+#include "Message.h"
+#include "cereal/archives/binary.hpp"
+#include <cereal/types/vector.hpp>
 
 using namespace MATH;
+
+enum class CustomMessageType : uint32_t {
+    Position,
+    Name
+};
 
 Client::Client() : NetworkUnit(UnitType::CLIENT)
 {
@@ -102,13 +111,31 @@ void Client::Update()
 
 void Client::Send()
 {
-    // Set pos vector to pos of the Local Player Actor
-    Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
-
     if (peer == nullptr) return;
 
-    ENetPacket* tempPacket = enet_packet_create(pos,
-        sizeof(Vec3) + 1,
+    Message<CustomMessageType> msg;
+    msg.header.id = CustomMessageType::Position;
+    float x = 240.0f;
+    msg << x;
+    // header is 18 bytes
+
+    //PacketPosition msg(10.0f, 20.0f, 50.0f);
+    // 12 bytes
+
+    std::stringstream ss;
+    cereal::BinaryOutputArchive archive(ss);
+    archive(msg);
+
+    // Set pos vector to pos of the Local Player Actor
+    //Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
+
+    //const void* sendingData = ss.str().c_str();
+    std::string str = ss.str();
+
+    std::cout << str.length() << std::endl;
+
+    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
+        str.length() + 1,
         ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
     enet_peer_send(peer, 0, tempPacket);
 }
