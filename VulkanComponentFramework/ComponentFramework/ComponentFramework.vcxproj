@@ -182,7 +182,7 @@
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="NetworkUnit.h" />
     <ClInclude Include="OpenGLRenderer.h" />
-    <ClInclude Include="Packets.h" />
+    <ClInclude Include="Packet.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="QMath.h" />

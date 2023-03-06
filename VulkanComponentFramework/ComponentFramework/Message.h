@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 	MMO Client/Server Framework using ASIO
 	"Happy Birthday Mrs Javidx9!" - javidx9
 	Videos:
@@ -40,7 +40,7 @@
 	Homepage:	https://www.onelonecoder.com
 	Author
 	~~~~~~
-	David Barr, aka javidx9, ©OneLoneCoder 2019, 2020
+	David Barr, aka javidx9, ï¿½OneLoneCoder 2019, 2020
 */
 
 #pragma once
@@ -49,32 +49,38 @@
 #include <iostream>
 #include <vector>
 
+enum class CustomMessageType : uint32_t {
+	Position,
+	Rotation
+};
+
 ///[OLC_HEADERIFYIER] START "MESSAGE"
 
 // Message Header is sent at start of all messages. The template allows us
 // to use "enum class" to ensure that the messages are valid at compile time
-template <typename T>
 struct message_header
 {
-	T id{};
-	uint32_t size = 0;
+	CustomMessageType type;
 
 	template<class Archive>
 	void serialize(Archive& archive)
 	{
-		archive(id, size); // serialize things by passing them to the archive
+		archive(type); // serialize things by passing them to the archive
 	}
 };
 
 // Message Body contains a header and a std::vector, containing raw bytes
 // of infomation. This way the message can be variable length, but the size
 // in the header must be updated.
-template <typename T>
 struct Message
 {
 	// Header & Body vector
-	message_header<T> header{};
+	message_header header{};
 	std::vector<uint8_t> body;
+	
+	void clear() {
+		body.clear();
+	}
 
 	// This method lets cereal know which data members to serialize
 	template<class Archive>
@@ -89,13 +95,6 @@ struct Message
 		return body.size();
 	}
 
-	// Override for std::cout compatibility - produces friendly description of message
-	friend std::ostream& operator << (std::ostream& os, const Message<T>& msg)
-	{
-		os << "ID:" << int(msg.header.id) << " Size:" << msg.header.size;
-		return os;
-	}
-
 	// Convenience Operator overloads - These allow us to add and remove stuff from
 	// the body vector as if it were a stack, so First in, Last Out. These are a 
 	// template in itself, because we dont know what data type the user is pushing or 
@@ -104,7 +103,7 @@ struct Message
 
 	// Pushes any POD-like data into the message buffer
 	template<typename DataType>
-	friend Message<T>& operator << (Message<T>& msg, const DataType& data)
+	friend Message& operator << (Message& msg, const DataType& data)
 	{
 		// Check that the type of the data being pushed is trivially copyable
 		static_assert(std::is_standard_layout<DataType>::value, "Data is too complex to be pushed into vector");
@@ -118,8 +117,6 @@ struct Message
 		// Physically copy the data into the newly allocated vector space
 		std::memcpy(msg.body.data() + i, &data, sizeof(DataType));
 
-		// Recalculate the message size
-		msg.header.size = msg.size();
 
 		// Return the target message so it can be "chained"
 		return msg;
@@ -127,7 +124,7 @@ struct Message
 
 	// Pulls any POD-like data form the message buffer
 	template<typename DataType>
-	friend Message<T>& operator >> (Message<T>& msg, DataType& data)
+	friend Message& operator >> (Message& msg, DataType& data)
 	{
 		// Check that the type of the data being pushed is trivially copyable
 		static_assert(std::is_standard_layout<DataType>::value, "Data is too complex to be pulled from vector");
@@ -141,11 +138,7 @@ struct Message
 		// Shrink the vector to remove read bytes, and reset end position
 		msg.body.resize(i);
 
-		// Recalculate the message size
-		msg.header.size = msg.size();
-
 		// Return the target message so it can be "chained"
 		return msg;
 	}
 };
-

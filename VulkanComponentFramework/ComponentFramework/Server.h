@@ -25,6 +25,8 @@ public:
 	void OnDestroy();
 	void Update();
 	void Send();
+	void SendPosition();
+	void SendRotation();
 	void Recieve();
 };
 
