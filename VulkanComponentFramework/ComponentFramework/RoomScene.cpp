@@ -87,7 +87,7 @@ void RoomScene::Update(const float deltaTime){
     room->Update(deltaTime);
     camera->Update(deltaTime);
     localPlayer->GetPawn()->GetComponent<Physics>()->TestTwoAABB(localPlayer->GetPawn()->GetComponent<AABB>().get(), GetActor("Bottom")->GetComponent<AABB>().get());
-    localPlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition().print();
+    //localPlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition().print();
 }
 
 void RoomScene::Render() const{

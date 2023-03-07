@@ -25,9 +25,13 @@ void PHYSICS::DynamicLinearMovement::Update(const float deltaTime)
 		return;
 	}
 
+	
+
 	Quaternion orient = MovementTransform->GetOrientation();
 	Vec3 pos = MovementTransform->GetPosition();
-	pos.y += FallSpeed * deltaTime * 0.5f * -Gravity * deltaTime * deltaTime;
+	accel = Gravity / mass;
+	pos.y += vel.y * deltaTime + accel.y * (0.5f * deltaTime * deltaTime);
+	vel += accel * deltaTime;
 
 	MovementTransform->SetTransform(pos, orient);
 }

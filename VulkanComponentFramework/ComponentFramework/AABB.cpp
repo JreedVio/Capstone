@@ -87,7 +87,7 @@ bool PHYSICS::AABB::TestAABB(AABB* b1, AABB* b2)
 	if (b1->min.z >= b2->max.z) return false;
 	if (b1->max.z <= b2->min.z) return false;
 
-	printf("Collision!\n");
+	//printf("Collision!\n");
 	
 	return true;
 }

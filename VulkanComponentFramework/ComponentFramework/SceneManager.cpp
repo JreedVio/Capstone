@@ -120,19 +120,23 @@ void SceneManager::Run() {
 	networking.detach();
 
 
+
 	while (isRunning) {
 		{
 			//ChronoTimer chronoTimer;
 
 			timer->UpdateFrameTicks();
 			currentScene->Update(timer->GetDeltaTime());
+
 			currentScene->Render();
+
 
 			//networkManager->Update();
 			//std::async(std::launch::async, RunNetworkUpdate, networkManager);
 
 			GetEvents();
 		}
+
 		SDL_Delay(timer->GetSleepTime(fps));
 	}
 }

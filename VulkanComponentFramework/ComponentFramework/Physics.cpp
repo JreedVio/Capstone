@@ -12,13 +12,13 @@ bool Physics::TestTwoAABB(AABB* b1, AABB* b2)
 }
 
 void Physics::Update(const float deltaTime, Ref<DynamicLinearMovement> DLM, Ref<AABB> cBox)
-{		
-	if (!Collision && DLM)
-	{
-		DLM->Update(deltaTime);		
-	}
+{
 	if (cBox)
 	{
 		cBox->Update(deltaTime);
+	}
+	if (!Collision && DLM)
+	{
+		DLM->Update(deltaTime);
 	}
 }

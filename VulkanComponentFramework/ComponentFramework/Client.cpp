@@ -137,6 +137,9 @@ void Client::AddRotation(Message& msg)
     Vec3 ijk = localPlayer->GetComponent<TransformComponent>()->GetOrientation().ijk;
     float w = localPlayer->GetComponent<TransformComponent>()->GetOrientation().w;
 
+    ijk.print();
+    std::cout << w << std::endl;
+
     msg << ijk.x << ijk.y << ijk.z << w;
 }
 
@@ -230,7 +233,8 @@ void Client::ProcessMessage(Message& msg)
 
         float x, y, z, w;
         msg >> w >> z >> y >> x;
-        remotePlayer->GetComponent<TransformComponent>()->orientation = Quaternion(w, x, y, z);
+        //remotePlayer->GetComponent<TransformComponent>()->orientation = Quaternion(w, x, y, z);
+        remotePlayer->GetComponent<TransformComponent>()->SetTransform(receivedPos, Quaternion(w, x, y, z));
         //std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
     }
 }

@@ -9,9 +9,12 @@ namespace PHYSICS
 {
 	class DynamicLinearMovement : public Component
 	{
-		const float Gravity = 9.81f;
+		const float Gravity = -9.81f;
 		Ref<TransformComponent> MovementTransform;
 		const float FallSpeed = 1600.0f;
+		Vec3 vel;
+		Vec3 accel;
+		const float mass = 1.0f;
 
 
 
