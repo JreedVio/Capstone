@@ -88,14 +88,15 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 	//Create Players
 	localPlayer = std::make_shared<PlayerController>(nullptr);
 	Ref<Actor> localActor = assetManager->GetActor("LocalPlayer");
-	localActor->AddComponent<TransformComponent>(nullptr, Vec3(), Quaternion());
+	
+	localActor->AddComponent<TransformComponent>(nullptr, Vec3(), QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)));
 	localActor->OnCreate();
 	localPlayer->SetPawn(localActor);
 	localPlayer->GetPawn()->SetVisible(false);
 
 	remotePlayer = std::make_shared<PlayerController>(nullptr);
 	Ref<Actor> remoteActor = assetManager->GetActor("RemotePlayer");
-	remoteActor->AddComponent<TransformComponent>(nullptr, Vec3(), Quaternion());
+	remoteActor->AddComponent<TransformComponent>(nullptr, Vec3(), QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)));
 	remoteActor->OnCreate();
 	remotePlayer->SetPawn(remoteActor);
 	remotePlayer->GetPawn()->SetVisible(false);

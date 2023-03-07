@@ -174,13 +174,13 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 			if (parent) {
 				Ref<TransformComponent> parentTransform = dynamic_cast<Actor*>(parent)->GetComponent<TransformComponent>();
 
-				/*parentTransform->SetTransform(parentTransform->GetPosition(),
+				parentTransform->SetTransform(parentTransform->GetPosition(),
 									QMath::angleAxisRotation(-delta.x * cameraSpeed, upVector) * parentTransform->GetOrientation());
-			*/	transform_->SetTransform(transform_->GetPosition(), transform_->GetOrientation() * parentTransform->GetOrientation());
+				/*transform_->SetTransform(transform_->GetPosition(), transform_->GetOrientation()* parentTransform->GetOrientation());
 			newOrientation_ = parentTransform->GetOrientation();
 			Vec3 ijk = newOrientation_.ijk;
 			newOrientation_.set(newOrientation_.w, ijk.x, ijk.y, 0.0f);
-			parentTransform->SetTransform(parentTransform->GetPosition(), newOrientation_);
+			parentTransform->SetTransform(parentTransform->GetPosition(), newOrientation_);*/
 			}
 		}
 

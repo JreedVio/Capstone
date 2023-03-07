@@ -113,9 +113,6 @@ void Server::AddRotation(Message& msg)
     Vec3 ijk = localPlayer->GetComponent<TransformComponent>()->GetOrientation().ijk;
     float w = localPlayer->GetComponent<TransformComponent>()->GetOrientation().w;
 
-    ijk.print();
-    std::cout << w << std::endl;
-
     msg << ijk.x << ijk.y << ijk.z << w;
 }
 
