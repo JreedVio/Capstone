@@ -15,6 +15,8 @@ private:
 	float minZ;
 	float maxZ;
 
+	void reset();
+
 public:
 	CameraActor(Component* parent_);
 	virtual ~CameraActor();
@@ -31,5 +33,6 @@ public:
 	void UpdateProjectionMatrix(const float fovy, const float aspectRatio, const float near, const float far);
 	void UpdateViewMatrix();
 	PushConst GetModelMatrix() override;
+	Quaternion GetRotation();
 };
 

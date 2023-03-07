@@ -48,7 +48,22 @@ void CameraActor::Update(const float deltaTime){
 
 void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 
+	VulkanRenderer* renderer_ = VulkanRenderer::GetInstance();
+	float w_ = renderer_->GetWidth();
+	float h_ = renderer_->GetHeight();
 	Ref<TransformComponent> transform_ = GetComponent<TransformComponent>();
+	//Transform from screen coords to world coords
+	Matrix4 ndc = MMath::viewportNDC(w_, h_);
+	Matrix4 projection = GetProjectionMatrix();
+	Matrix4 view = GetViewMatrix();
+	Matrix4 worldTransform = MMath::inverse(ndc * projection * view);
+
+	Vec3 forward = Vec3(0.0f, 0.0f, 1.0f);
+	forwardVec = QMath::rotate(forward, transform_->GetOrientation());
+	forwardVec.y = 0.0f;
+
+	Vec3 upVector = Vec3(0.0f, 1.0f, 0.0f);
+	Vec3 rightDirection = VMath::cross(forwardVec, upVector);
 
 	switch (sdlEvent.type) {
 	case SDL_KEYDOWN:
@@ -76,45 +91,16 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 				transform_->GetPosition() + Vec3(0.0f, 0.0f, -0.1f), transform_->GetOrientation());
 			UpdateViewMatrix();
 		}
-		else if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_R) {
+		else if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_Z) {
 			//std::cout << "R EVENT\n";MMath::rotate(5.0f, Vec3(0.0f, 1.0f, 0.0f)) * 
 			transform_->SetTransform(
-				transform_->GetPosition(), QMath::angleAxisRotation(5.0f, Vec3(0.0f, 1.0f, 0.0f)) *transform_->GetOrientation());
-			//if (parent) {
-			//	Actor* parentActor = dynamic_cast<Actor*>(parent);
-			//	Ref<TransformComponent> parentTransform = parentActor->GetComponent<TransformComponent>();
-			//	Matrix4 parentModel = parentActor->GetModelMatrix().model;
-			//	//parentModel = MMath::translate(parentTransform->GetPosition() + Vec3(0.0f, 0.0f, -1.0f));
-			//	//parentActor->SetPushConst(parentModel);
-			//	parentTransform->SetTransform(parentTransform->GetPosition(), QMath::angleAxisRotation(-5.0f, Vec3(0.0f, 1.0f, 0.0f)) * parentTransform->GetOrientation());
-			//}
-			if (parent) {
-				Ref<TransformComponent> parentTransform = dynamic_cast<Actor*>(parent)->GetComponent<TransformComponent>();
-				parentTransform->SetTransform(parentTransform->GetPosition(),
-					QMath::angleAxisRotation(-5.0f, Vec3(0.0f, 1.0f, 0.0f)) * parentTransform->GetOrientation());
-
-				//Quaternion newOreintation = QMath::angleAxisRotation(cosine * cameraSpeed, Vec3(0.0f, 1.0f, 0.0f)) * transform_->GetOrientation();
-				//Vec3 ijk = newOreintation.ijk;
-				////Make the rotation around z axis fixed
-				//newOreintation.set(newOreintation.w, ijk.x, ijk.y, 0.0f);
-				//transform_->SetTransform(transform_->GetPosition(), newOreintation);
-			}
+				transform_->GetPosition(), QMath::angleAxisRotation(5.0f, rightDirection) * transform_->GetOrientation());
 			UpdateViewMatrix();
 		}
-		else if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_T) {
+		else if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_X) {
 			//std::cout << "R EVENT\n";MMath::rotate(5.0f, Vec3(0.0f, 1.0f, 0.0f)) * 
 			transform_->SetTransform(
-				transform_->GetPosition(), QMath::angleAxisRotation(5.0f, Vec3(1.0f, 0.0f, 0.0f)) * transform_->GetOrientation());
-			//if (parent) {
-			//	Actor* parentActor = dynamic_cast<Actor*>(parent);
-			//	Ref<TransformComponent> parentTransform = parentActor->GetComponent<TransformComponent>();
-			//	Matrix4 parentModel = parentActor->GetModelMatrix().model;
-			//	//parentModel = MMath::translate(parentTransform->GetPosition() + Vec3(0.0f, 0.0f, -1.0f));
-			//	//parentActor->SetPushConst(parentModel);
-			//	parentTransform->SetTransform(parentTransform->GetPosition(), QMath::angleAxisRotation(-5.0f, Vec3(0.0f, 1.0f, 0.0f)) * parentTransform->GetOrientation());
-			//}
-
-			//transform_->GetOrientation().print();
+				transform_->GetPosition(), QMath::angleAxisRotation(-5.0f, rightDirection) * transform_->GetOrientation());
 			UpdateViewMatrix();
 		}
 		break;
@@ -140,26 +126,21 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 		}
 		break;
 
-	case SDL_MOUSEBUTTONDOWN:{
-		Vec3 mousedownPos = Vec3(sdlEvent.motion.x, sdlEvent.motion.y, 0.0f);
-		lastMousePos = mousedownPos;
-		break;
+	case SDL_MOUSEBUTTONDOWN: {
+
 	}
 	case SDL_MOUSEMOTION:
 		//TODO:Smoother movement (Optional)
 		//return;
 		/*Find current forward vector of the camera
-		* The old quaternion will be take into account at the end, 
-		* so this vector does not need to be calculated through current orientation 
+		* The old quaternion will be take into account at the end,
+		* so this vector does not need to be calculated through current orientation
 		*/
 		//return;
-		VulkanRenderer* renderer_ = VulkanRenderer::GetInstance();
-		float w_ = renderer_->GetWidth();
-		float h_ = renderer_->GetHeight();
+
 		Vec3 rotationAxis;
 		//Find the destination vector that the current forward vector should rotate to
 		Vec3 mousePos = Vec3(sdlEvent.motion.x, sdlEvent.motion.y, 0.0f);
-
 		Vec3 delta = (mousePos - lastMousePos);
 		float smoothValue = VERY_SMALL + 10.0f;
 		//Limit the camera upgrade interval
@@ -172,15 +153,10 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 			Ref<TransformComponent> parentTransform = dynamic_cast<Actor*>(parent)->GetComponent<TransformComponent>();
 			cameraPos = cameraPos - parentTransform->GetPosition();
 		}
-		//Transform from screen coords to world coords
-		Matrix4 ndc = MMath::viewportNDC(w_, h_);
-		Matrix4 projection = GetProjectionMatrix();
-		Matrix4 view = GetViewMatrix();
-		Matrix4 worldTransform = MMath::inverse(ndc * projection * view);
+
 		Vec3 worldMousePos = worldTransform * mousePos;
 		Vec3 destination = worldMousePos - cameraPos;
-		Vec3 upVector = Vec3(0.0f, 1.0f, 0.0f);
-		Vec3 rightDirection = Vec3(-1.0f, 0.0f, 0.0f);
+
 		/*Use the dot products and the magnitude to find the cosine
 		* This cosine is usually around 1.0f due to the normalized world coordinates
 		* (Really no point to calculate the angle, just do it anyways)
@@ -192,32 +168,43 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 		//Do separate rotation in x axis and y axis
 
 		if (abs(delta.x) >= VERY_SMALL) {
-			if (abs(delta.x) >= w_/2.0f) delta.x /= w_;
+			if (abs(delta.x) >= w_ / 2.0f) delta.x /= w_;
 			Quaternion newOrientation_ = QMath::angleAxisRotation(delta.x * cameraSpeed, upVector) * transform_->GetOrientation();
 			transform_->SetTransform(transform_->GetPosition(), newOrientation_);
-			//if (parent) {
-			//	Ref<TransformComponent> parentTransform = dynamic_cast<Actor*>(parent)->GetComponent<TransformComponent>();
-			//	/*parentTransform->SetTransform(parentTransform->GetPosition(), 
-			//						QMath::angleAxisRotation(-delta.x * cameraSpeed, upVector) * parentTransform->GetOrientation());
-			//*/	transform_->SetTransform(transform_->GetPosition(), transform_->GetOrientation() * parentTransform->GetOrientation());
-			//}
+			if (parent) {
+				Ref<TransformComponent> parentTransform = dynamic_cast<Actor*>(parent)->GetComponent<TransformComponent>();
+
+				/*parentTransform->SetTransform(parentTransform->GetPosition(),
+									QMath::angleAxisRotation(-delta.x * cameraSpeed, upVector) * parentTransform->GetOrientation());
+			*/	transform_->SetTransform(transform_->GetPosition(), transform_->GetOrientation() * parentTransform->GetOrientation());
+			newOrientation_ = parentTransform->GetOrientation();
+			Vec3 ijk = newOrientation_.ijk;
+			newOrientation_.set(newOrientation_.w, ijk.x, ijk.y, 0.0f);
+			parentTransform->SetTransform(parentTransform->GetPosition(), newOrientation_);
+			}
 		}
+
+		forwardVec = QMath::rotate(forward, transform_->GetOrientation());
+		forwardVec.y = 0.0f;
+
+		rightDirection = VMath::cross(forwardVec, upVector);
 
 		if (abs(delta.y) >= VERY_SMALL) {
 			if (abs(delta.y) >= w_ / 2.0f) delta.y /= w_;
-			Quaternion newOrientation_ = QMath::angleAxisRotation(delta.y * cameraSpeed, rightDirection) * transform_->GetOrientation();
+
+			Quaternion newOrientation_ = QMath::angleAxisRotation(-delta.y * cameraSpeed, rightDirection) * transform_->GetOrientation();		
 			Vec3 ijk = newOrientation_.ijk;
-			if (ijk.x >= -0.2f && ijk.x <= 0.1f) {
+			if (ijk.x >= 0.0f && ijk.x <= 0.1f) {
 				transform_->SetTransform(transform_->GetPosition(), newOrientation_);
 			}
 
 		}
 
 		//Calculate the rotational axis
-		rotationAxis = VMath::cross(VMath::normalize(destination), VMath::normalize(current));
+		//rotationAxis = VMath::cross(VMath::normalize(destination), VMath::normalize(current));
 		//Use the calculated angle and rotation axis to get the rotation
 		//Add the camera velocity as a factor to the angle,
-		Quaternion newOreintation = QMath::angleAxisRotation(cosine * cameraSpeed, rotationAxis) * transform_->GetOrientation();
+		//Quaternion newOreintation = QMath::angleAxisRotation(cosine * cameraSpeed, rotationAxis) * transform_->GetOrientation();
 		//Vec3 ijk = newOreintation.ijk;
 		//Make the rotation around z axis fixed
 		//newOreintation.set(newOreintation.w, ijk.x, ijk.y, 0.0f);
@@ -228,17 +215,17 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 		//forwardVec = VMath::normalize(destination);
 		//forwardVec = QMath::rotate(Vec3(0.0f, 0.0f, -1.0f), transform_->GetOrientation());
 		//Rotate the actor if there's one
-		
+
 		//transform_->SetTransform(transform_->GetPosition(), newOreintation);
-		newOreintation = transform_->GetOrientation();
+		Quaternion newOreintation = transform_->GetOrientation();
 		Vec3 ijk = newOreintation.ijk;
-		newOreintation.set(newOreintation.w, ijk.x, ijk.y, 0.0f);
+		//newOreintation.set(newOreintation.w, ijk.x, ijk.y, 0.0f);
 		transform_->SetTransform(transform_->GetPosition(), newOreintation);
 
-		//transform_->GetOrientation().print();
 		UpdateViewMatrix();
 		break;
-	}
+		}
+
 }
 
 void CameraActor::UpdateViewMatrix() {
@@ -267,7 +254,6 @@ void CameraActor::UpdateViewMatrix() {
 	//Vec3 position = transformComponent->GetPosition();
 	//viewMatrix = QMath::toMatrix4(orientation) * MMath::translate(position);
 
-
 }
 
 PushConst CameraActor::GetModelMatrix(){
@@ -288,7 +274,27 @@ PushConst CameraActor::GetModelMatrix(){
 	return pushConst;
 }
 
+Quaternion CameraActor::GetRotation(){
+
+	Ref<TransformComponent> transform = GetComponent<TransformComponent>();
+	Vec3 pos = transform->GetPosition();
+	Quaternion orientation_ = transform->GetOrientation();
+	Vec3 ijk = orientation_.ijk;
+	ijk.y *= -1.0f;
+	orientation_.set(orientation_.w, ijk.x, ijk.y, ijk.z);
+
+	return orientation_;
+}
+
 void CameraActor::UpdateProjectionMatrix(const float fovy, const float aspectRatio, const float near, const float far) {
 	projectionMatrix = MMath::perspective(fovy, aspectRatio, near, far);
 
+}
+
+
+
+void CameraActor::reset() {
+	projectionMatrix.loadIdentity();
+	viewMatrix.loadIdentity();
+	forwardVec = Vec3(0.0f, 0.0f, -1.0f);
 }

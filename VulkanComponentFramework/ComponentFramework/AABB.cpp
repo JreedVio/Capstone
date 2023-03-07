@@ -1,25 +1,27 @@
 #include "AABB.h"
+#include "Debug.h"
 
-PHYSICS::AABB::AABB(Component* parent_, Vec3 centre_, Vec3 scale_, Quaternion orientation_) : Component(parent_)
+PHYSICS::AABB::AABB(Component* parent_, Ref<TransformComponent> ParentTransform_, Vec3 centre_, Vec3 scale_, Quaternion orientation_) : Component(parent_)
 {
-
 	Empty();
 
 	scale = scale_;
 	centre = centre_;
 	orientation = orientation_;
+	ParentTransform = ParentTransform_;
 
 	SetBounds(scale, centre, orientation);
 	Add(bounds);
 }
 
-PHYSICS::AABB::AABB(Vec3 centre_, Vec3 scale_, Quaternion orientation_)
+PHYSICS::AABB::AABB(Ref<TransformComponent> ParentTransform_, Vec3 centre_, Vec3 scale_, Quaternion orientation_)
 {
 	Empty();
 
 	scale = scale_;
 	centre = centre_;
 	orientation = orientation_;
+	ParentTransform = ParentTransform_;
 
 	SetBounds(scale, centre, orientation);
 	Add(bounds);
@@ -58,7 +60,6 @@ void PHYSICS::AABB::SetBounds(const Vec3 scale_, const Vec3 centre_, const Quate
 
 	// bottom right back
 	bounds[7] = orient_ * (centre_ + Vec3(scale_.x, -scale_.y, -scale_.z));
-
 }
 
 void PHYSICS::AABB::Add(const Vec3 bounds_[])
@@ -85,14 +86,22 @@ bool PHYSICS::AABB::TestAABB(AABB* b1, AABB* b2)
 
 	if (b1->min.z >= b2->max.z) return false;
 	if (b1->max.z <= b2->min.z) return false;
+
+	printf("Collision!\n");
 	
 	return true;
 }
 
 void PHYSICS::AABB::Update(const float deltaTime_)
 {
-
+	if (!ParentTransform)
+	{
+		Debug::Error("ParentTransform is nullptr!", __FILE__, __LINE__);
+	}
+	else
+	{
+		SetCentre(ParentTransform->GetPosition() + Vec3(0.0f, 2.0f, 0.0f));
+	}
 	SetBounds(scale, centre, orientation);
 	Add(bounds);
-
 }

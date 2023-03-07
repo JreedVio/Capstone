@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "VMath.h"
 #include "QMath.h"
+#include "TransformComponent.h"
 
 using namespace MATH;
 
@@ -16,14 +17,15 @@ namespace PHYSICS
 		Vec3 max;
 		Vec3 scale;
 		Quaternion orientation;
+		Ref<TransformComponent> ParentTransform;
 
 	public:
 
 
-		AABB(Component* parent_, Vec3 centre_ = Vec3(0.0f, 0.0f, 0.0f), Vec3 scale_ = Vec3(1.0f, 1.0f, 1.0f),
+		AABB(Component* parent_, Ref<TransformComponent> ParentTransform_,Vec3 centre_ = Vec3(0.0f, 0.0f, 0.0f), Vec3 scale_ = Vec3(1.0f, 1.0f, 1.0f),
 			Quaternion orientation_ = Quaternion(1.0f, 0.0f, 0.0f, 0.0f));
 
-		AABB(Vec3 centre_ = Vec3(0.0f, 0.0f, 0.0f), Vec3 scale_ = Vec3(1.0f, 1.0f, 1.0f),
+		AABB(Ref<TransformComponent> ParentTransform_, Vec3 centre_ = Vec3(0.0f, 0.0f, 0.0f), Vec3 scale_ = Vec3(1.0f, 1.0f, 1.0f),
 			 Quaternion orientation_ = Quaternion(1.0f, 0.0f, 0.0f, 0.0f));
 
 

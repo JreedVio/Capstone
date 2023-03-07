@@ -228,6 +228,7 @@
   <ItemGroup>
     <Xml Include="RendererAssets.xml" />
     <Xml Include="Scene0.xml" />
+    <Xml Include="Scene1.xml" />
     <Xml Include="TestScene.xml" />
     <Xml Include="TestScene2.xml" />
   </ItemGroup>

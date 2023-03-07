@@ -150,9 +150,6 @@
     <ClCompile Include="DynamicLinearMovement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Message.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Physics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -290,13 +287,7 @@
     <ClInclude Include="DynamicLinearMovement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Message.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Physics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Packet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -354,6 +345,9 @@
       <Filter>XML</Filter>
     </Xml>
     <Xml Include="TestScene2.xml">
+      <Filter>XML</Filter>
+    </Xml>
+    <Xml Include="Scene1.xml">
       <Filter>XML</Filter>
     </Xml>
   </ItemGroup>

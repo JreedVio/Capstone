@@ -9,6 +9,9 @@
 #include "SceneManager.h"
 #include "CameraActor.h"
 #include "TransformComponent.h"
+#include "Physics.h"
+
+using namespace PHYSICS;
 
 RoomScene::RoomScene(VulkanRenderer* renderer_):Scene(renderer_) {
     camera = std::make_shared<CameraActor>(nullptr);
@@ -26,7 +29,7 @@ RoomScene::~RoomScene(){
 bool RoomScene::OnCreate(){
 
     float aspectRatio = static_cast<float>(renderer->GetWidth()) / static_cast<float>(renderer->GetHeight());
-    camera->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, 0.0f, -2.0f), Quaternion());
+    camera->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, -0.8f, 0.0f), Quaternion());
     camera->OnCreate();
 
     //Add the players to the scene, and spawn at the desired location
@@ -37,10 +40,21 @@ bool RoomScene::OnCreate(){
     AddActor("LocalPlayer", localPlayer->GetPawn());
     camera->SetParent(localPlayer->GetPawn().get());
     localPlayer->GetPawn()->AddComponent(camera);
-    camera->UpdateViewMatrix();
+    //camera->UpdateViewMatrix();
     //localPlayer->GetPawn()->SetParent(camera.get());
     //camera->AddComponent(localPlayer->GetPawn());
     //camera->UpdateViewMatrix();
+    
+    //** example on how to currently use the collision
+    auto floor = GetActor("Bottom");
+    localPlayer->GetPawn()->AddComponent<AABB>(localPlayer.get(), localPlayer->GetPawn()->GetComponent<TransformComponent>(),
+                                               localPlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition(), Vec3(1.0f, 1.0f, 1.0f), Quaternion());
+    localPlayer->GetPawn()->AddComponent<DynamicLinearMovement>(nullptr, localPlayer->GetPawn()->GetComponent<TransformComponent>());
+    localPlayer->GetPawn()->AddComponent<Physics>(nullptr);
+    
+   
+    floor->AddComponent<AABB>(floor.get(), floor->GetComponent<TransformComponent>(), floor->GetComponent<TransformComponent>()->GetPosition(), Vec3(50.0f, 1.0f, 50.0f), Quaternion());
+    //**
 
     //globalLights.push_back(std::make_shared<LightActor>(nullptr));
     //globalLights.push_back(std::make_shared<LightActor>(nullptr));
@@ -68,8 +82,12 @@ void RoomScene::Update(const float deltaTime){
       When door collision happens, call RoomTransittion()
     */
     //
+    localPlayer->GetPawn()->GetComponent<AABB>()->SetCentre(localPlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition());
+    localPlayer->GetPawn()->Update(deltaTime);
     room->Update(deltaTime);
     camera->Update(deltaTime);
+    localPlayer->GetPawn()->GetComponent<Physics>()->TestTwoAABB(localPlayer->GetPawn()->GetComponent<AABB>().get(), GetActor("Bottom")->GetComponent<AABB>().get());
+    localPlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition().print();
 }
 
 void RoomScene::Render() const{
