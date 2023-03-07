@@ -212,26 +212,26 @@ void Client::ProcessMessage(Message& msg)
         Vec3 receivedPos;
         msg >> receivedPos.z >> receivedPos.y >> receivedPos.x;
         remotePlayer->GetComponent<TransformComponent>()->pos = receivedPos;
-        std::cout << "Position: " << receivedPos.x << " " << receivedPos.y
-            << " " << receivedPos.z << std::endl;
+        //std::cout << "Position: " << receivedPos.x << " " << receivedPos.y
+        //    << " " << receivedPos.z << std::endl;
     }
     else if (msg.header.type == CustomMessageType::Rotation) {
         float x, y, z, w;
         msg >> w >> z >> y >> x;
         remotePlayer->GetComponent<TransformComponent>()->orientation = Quaternion(w, x, y, z);
-        std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
+        //std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
     }
     else if (msg.header.type == CustomMessageType::RotationAndPosition) {
         Vec3 receivedPos;
         msg >> receivedPos.z >> receivedPos.y >> receivedPos.x;
         remotePlayer->GetComponent<TransformComponent>()->pos = receivedPos;
-        std::cout << "Position: " << receivedPos.x << " " << receivedPos.y
-            << " " << receivedPos.z << std::endl;
+        //std::cout << "Position: " << receivedPos.x << " " << receivedPos.y
+        //    << " " << receivedPos.z << std::endl;
 
         float x, y, z, w;
         msg >> w >> z >> y >> x;
         remotePlayer->GetComponent<TransformComponent>()->orientation = Quaternion(w, x, y, z);
-        std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
+        //std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
     }
 }
 
