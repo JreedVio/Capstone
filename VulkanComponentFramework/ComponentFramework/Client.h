@@ -7,6 +7,8 @@
 #include "NetworkUnit.h"
 #include "Actor.h"
 
+class Message;
+
 class Client : public NetworkUnit
 {
 public:
@@ -25,9 +27,10 @@ public:
 	void OnDestroy();
 	void Update();
 	void Send();
+	void AddPosition(Message& msg);
+	void AddRotation(Message& msg);
 	void SendPositionPacket();
-	void SendPosition();
-	void SendRotation();
-	void Recieve();
+	void Recieve(int tickrate);
+	void ProcessMessage(Message& msg);
 };
 

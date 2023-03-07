@@ -51,7 +51,8 @@
 
 enum class CustomMessageType : uint32_t {
 	Position,
-	Rotation
+	Rotation,
+	RotationAndPosition
 };
 
 ///[OLC_HEADERIFYIER] START "MESSAGE"
@@ -116,7 +117,6 @@ struct Message
 
 		// Physically copy the data into the newly allocated vector space
 		std::memcpy(msg.body.data() + i, &data, sizeof(DataType));
-
 
 		// Return the target message so it can be "chained"
 		return msg;
