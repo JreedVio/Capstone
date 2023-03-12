@@ -15,7 +15,7 @@ CameraActor::CameraActor(Component* parent_): Actor(parent_) {
 	forwardVec = Vec3(0.0f, 0.0f, -1.0f);
 	minZ = 1.0f;
 	maxZ = 4.0f;
-	cameraSpeed = 0.15f;
+	cameraSpeed = 0.3f;
 	lastMousePos = Vec3(0.0f, 0.0f, 0.0f);
 }
 
@@ -143,9 +143,9 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 		Vec3 delta = (mousePos - lastMousePos);
 		float smoothValue = VERY_SMALL;
 		//Limit the camera upgrade interval
-		if (VMath::mag(delta) <= smoothValue) {
-			break;
-		}
+		//if (VMath::mag(delta) <= smoothValue) {
+		//	break;
+		//}
 		Vec3 current = forwardVec;
 		Vec3 cameraPos = transform_->GetPosition();
 		if (parent) {

@@ -102,4 +102,6 @@ public:
 	virtual PushConst GetModelMatrix();
 	void createDescriptorSets();
 	void SetPushConst(const Matrix4& model);
+
+	virtual void CollisionResponse(){}
 };

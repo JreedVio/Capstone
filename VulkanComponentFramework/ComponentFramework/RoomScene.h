@@ -8,6 +8,7 @@
 
 class LightActor;
 
+
 class RoomScene : public Scene{
 
 public:
@@ -32,6 +33,7 @@ private:
 	Ref<Room> room;
 	Ref<PlayerController> remotePlayer;
 	Ref<PlayerController> localPlayer;
+	
 };
 
 #endif

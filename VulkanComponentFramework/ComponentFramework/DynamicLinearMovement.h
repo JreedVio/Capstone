@@ -16,8 +16,6 @@ namespace PHYSICS
 		Vec3 accel;
 		const float mass = 1.0f;
 
-
-
 	public:
 
 		DynamicLinearMovement();
@@ -28,7 +26,7 @@ namespace PHYSICS
 		virtual void OnDestroy();
 		virtual void Update(const float deltaTime_);
 		virtual void Render()const {}
-
+		virtual void ApplyForce(Vec3 force_);
 	};
 
 }

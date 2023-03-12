@@ -21,9 +21,10 @@ public:
 	void SetConnection(const char* connectedRoom_) { connectedRoom = connectedRoom_; }
 	const char* GetConnection() { return connectedRoom; }
 	//Move the local player to the connected room
-	void RoomTransition();
+	bool RoomTransition();
 	void SetIsOpened(bool isOpened_) { isOpened = isOpened_; }
 	bool GetIsOpened() { return isOpened; }
+	void CollisionResponse() override;
 };
 
 #endif 

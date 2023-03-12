@@ -12,6 +12,11 @@
 union SDL_Event;
 class CameraActor;
 
+enum SceneStatus {
+	MENUTRANSIT = 0,
+	ROOMTRANSIT
+};
+
 class Scene {
 public:
 	explicit Scene(VulkanRenderer* renderer_):renderer(renderer_){};
@@ -36,12 +41,14 @@ public:
 
 
 	virtual Ref<Actor> GetActor(const char* name_) = 0;
-
+	virtual SceneStatus GetStatus() { return sceneStatus; }
+	virtual void SetStatus(SceneStatus status_) { sceneStatus = status_; }
 
 protected:
 	VulkanRenderer* renderer;
 	Ref<CameraActor> camera;
 	std::unordered_map<const char*, Ref<Actor>> actorList;
 	std::vector<Ref<LightActor>> globalLights;
+	SceneStatus sceneStatus;
 };
 #endif

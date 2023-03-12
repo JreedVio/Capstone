@@ -57,8 +57,7 @@ void Actor::Update(const float deltaTime) {
     auto dlm = GetComponent<PHYSICS::DynamicLinearMovement>();
     auto ab = GetComponent<PHYSICS::AABB>();
     auto phys = GetComponent<PHYSICS::Physics>();
-    if (phys)
-    {
+    if (phys)    {
         phys->Update(deltaTime, dlm, ab);
     }
 

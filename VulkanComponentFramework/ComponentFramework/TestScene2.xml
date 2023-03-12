@@ -2,37 +2,64 @@
 <Root>
 	<TestScene2>
 
-		<Size x="100" y="100" z="100"/>
+		<Size x="50" y="10" z="50"/>
+		<RoomTime time="5"/>
+		<WallActor>
+			<!--><-->
+			<Wall name="Left" actor="Wall"/>
+			<Wall name="Right" actor="Wall"/>
+			<Wall name="Forward" actor="Wall"/>
+			<Wall name="Backward" actor="Wall"/>
+			<Wall name="Top" actor="Floor"/>
+			<Wall name="Bottom" actor="Floor"/>
+		</WallActor>
+
+
+		<LightActor>
+			<Light posX ="0.0" posY ="5.0" posZ ="0.0"
+				   r="0.5" g="0.5" b="0.5" a="0.5"/>
+			<Light posX ="-5.0" posY ="0.0" posZ ="0.0"
+				   r="1.0" g="" b="0.0" a="0.0"/>
+		</LightActor>
+
+		<DoorActor>
+			<Door connection="TestScene" actor="Door">
+				<Transform
+					posX ="25.0" posY ="-0.5" posZ ="0.0"
+					angle="90.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+					scaleX="1.0" scaleY="0.8" scaleZ="1.0"/>
+			</Door>
+
+		</DoorActor>
+
 		<ReferenceActor>
 			<RefName name="Mario"/>
 			<RefName name="Skull"/>
 			<RefName name="Cube"/>
 		</ReferenceActor>
 
-
 		<Actor ref="Mario" name="Mario1">
 			<Transform componentName="MarioTransform"
-					   posX ="0.0" posY ="0.0" posZ ="0.0"
-					   angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
-					   scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
+						   posX ="1.0" posY ="1.0" posZ ="-5.0"
+						   angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+						   scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
+		</Actor>
+
+		<Actor ref="Mario" name="Mario2">
+			<Transform componentName="MarioTransform"
+						   posX ="5.0" posY ="1.0" posZ ="-10.0"
+						   angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+						   scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
 		</Actor>
 
 
 		<Actor ref="Skull" name="Skull1">
 			<Transform componentName="SkullTransform"
-			   posX ="3.0" posY ="0.0" posZ ="0.0"
+			   posX ="3.0" posY ="0.0" posZ ="5.0"
 			   angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
 			   scaleX="0.3" scaleY="0.3" scaleZ="0.3"/>
 
 		</Actor>
 
-		<Actor ref="Random" name="Cube1">
-			<Transform componentName="CubeTransform"
-				posX ="-3.0" posY ="1.0" posZ ="0.0"
-				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
-				scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
-		</Actor>
-	
-		
 	</TestScene2>
 </Root>

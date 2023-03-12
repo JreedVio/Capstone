@@ -99,16 +99,18 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 	Debug::Info("AssetManager Created", __FILE__, __LINE__);
 	assetManager->LoadAssets("RendererAssets");
 
-
 	timer = new Timer();
 	if (timer == nullptr) {
 		Debug::FatalError("Failed to initialize Timer object", __FILE__, __LINE__);
 		return false;
 	}
 
+	//StartGame(CLIENT);
+
 	//Open Main Menu
 	MainMenu();
-
+	//Enter the start room
+	//BuildScene(ROOMSCENE, "TestScene");
 	return true;
 }
 
@@ -127,10 +129,11 @@ void SceneManager::Run() {
 			//ChronoTimer chronoTimer;
 			timer->UpdateFrameTicks();
 			currentScene->Update(timer->GetDeltaTime());
-
 			uiManager->Update(currentScene);
+			if (currentScene->GetStatus() == ROOMTRANSIT) {
+				BuildScene(ROOMSCENE, nextScene);
+			}
 			uiManager->Display();
-
 			currentScene->Render();
 
 			//networkManager->Update();
@@ -189,10 +192,12 @@ void SceneManager::RoomChange(const char* roomName_) {
 	//When room change occurs, check the winning condition
 	if (GameWin()) return;
 	//Change room
-	BuildScene(ROOMSCENE, roomName_);
+	currentScene->SetStatus(ROOMTRANSIT);
+	SetNextScene(roomName_);
 }
 
 void SceneManager::MainMenu() {
+	//TODO Cleanup players
 	//Cleanup Network Manager
 	if (networkManager) {
 		//networkManager->OnDestroy();
@@ -218,8 +223,9 @@ bool SceneManager::GameWin(){
 
 	if (localPlayer->GetSurvivedRoom() >= winCondition) {
 		//TODO: Change to the winning screen
+		return true;
 	}
-	return true;
+	return false;
 }
 
 void SceneManager::GetEvents() {
@@ -277,6 +283,7 @@ void SceneManager::GetEvents() {
 
 void SceneManager::BuildScene(SCENETYPE scenetype_, const char* fileName) {
 	bool status; 
+	std::string sceneName_ = std::string(fileName);
 
 	//Cleanup current scene
 	if (currentScene != nullptr) {
@@ -287,7 +294,7 @@ void SceneManager::BuildScene(SCENETYPE scenetype_, const char* fileName) {
 	switch (scenetype_) {
 	case ROOMSCENE:
 
-		currentScene = assetManager->LoadRoom(fileName);
+		currentScene = assetManager->LoadRoom(sceneName_.c_str());
 		status = currentScene->OnCreate();
 		break;
 

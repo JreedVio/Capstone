@@ -1,5 +1,28 @@
 [INFO]: Starting the GameSceneManager
 [INFO]: AssetManager Created
 [INFO]: Succeed to Load Asset RendererAssets
-[FATAL ERROR]: Failed to initialize Network Manager in file: D:\Documents\Documents\Humber\Semester6\Capstone\VulkanComponentFramework\ComponentFramework\SceneManager.cpp on line: 173
+[INFO]: Succeed to Load Scene TestScene
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Succeed to Load Scene TestScene2
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
 [INFO]: Deleting the GameSceneManager

@@ -3,6 +3,9 @@
 #include "CameraActor.h"
 #include "UIManager.h"
 #include "AssetManager.h"
+#include "Physics.h"
+
+using namespace PHYSICS;
 
 PlayerController::PlayerController(Component* parent_, const char* actorName_): Component(parent_), actorName(actorName_), pawnActor(nullptr), roomSurvived(0), isCreated(false) {
 	uiManager = UIManager::getInstance();
@@ -13,6 +16,7 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 
 	Ref<TransformComponent> transform = pawnActor->GetComponent<TransformComponent>();
 	//Ref<TransformComponent> transform = TF_Component;
+	auto dlm = pawnActor->GetComponent<PHYSICS::DynamicLinearMovement>();
 
 	if (!transform)
 		return;
@@ -27,7 +31,6 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 		forward = QMath::rotate(forward, camera->GetComponent<TransformComponent>()->GetOrientation());
 		forward.y = 0.0f;
 		rightDirection = VMath::cross(forward, upVector);
-
 	}
 
 	// temp var(s)
@@ -104,6 +107,10 @@ bool PlayerController::OnCreate(){
 	actor_->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, 2.0f, 0.0f), QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)));
 	actor_->OnCreate();
 	actor_->SetVisible(false);
+	actor_->AddComponent<AABB>(actor_.get(), actor_->GetComponent<TransformComponent>(),
+		actor_->GetComponent<TransformComponent>()->GetPosition(), Vec3(1.0f, 1.0f, 1.0f), Quaternion());
+	actor_->AddComponent<DynamicLinearMovement>(nullptr, actor_->GetComponent<TransformComponent>());
+	actor_->AddComponent<Physics>(nullptr);
 	SetPawn(actor_);
 
 	isCreated = true;

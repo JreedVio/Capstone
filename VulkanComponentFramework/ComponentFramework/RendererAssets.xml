@@ -10,6 +10,7 @@
 			<Mesh name="WallModel" filename= "./meshes/Wall_Empty.obj"/>
 			<Mesh name="FloorModel" filename= "./meshes/FloorTile_Empty.obj"/>
 			<Mesh name="RobotModel" filename= "./meshes/Robot.obj"/>
+			<Mesh name="DoorModel" filename= "./meshes/SingleDoor.obj"/>
 			
 			<Material name="MarioFire" filename="./textures/mario_fire.png"/>
 			<Material name="MarioBlack" filename="./textures/mario_mime.png"/>
@@ -40,15 +41,22 @@
 
 		<Actor name="Door">
 			<Parent componentName="None"/>
-			<Mesh componentName="CubeModel"/>
-			<Material componentName="SkullBlue"/>
+			<Mesh componentName="DoorModel"/>
+			<Material componentName="ScifiColor"/>
 			<Shader componentName="PhongShader"/>
 		</Actor>
 		
-		<Actor name="Mario">
+		<Actor name="Player">
 			<Parent componentName="None"/>
 			<Mesh componentName="RobotModel"/>
 			<Material componentName="ScifiColor"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+
+		<Actor name="Mario">
+			<Parent componentName="None"/>
+			<Mesh componentName="MarioModel"/>
+			<Material componentName="MarioFire"/>
 			<Shader componentName="PhongShader"/>
 		</Actor>
 
@@ -62,7 +70,7 @@
 		<Actor name="Cube">
 			<Parent componentName="None"/>
 			<Mesh componentName="CubeModel"/>
-			<Material componentName="SkullNormal"/>
+			<Material componentName="WallRed"/>
 			<Shader componentName="PhongShader"/>
 		</Actor>
 

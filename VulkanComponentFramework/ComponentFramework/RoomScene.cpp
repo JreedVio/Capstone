@@ -29,31 +29,41 @@ RoomScene::~RoomScene(){
 bool RoomScene::OnCreate(){
 
     float aspectRatio = static_cast<float>(renderer->GetWidth()) / static_cast<float>(renderer->GetHeight());
-    camera->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, -0.8f, 0.0f), Quaternion());
-    camera->OnCreate();
+
 
     //Add the players to the scene, and spawn at the desired location
-    //TODO: Change the spawn location to player start position in the scene
     remotePlayer = SceneManager::GetInstance()->GetRemotePlayer();
     localPlayer = SceneManager::GetInstance()->GetLocalPlayer();
+    Ref<Actor> remotePawn = remotePlayer->GetPawn();
+    Ref<Actor> localPawn = localPlayer->GetPawn();
+    Ref<TransformComponent> remoteTransform_ = remotePawn->GetComponent<TransformComponent>();
+    Ref<TransformComponent> localTransform_ = localPawn->GetComponent<TransformComponent>();
+    
+    //Set the enter location
+    Vec3 playerStart = Vec3(0.0f, 1.0f, 0.0f);
+    remoteTransform_->SetTransform(playerStart, Quaternion(), remoteTransform_->GetScale());
+    localTransform_->SetTransform(playerStart, Quaternion(), localTransform_->GetScale());
     AddActor("RemotePlayer", remotePlayer->GetPawn());
     AddActor("LocalPlayer", localPlayer->GetPawn());
+
+    //Setup the camera
+    camera->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, -0.8f, 0.0f), Quaternion());
+    camera->OnCreate();
+    if (localPlayer->GetPawn()->GetComponent<CameraActor>()) {
+        localPlayer->GetPawn()->RemoveComponent<CameraActor>();
+    }
     camera->SetParent(localPlayer->GetPawn().get());
     localPlayer->GetPawn()->AddComponent(camera);
-    //camera->UpdateViewMatrix();
-    //localPlayer->GetPawn()->SetParent(camera.get());
-    //camera->AddComponent(localPlayer->GetPawn());
-    //camera->UpdateViewMatrix();
     
     //** example on how to currently use the collision
     auto floor = GetActor("Bottom");
-    localPlayer->GetPawn()->AddComponent<AABB>(localPlayer.get(), localPlayer->GetPawn()->GetComponent<TransformComponent>(),
-                                               localPlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition(), Vec3(1.0f, 1.0f, 1.0f), Quaternion());
-    localPlayer->GetPawn()->AddComponent<DynamicLinearMovement>(nullptr, localPlayer->GetPawn()->GetComponent<TransformComponent>());
-    localPlayer->GetPawn()->AddComponent<Physics>(nullptr);
+    //localPlayer->GetPawn()->AddComponent<AABB>(localPlayer.get(), localPlayer->GetPawn()->GetComponent<TransformComponent>(),
+    //                                           localPlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition(), Vec3(1.0f, 1.0f, 1.0f), Quaternion());
+    //localPlayer->GetPawn()->AddComponent<DynamicLinearMovement>(nullptr, localPlayer->GetPawn()->GetComponent<TransformComponent>());
+    //localPlayer->GetPawn()->AddComponent<Physics>(nullptr);
     
    
-    floor->AddComponent<AABB>(floor.get(), floor->GetComponent<TransformComponent>(), floor->GetComponent<TransformComponent>()->GetPosition(), Vec3(50.0f, 1.0f, 50.0f), Quaternion());
+    //floor->AddComponent<AABB>(floor.get(), floor->GetComponent<TransformComponent>(), floor->GetComponent<TransformComponent>()->GetPosition(), Vec3(50.0f, 1.0f, 50.0f), Quaternion());
     //**
 
     //globalLights.push_back(std::make_shared<LightActor>(nullptr));
@@ -75,18 +85,40 @@ void RoomScene::OnDestroy(){
     room->OnDestroy();
 }
 
-void RoomScene::Update(const float deltaTime){
+void RoomScene::Update(const float deltaTime) {
 
-    /*TODO: 
+    /*TODO:
       Check for collision and update actors, room
       When door collision happens, call RoomTransittion()
     */
     //
-    localPlayer->GetPawn()->GetComponent<AABB>()->SetCentre(localPlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition());
-    localPlayer->GetPawn()->Update(deltaTime);
+    Ref<Actor> localPawn = localPlayer->GetPawn();
+    Ref<AABB> localPawnCollision = localPawn->GetComponent<AABB>();
+    localPawn->GetComponent<AABB>()->SetCentre(localPawn->GetComponent<TransformComponent>()->GetPosition());
+    localPawn->Update(deltaTime);
     room->Update(deltaTime);
     camera->Update(deltaTime);
-    localPlayer->GetPawn()->GetComponent<Physics>()->TestTwoAABB(localPlayer->GetPawn()->GetComponent<AABB>().get(), GetActor("Bottom")->GetComponent<AABB>().get());
+
+    for (auto e : GetActorList()) {
+        Ref<Actor> actor_ = e.second;
+        Ref<AABB> actorCollision = actor_->GetComponent<AABB>();
+        if (std::dynamic_pointer_cast<DoorActor>(actor_)) {
+
+            if (!actorCollision) continue;
+
+            if (localPawn->GetComponent<Physics>()->TestTwoAABB(localPawnCollision.get(), actorCollision.get())) {
+                actor_->CollisionResponse();
+            }
+
+        }
+
+        if (actorCollision) {
+            //localPawn->GetComponent<Physics>()->TestTwoAABB(localPawnCollision.get(), actorCollision.get());
+        }
+    }
+
+    localPawn->GetComponent<Physics>()->TestTwoAABB(localPawnCollision.get(), GetActor("Bottom")->GetComponent<AABB>().get());
+
     //localPlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition().print();
 }
 

@@ -29,26 +29,6 @@ void PauseMenu::Update(Scene* scene_) {
 
 void PauseMenu::showAudioControl() {
     float itemWidth = ImGui::GetWindowSize().x * 0.9f;
-
-    //ImGui::Text("Master Volume");
-    //ImGui::SetNextItemWidth(itemWidth);
-    //int masterVol_ = AudioManager::getInstance()->getMasterVolume() * 100;
-    //if (ImGui::SliderInt("##masterVol", &masterVol_, 0, 100)) {
-    //    AudioManager::getInstance()->setMasterVolume(masterVol_ * 0.01f);
-    //}
-    //ImGui::Text("BGM Volume");
-    //ImGui::SetNextItemWidth(itemWidth);
-    //int bgmVol_ = AudioManager::getInstance()->getBGMVolume() * 100;
-    //if (ImGui::SliderInt("##bgmVol", &bgmVol_, 0, 100)) {
-    //    AudioManager::getInstance()->setBGMVolume(bgmVol_ * 0.01f);
-    //}
-    //ImGui::Text("SFX Volume");
-    //ImGui::SetNextItemWidth(itemWidth);
-    //int sfxVol_ = AudioManager::getInstance()->getSFXVolume() * 100;
-    //if (ImGui::SliderInt("##sfxVol", &sfxVol_, 0, 100)) {
-    //    AudioManager::getInstance()->setSFXVolume(sfxVol_ * 0.01f);
-    //}
-
 }
 
 void PauseMenu::showPauseMenu() {
@@ -93,8 +73,8 @@ void PauseMenu::showPauseMenu() {
     ImGui::SetCursorPos(buttonLocation);
     if (ImGui::Button("Main Menu", buttonSize)) {
         //Got back to main menu
-        ShowWindow(false);
-        SceneManager::GetInstance()->MainMenu();
+        //ShowWindow(false);
+        //SceneManager::GetInstance()->MainMenu();
     }
 
     buttonLocation.y += heightInterval;

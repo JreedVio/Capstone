@@ -2,6 +2,7 @@
 #define SCENEMANAGER_H
 
 #include <string>
+#include <unordered_map>
 #include "VulkanRenderer.h"
 #include "NetworkManager.h"
 
@@ -32,6 +33,7 @@ public:
 	static void RunNetworkUpdate(NetworkManager*);
 	bool GetIsRunning() { return isRunning; }
 	Scene* GetCurrentScene() { return currentScene; }
+	void SetNextScene(const char* nextScene_) { nextScene = nextScene_; }
 	Ref<PlayerController> GetRemotePlayer() { return remotePlayer; }
 	Ref<PlayerController> GetLocalPlayer() { return localPlayer; }
 	bool StartGame(USERTYPE userType_);
@@ -43,12 +45,13 @@ public:
 	
 private:
 
-
 	SceneManager();
 	static SceneManager* Instance;
 	NetworkManager* networkManager;
 	enum class RendererType rendererType;
 	Scene* currentScene;
+	const char* nextScene;
+	std::unordered_map<const char*, Scene*> sceneList;
 	class Timer* timer;
 
 	Ref<PlayerController> localPlayer;

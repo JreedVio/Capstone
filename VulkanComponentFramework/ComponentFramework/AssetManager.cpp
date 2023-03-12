@@ -12,6 +12,9 @@
 #include "Scene.h"
 #include "Room.h"
 #include "RoomScene.h"
+#include "Physics.h"
+
+using namespace PHYSICS;
 
 #define BUFFER_SIZE 128
 
@@ -240,8 +243,8 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 	//Get information for room (size, time)
 	XMLElement* sizeData = roomData->FirstChildElement("Size");
 	float width = sizeData->FloatAttribute("x");
-	float length = sizeData->FloatAttribute("y");
-	float height = sizeData->FloatAttribute("z");
+	float height = sizeData->FloatAttribute("y");
+	float length = sizeData->FloatAttribute("z");
 	Ref<Room> room_ = std::make_shared<Room>(width, length, height);
 
 	Scene* scene_ = new RoomScene(renderer, room_);
@@ -265,50 +268,43 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 		  Top, Bottom is height calcultion */
 		Vec3 position;
 		Quaternion rotation;
-		Vec3 scale = Vec3(10.0f, 1.0f, 10.0f);
-		Vec3 scaleX = Vec3(0.1f, width, width);
-		Vec3 scaleY = Vec3(length, length, 0.1f);
-		Vec3 scaleZ = Vec3(height, 0.1f, height);
+		Vec3 scale = Vec3(width * 0.15f, 1.0f, length * 0.15f);
 		float floorY = -0.5f;
 		if (strcmp(wallName_, "Left") == 0) {
 			float x_ = 0.0f - width / 2.0f;
 			position = Vec3(x_, floorY, 0.0f);
-			//scale = scaleX;
+			scale.x  = 1.0f;
 			rotation = QMath::angleAxisRotation(90.0f, Vec3(0.0f, 1.0f, 0.0f));
 		}
 		else if (strcmp(wallName_, "Right") == 0) {
 			float x_ = 0.0f + width / 2.0f;
 			position = Vec3(x_, floorY, 0.0f);
-			//scale = scaleX;
+			scale.x = 1.0f;
 			rotation = QMath::angleAxisRotation(-90.0f, Vec3(0.0f, 1.0f, 0.0f));
 		}
 		else if (strcmp(wallName_, "Forward") == 0) {
 			float z_ = 0.0f - length / 2.0f;
 			position = Vec3(0.0f, floorY, z_);
-			//scale = scaleY;
+			scale.z = 1.0f;
 		}
 		else if (strcmp(wallName_, "Backward") == 0) {
 			float z_ = 0.0f + length / 2.0f;
 			position = Vec3(0.0f, floorY, z_);
-			//scale = scaleY;
+			scale.z = 1.0f;
 			rotation = QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f));
 		}
 		else if (strcmp(wallName_, "Top") == 0) {
 			float y_ = floorY + height / 2.0f;
 			position = Vec3(0.0f, y_, 0.0f);
 			rotation = QMath::angleAxisRotation(180.0f, Vec3(1.0f, 0.0f, 0.0f));
-
-			//scale = scaleZ;
 		}
 		else if (strcmp(wallName_, "Bottom") == 0) {
 			float y_ = 0.0f;
 			position = Vec3(0.0f, floorY, 0.0f);
-			//rotation = QMath::angleAxisRotation(180.0f, Vec3(0.0f, 0.0f, 0.0f));
-
-			//scale = scaleZ;
 		}
-		Ref<TransformComponent> tranform_ = std::make_shared<TransformComponent>(wallActor_.get(), position, rotation, scale);
-		wallActor_->AddComponent(tranform_);
+		Ref<TransformComponent> transform_ = std::make_shared<TransformComponent>(wallActor_.get(), position, rotation, scale);
+		wallActor_->AddComponent(transform_);
+		wallActor_->AddComponent<AABB>(wallActor_.get(), transform_, transform_->GetPosition(), Vec3(50.0f, 1.5f, 50.0f), transform_->GetOrientation());
 		wallActor_->OnCreate();
 		room_->AddActor(wallName_, wallActor_);
 		wall_ = wall_->NextSiblingElement("Wall");
@@ -341,12 +337,22 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 		const char* doorActorName = door_->FindAttribute("actor")->Value();
 		Ref<Actor> doorActorData_ = GetActor(doorActorName);
 		//Copy the actor
-		Ref<Actor> doorActor_ = std::make_shared<Actor>(*doorActorData_.get());
+		Ref<DoorActor> doorActor_ = std::make_shared<DoorActor>(nullptr);
+		//Get and set the actor data
+		Ref<MeshComponent> mesh_ = doorActorData_->GetComponent<MeshComponent>();
+		Ref<MaterialComponent> material_ = doorActorData_->GetComponent<MaterialComponent>();
+		Ref<ShaderComponent> shader_ = doorActorData_->GetComponent<ShaderComponent>();
+		doorActor_->AddComponent(mesh_);
+		doorActor_->AddComponent(material_);
+		doorActor_->AddComponent(shader_);
+		doorActor_->SetConnection(doorConnection_);
 		//Get tranform
 		XMLElement* transformElement = door_->FirstChildElement("Transform");
-		doorActor_->AddComponent(LoadTransform(doorActor_.get(), transformElement));
+		Ref<TransformComponent> transform_ = LoadTransform(doorActor_.get(), transformElement);
+		doorActor_->AddComponent(transform_);
+		doorActor_->AddComponent<AABB>(doorActor_.get(), transform_, transform_->GetPosition(), Vec3(1.0f, 10.0f, 1.5f), transform_->GetOrientation());
 		doorActor_->OnCreate();
-		room_->AddActor(doorConnection_, doorActor_);
+		room_->AddActor(doorActorName, doorActor_);
 		door_ = door_->NextSiblingElement("Door");
 	}
 
