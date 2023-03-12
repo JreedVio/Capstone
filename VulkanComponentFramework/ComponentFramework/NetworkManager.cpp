@@ -4,9 +4,7 @@
 #include "SceneManager.h"
 #include "Timer.h"
 
-
-
-NetworkManager::NetworkManager() : tickrate(30)
+NetworkManager::NetworkManager() : tickrate(30), isServer(0)
 {
 }
 
@@ -35,8 +33,6 @@ bool NetworkManager::OnCreate()
         return false;
     }
     atexit(enet_deinitialize);
-
-    int isServer = 0;
 
     while (true) {
         std::cout << "Enter 0 if you are a client or 1 if you are a server\n";

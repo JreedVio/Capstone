@@ -7,7 +7,18 @@
 
 class PlayerController;
 class AssetManager;
+class UIManager;
 class Scene;
+
+enum SCENETYPE {
+	ROOMSCENE = 0,
+	MENUSCENE
+};
+
+enum USERTYPE {
+	SERVER = 0,
+	CLIENT
+};
 
 
 class SceneManager  {
@@ -23,16 +34,15 @@ public:
 	Scene* GetCurrentScene() { return currentScene; }
 	Ref<PlayerController> GetRemotePlayer() { return remotePlayer; }
 	Ref<PlayerController> GetLocalPlayer() { return localPlayer; }
+	bool StartGame(USERTYPE userType_);
+	void QuitGame();
 	void RoomChange(const char* roomName_);
+	void MainMenu();
 	bool GameOver();
 	bool GameWin();
 	
 private:
-	
-	enum SCENETYPE {
-		ROOMSCENE = 0,
-		MENUSCENE
-	};
+
 
 	SceneManager();
 	static SceneManager* Instance;
@@ -46,6 +56,7 @@ private:
 
 	VulkanRenderer* renderer;
 	AssetManager* assetManager;
+	UIManager* uiManager;
 	unsigned int fps;
 	bool isRunning;
 	void BuildScene(SCENETYPE scenetype_, const char* fileName);

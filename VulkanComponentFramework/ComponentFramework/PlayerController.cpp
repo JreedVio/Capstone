@@ -1,10 +1,11 @@
 #include "PlayerController.h"
 #include "Actor.h"
 #include "CameraActor.h"
+#include "UIManager.h"
+#include "AssetManager.h"
 
-
-PlayerController::PlayerController(Component* parent_): Component(parent_), pawnActor(nullptr), roomSurvived(0) {
-
+PlayerController::PlayerController(Component* parent_, const char* actorName_): Component(parent_), actorName(actorName_), pawnActor(nullptr), roomSurvived(0), isCreated(false) {
+	uiManager = UIManager::getInstance();
 }
 
 void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent* TF_Component)
@@ -12,8 +13,12 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 
 	Ref<TransformComponent> transform = pawnActor->GetComponent<TransformComponent>();
 	//Ref<TransformComponent> transform = TF_Component;
-	Ref<CameraActor> camera = pawnActor->GetComponent<CameraActor>();
 
+	if (!transform)
+		return;
+
+	//Get direction to travel
+	Ref<CameraActor> camera = pawnActor->GetComponent<CameraActor>();
 	Vec3 forward = Vec3(0.0f, 0.0f, -1.0f);
 	Vec3 upVector = Vec3(0.0f, 1.0f, 0.0f);
 	Vec3 rightDirection = Vec3(1.0f, 0.0f, 0.0f);
@@ -25,14 +30,23 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 
 	}
 
-	if (!transform)
-		return;
-
 	// temp var(s)
 	float moveSpeed = 0.5f;
 	Vec3 pos = transform->GetPosition();
 	Quaternion orient = transform->GetOrientation();
 
+	//UI events first
+	if (KeyDown(KeyCode::ESC, Event))
+	{
+		//printf("Key Pressed\n");
+
+		uiManager->openMenu("PauseMenu");
+	}
+
+	//When option menu is opened, don't receive any in game input
+	if (uiManager->isOpened("PauseMenu")) {
+		return;
+	}
 	// Key DOWN
 	if (KeyDown(KeyCode::W, Event))
 	{	
@@ -56,11 +70,6 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 		pos = transform->GetPosition() + (moveSpeed * rightDirection);
 		transform->SetTransform(pos, orient);
 	}
-	if (KeyDown(KeyCode::ESC, Event))
-	{
-		//printf("Key Pressed\n");
-	}	
-
 	// KEY UP
 	else if (KeyUP(KeyCode::W, Event))
 	{
@@ -79,10 +88,7 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 		//printf("Key Released\n");
 	}
 
-	//if (camera) {
-	//	camera->UpdateViewMatrix();
-	//}
-
+	camera->HandleEvents(Event);
 }
 
 PlayerController::~PlayerController()
@@ -90,12 +96,21 @@ PlayerController::~PlayerController()
 	
 }
 
-bool PlayerController::OnCreate()
-{
-	return false;
+bool PlayerController::OnCreate(){
+
+	if (isCreated) return false;
+	//Create actors and ui elements
+	Ref<Actor> actor_ = AssetManager::GetInstance()->GetActor(actorName);
+	actor_->AddComponent<TransformComponent>(nullptr, Vec3(0.0f, 2.0f, 0.0f), QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)));
+	actor_->OnCreate();
+	actor_->SetVisible(false);
+	SetPawn(actor_);
+
+	isCreated = true;
+	return true;
 }
 
-void PlayerController::OnDestroy()
-{
+void PlayerController::OnDestroy(){
+	isCreated = false;
 		
 }

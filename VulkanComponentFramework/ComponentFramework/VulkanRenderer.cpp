@@ -2,6 +2,7 @@
 #include "AssetManager.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "UIManager.h"
 
 using namespace std;
 
@@ -228,25 +229,13 @@ void VulkanRenderer::destroyUniformBuffer(std::vector<VkBuffer>& uniformBuffer, 
 void VulkanRenderer::cleanup() {
     cleanupSwapChain();
 
-    //Destroy components materials
+    //Destroy components
     for (auto component : AssetManager::GetInstance()->GetComponentList()) {
         component.second->OnDestroy();
     }
 
-    //Shader is destroyed in cleanup swap chain
+    //Destroy UI
 
- /*   vkDestroySampler(device, materialComponent[0]->textureSampler, nullptr);
-    vkDestroyImageView(device, materialComponent[0]->textureImageView, nullptr);
-    vkDestroyImage(device, materialComponent[0]->textureImage, nullptr);
-    vkFreeMemory(device, materialComponent[0]->textureImageMemory, nullptr);*/
-
-    //vkDestroyDescriptorSetLayout(device, shaderComponent->descriptorSetLayout, nullptr);
-
-    //vkDestroyBuffer(device, meshComponent[0]->indexBufferID, nullptr);
-    //vkFreeMemory(device, meshComponent[0]->indexBufferMemoryID, nullptr);
-
-    //vkDestroyBuffer(device, meshComponent[0]->vertexBufferID, nullptr);
-    //vkFreeMemory(device, meshComponent[0]->vertexBufferMemoryID, nullptr);
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
         vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
@@ -281,6 +270,9 @@ void VulkanRenderer::recreateSwapChain() {
         SDL_WaitEvent(&sdlEvent);
 
     }
+
+    windowWidth = width;
+    windowHeight = height;
 
     vkDeviceWaitIdle(device);
 
@@ -966,6 +958,14 @@ void VulkanRenderer::recordCommandBuffer() {
             }
         }
 
+        //Draw UI
+        if (UIManager::getInstance()->isValid()) {
+            ImDrawData* draw_data = ImGui::GetDrawData();
+            if (draw_data) {
+                ImGui_ImplVulkan_RenderDrawData(draw_data, commandBuffers[i]);
+            }
+        }
+
         vkCmdEndRenderPass(commandBuffers[i]);
 
         if (vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS) {
@@ -1014,6 +1014,43 @@ void VulkanRenderer::SetGLightsUbo(const std::vector<Ref<LightActor>>& lights) {
 
 void VulkanRenderer::SetPushConst(const Matrix4& model) {
 
+}
+
+void VulkanRenderer::InitImGui(){
+
+    UIManager* uiManager = UIManager::getInstance();
+    uiManager->setSize(GetWidth(), GetHeight());
+    //Setup UI
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); //(void)io;
+    //ImGui::StyleColorsDark();
+    //UIManager::getInstance()->defaultTheme();
+
+    //Create a new descriptor pool for setup
+    createDescriptorPool(uiManager->descriptorPool);
+
+    ImGui_ImplSDL2_InitForVulkan(window);
+    ImGui_ImplVulkan_InitInfo init_info = {};
+    init_info.Instance = instance;
+    init_info.PhysicalDevice = physicalDevice;
+    init_info.Device = device;
+    init_info.Queue = graphicsQueue;
+    init_info.DescriptorPool = uiManager->descriptorPool;
+    init_info.Subpass = 0;
+    init_info.MinImageCount = 2;
+    init_info.ImageCount = MAX_FRAMES_IN_FLIGHT;
+    init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
+    ImGui_ImplVulkan_Init(&init_info, renderPass);
+
+    //Load font
+    //Start a command buffer to pass in font information
+    VkCommandBuffer fontBuffer = beginSingleTimeCommands();
+    ImGui_ImplVulkan_CreateFontsTexture(fontBuffer);
+    endSingleTimeCommands(fontBuffer);
+    ImGui_ImplVulkan_DestroyFontUploadObjects();
+
+    createSyncObjects();
 }
 
 void VulkanRenderer::updateUniformBuffer(uint32_t currentImage) {

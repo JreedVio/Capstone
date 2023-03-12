@@ -116,6 +116,8 @@ struct QueueFamilyIndices {
         void SetUBO(const Matrix4& projection, const Matrix4& view);
         void SetGLightsUbo(const std::vector<Ref<LightActor>>& lights);
         void SetPushConst(const Matrix4& model);
+        void InitImGui();
+
         SDL_Window* GetWindow() {
             return window;
         }

@@ -99,7 +99,7 @@ void RoomScene::Render() const{
 void RoomScene::HandleEvents(const SDL_Event& sdlEvent){
     //Ref<TransformComponent> tf = player->GetComponent<TransformComponent>();
     localPlayer->GetPlayerInput(sdlEvent, nullptr);
-    camera->HandleEvents(sdlEvent);
+
 }
 
 Ref<Actor> RoomScene::GetActor(const char* name_){

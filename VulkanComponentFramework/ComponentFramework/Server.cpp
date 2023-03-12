@@ -55,14 +55,14 @@ bool Server::OnCreate()
     std::cout << "Server is created\n";
 
     // Get scene and actors
-    Scene* scene = SceneManager::GetInstance()->GetCurrentScene();
-    if (scene == nullptr) {
-        Debug::FatalError("Failed to get Current Scene", __FILE__, __LINE__);
-        return false;
-    }
+    SceneManager* sceneManager = SceneManager::GetInstance();
+    //if (scene == nullptr) {
+    //    Debug::FatalError("Failed to get Current Scene", __FILE__, __LINE__);
+    //    return false;
+    //}
 
-    localPlayer = scene->GetActor("LocalPlayer");
-    remotePlayer = scene->GetActor("RemotePlayer");
+    localPlayer = sceneManager->GetLocalPlayer()->GetPawn();
+    remotePlayer = sceneManager->GetRemotePlayer()->GetPawn();
     if (localPlayer == nullptr || remotePlayer == nullptr) {
         Debug::FatalError("Failed to get Player Actors", __FILE__, __LINE__);
         return false;

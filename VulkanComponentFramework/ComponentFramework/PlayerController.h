@@ -8,18 +8,23 @@
 // it will need to added to the actor like a component would
 
 class Actor;
+class UIManager;
 
 class PlayerController : public Input, public Component {
 
 private:
 
     Ref<Actor> pawnActor;
+    const char* actorName;
     const char* checkPoint;
     int roomSurvived;
+    UIManager* uiManager;
+    bool isCreated;
 
-public:   
 
-    PlayerController(Component* parent_);   
+public:
+
+    PlayerController(Component* parent_, const char* actorName_);   
 
     // (TODO): will need to pass a ref of the Transform Component to this function so it can manipulate the transform
     void GetPlayerInput(const SDL_Event& Event, TransformComponent* TF_Component);

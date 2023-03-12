@@ -5,6 +5,7 @@
 #include "Actor.h"
 #include "GlobalLighting.h"
 #include <unordered_map>
+#include <memory>
 
 #define LIGHT_NUM 2
 
