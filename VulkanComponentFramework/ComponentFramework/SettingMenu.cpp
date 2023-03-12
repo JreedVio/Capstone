@@ -6,7 +6,7 @@ SettingMenu::~SettingMenu(){}
 
 void SettingMenu::Display(){
     ImGui::SetNextWindowBgAlpha(windowAlpha);
-    ImGui::Begin("Option Menu", NULL, 
+    ImGui::Begin("Settings", NULL, 
            ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
     ImGui::SetWindowFontScale(1.5f);
@@ -33,23 +33,7 @@ void SettingMenu::Display(){
         //ImGui::SetNextItemWidth(tabWidth);
         const char* tabName = "Gameplay";
         float textWidth = ImGui::CalcTextSize(tabName).x;
-        //if (ImGui::BeginTabItem(tabName))
-        //{
-        //    //Show gameplay options
 
-        //    float heightInterval = windowH * 0.15f;
-        //    ImGui::SetCursorPos(buttonLocation);
-        //    if (ImGui::Button("Resume", buttonSize)) {
-        //        //Close the window
-        //        ShowWindow(false);
-        //    }
-        //    buttonLocation.y += heightInterval;
-        //    ImGui::SetCursorPos(buttonLocation);
-        //    if (ImGui::Button("Main Menu", buttonSize)) {
-
-        //    }
-        //    ImGui::EndTabItem();
-        //}
         ImGui::SetNextItemWidth(tabWidth);
         tabName = "Audio";
         textWidth = ImGui::CalcTextSize(tabName).x;
@@ -99,26 +83,6 @@ void SettingMenu::Update(Scene* scene_){
 
 void SettingMenu::showAudioControl(){
     float itemWidth = ImGui::GetWindowSize().x * 0.9f;
-
-    //ImGui::Text("Master Volume");
-    //ImGui::SetNextItemWidth(itemWidth);
-    //int masterVol_ = AudioManager::getInstance()->getMasterVolume() * 100;
-    //if (ImGui::SliderInt("##masterVol", &masterVol_, 0, 100)) {
-    //    AudioManager::getInstance()->setMasterVolume(masterVol_ * 0.01f);
-    //}
-    //ImGui::Text("BGM Volume");
-    //ImGui::SetNextItemWidth(itemWidth);
-    //int bgmVol_ = AudioManager::getInstance()->getBGMVolume() * 100;
-    //if (ImGui::SliderInt("##bgmVol", &bgmVol_, 0, 100)) {
-    //    AudioManager::getInstance()->setBGMVolume(bgmVol_ * 0.01f);
-    //}
-    //ImGui::Text("SFX Volume");
-    //ImGui::SetNextItemWidth(itemWidth);
-    //int sfxVol_ = AudioManager::getInstance()->getSFXVolume() * 100;
-    //if (ImGui::SliderInt("##sfxVol", &sfxVol_, 0, 100)) {
-    //    AudioManager::getInstance()->setSFXVolume(sfxVol_ * 0.01f);
-    //}
-
 }
 
 void SettingMenu::toParent(){
@@ -126,7 +90,6 @@ void SettingMenu::toParent(){
     if (parent) {
         parent->ShowWindow(!parent->isOpened());
     }
-
 }
 
 

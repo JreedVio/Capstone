@@ -16,8 +16,11 @@ private:
 	bool isOpened;
 
 public:
-	DoorActor(Component* parent_): Actor(parent_), isOpened(false) {}
+	DoorActor(Component* parent_): Actor(parent_), isOpened(false) {
+		SetAlpha(0.5f);
+	}
 	~DoorActor(){}
+	void Update(const float deltaTime_) override;
 	void SetConnection(const char* connectedRoom_) { connectedRoom = connectedRoom_; }
 	const char* GetConnection() { return connectedRoom; }
 	//Move the local player to the connected room

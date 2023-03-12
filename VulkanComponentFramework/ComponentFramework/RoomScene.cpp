@@ -103,11 +103,12 @@ void RoomScene::Update(const float deltaTime) {
         Ref<Actor> actor_ = e.second;
         Ref<AABB> actorCollision = actor_->GetComponent<AABB>();
         if (std::dynamic_pointer_cast<DoorActor>(actor_)) {
-
+            actor_->Update(deltaTime);
             if (!actorCollision) continue;
 
             if (localPawn->GetComponent<Physics>()->TestTwoAABB(localPawnCollision.get(), actorCollision.get())) {
                 actor_->CollisionResponse();
+
             }
 
         }
@@ -115,6 +116,7 @@ void RoomScene::Update(const float deltaTime) {
         if (actorCollision) {
             //localPawn->GetComponent<Physics>()->TestTwoAABB(localPawnCollision.get(), actorCollision.get());
         }
+
     }
 
     localPawn->GetComponent<Physics>()->TestTwoAABB(localPawnCollision.get(), GetActor("Bottom")->GetComponent<AABB>().get());
@@ -131,6 +133,15 @@ void RoomScene::Render() const{
 void RoomScene::HandleEvents(const SDL_Event& sdlEvent){
     //Ref<TransformComponent> tf = player->GetComponent<TransformComponent>();
     localPlayer->GetPlayerInput(sdlEvent, nullptr);
+
+    //Short cut to open door
+    if (sdlEvent.type == SDL_KEYDOWN) {
+        if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_O){
+            Ref<DoorActor> doorActor = std::dynamic_pointer_cast<DoorActor>(GetActor("Door"));
+            doorActor->SetIsOpened(!doorActor->GetIsOpened());
+        }
+    }
+
 
 }
 

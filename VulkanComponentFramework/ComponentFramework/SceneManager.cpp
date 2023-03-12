@@ -119,11 +119,6 @@ void SceneManager::Run() {
 	timer->Start();
 	isRunning = true;
 	
-	if (networkManager) {
-		std::thread networking(&NetworkManager::Update, this->networkManager);
-		networking.detach();
-	}
-
 	while (isRunning) {
 	{
 			//ChronoTimer chronoTimer;
@@ -177,11 +172,14 @@ bool SceneManager::StartGame(USERTYPE userType_){
 		return false;
 	}
 
+	std::thread networking(&NetworkManager::Update, this->networkManager);
+	networking.detach();
+
 	uiManager->openMenu("MainMenu");
 	//Enter the start room
 	BuildScene(ROOMSCENE, "TestScene");
 	//Restart the timer
-	timer->Start();
+	//timer->Start();
 
 	return true;
 }
@@ -230,9 +228,9 @@ bool SceneManager::GameWin(){
 
 void SceneManager::GetEvents() {
 	SDL_Event sdlEvent;
+
 	while (SDL_PollEvent(&sdlEvent)) {
 		ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
-
 		if (sdlEvent.type == SDL_EventType::SDL_QUIT) {
 			isRunning = false;
 			return;

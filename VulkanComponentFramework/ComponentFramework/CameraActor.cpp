@@ -9,7 +9,7 @@
 
 using namespace MATH;
 
-CameraActor::CameraActor(Component* parent_): Actor(parent_) {
+CameraActor::CameraActor(Component* parent_): Actor(parent_), isActivate(false) {
 	projectionMatrix.loadIdentity();
 	viewMatrix.loadIdentity();
 	forwardVec = Vec3(0.0f, 0.0f, -1.0f);
@@ -90,18 +90,6 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 				transform_->GetPosition() + Vec3(0.0f, 0.0f, -0.1f), transform_->GetOrientation());
 			UpdateViewMatrix();
 		}
-		else if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_Z) {
-			//std::cout << "R EVENT\n";MMath::rotate(5.0f, Vec3(0.0f, 1.0f, 0.0f)) * 
-			transform_->SetTransform(
-				transform_->GetPosition(), QMath::angleAxisRotation(5.0f, rightDirection) * transform_->GetOrientation());
-			UpdateViewMatrix();
-		}
-		else if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_X) {
-			//std::cout << "R EVENT\n";MMath::rotate(5.0f, Vec3(0.0f, 1.0f, 0.0f)) * 
-			transform_->SetTransform(
-				transform_->GetPosition(), QMath::angleAxisRotation(-5.0f, rightDirection) * transform_->GetOrientation());
-			UpdateViewMatrix();
-		}
 		break;
 
 	case SDL_MOUSEWHEEL:
@@ -125,17 +113,16 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 		}
 		break;
 
-	case SDL_MOUSEBUTTONDOWN: {
+	case SDL_MOUSEBUTTONDOWN: 
+		isActivate = true;
+		lastMousePos.x = sdlEvent.button.x;
+		lastMousePos.y = sdlEvent.button.y;
 
-	}
+		break;
+	
 	case SDL_MOUSEMOTION:
-		//TODO:Smoother movement (Optional)
-		//return;
-		/*Find current forward vector of the camera
-		* The old quaternion will be take into account at the end,
-		* so this vector does not need to be calculated through current orientation
-		*/
-		//return;
+
+		if (!isActivate) return;
 
 		Vec3 rotationAxis;
 		//Find the destination vector that the current forward vector should rotate to
@@ -218,7 +205,6 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 
 void CameraActor::UpdateViewMatrix() {
 	Ref<TransformComponent> transformComponent = GetComponent<TransformComponent>();
-
 	
 	if (transformComponent.get() == nullptr) { /// There is no such component, use default view
 		transformComponent = std::make_shared<TransformComponent>(nullptr, Vec3(0.0f, 0.0f, -5.0f), Quaternion());
@@ -276,13 +262,5 @@ Quaternion CameraActor::GetRotation(){
 
 void CameraActor::UpdateProjectionMatrix(const float fovy, const float aspectRatio, const float near, const float far) {
 	projectionMatrix = MMath::perspective(fovy, aspectRatio, near, far);
-
 }
 
-
-
-void CameraActor::reset() {
-	projectionMatrix.loadIdentity();
-	viewMatrix.loadIdentity();
-	forwardVec = Vec3(0.0f, 0.0f, -1.0f);
-}

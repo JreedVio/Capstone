@@ -17,9 +17,9 @@
 		
 	<LightActor>
 		<Light posX ="0.0" posY ="5.0" posZ ="0.0"
-			   r="0.0" g="1.0" b="0.0" a="1.0"/>
+			   r="0.0" g="0.5" b="0.0" a="1.0"/>
 		<Light posX ="-5.0" posY ="0.0" posZ ="0.0"
-			   r="1.0" g="" b="1.0" a="1.0"/>
+			   r="0.1" g="0.1" b="0.1" a="0.1"/>
 	</LightActor>
 
 	<DoorActor>

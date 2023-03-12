@@ -18,6 +18,7 @@ layout (binding = 1) uniform GlobalLightingUBO {
 layout (push_constant) uniform PushConst {
 	mat4 model;
 	mat4 normal;
+	float alpha;
 } pushConst;
 
 

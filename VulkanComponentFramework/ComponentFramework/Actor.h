@@ -15,6 +15,7 @@ class VulkanRenderer;
 struct PushConst {
 	Matrix4 model;
 	Matrix4 normal;
+	alignas(4)float alpha;
 };
 
 class Actor : public Component {
@@ -25,9 +26,10 @@ class Actor : public Component {
 	Actor& operator=(const Actor&) = delete;
 	Actor& operator=(Actor&&) = delete;
 
-private:
+protected:
 	std::vector<Ref<Component>> components;
 	bool visible;
+	float alpha;
 	VulkanRenderer* renderer;
 
 public:
@@ -43,7 +45,8 @@ public:
 	void OnDestroy();
 	void Update(const float deltaTime_);
 	void Render() const;
-
+	float GetAlpha() const { return alpha; }
+	void SetAlpha(float alpha_) { alpha = alpha_; }
 	bool GetVisible() const { return visible; }
 	void SetVisible(bool visible_) { visible = visible_; }
 

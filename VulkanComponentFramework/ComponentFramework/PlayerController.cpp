@@ -21,17 +21,11 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 	if (!transform)
 		return;
 
-	//Get direction to travel
+	//Get camera and direction to travel
 	Ref<CameraActor> camera = pawnActor->GetComponent<CameraActor>();
 	Vec3 forward = Vec3(0.0f, 0.0f, -1.0f);
 	Vec3 upVector = Vec3(0.0f, 1.0f, 0.0f);
 	Vec3 rightDirection = Vec3(1.0f, 0.0f, 0.0f);
-	if (camera) {
-		//Get forward direction
-		forward = QMath::rotate(forward, camera->GetComponent<TransformComponent>()->GetOrientation());
-		forward.y = 0.0f;
-		rightDirection = VMath::cross(forward, upVector);
-	}
 
 	// temp var(s)
 	float moveSpeed = 0.5f;
@@ -42,13 +36,21 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 	if (KeyDown(KeyCode::ESC, Event))
 	{
 		//printf("Key Pressed\n");
-
 		uiManager->openMenu("PauseMenu");
 	}
 
 	//When option menu is opened, don't receive any in game input
 	if (uiManager->isOpened("PauseMenu")) {
+		camera->Deactivate();
 		return;
+	}
+
+	if (camera) {
+		//Get forward direction
+		forward = QMath::rotate(forward, camera->GetComponent<TransformComponent>()->GetOrientation());
+		forward.y = 0.0f;
+		rightDirection = VMath::cross(forward, upVector);
+		camera->HandleEvents(Event);
 	}
 	// Key DOWN
 	if (KeyDown(KeyCode::W, Event))
@@ -73,6 +75,9 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 		pos = transform->GetPosition() + (moveSpeed * rightDirection);
 		transform->SetTransform(pos, orient);
 	}
+	else if (KeyDown(KeyCode::LCTRL, Event)) {
+		camera->Deactivate();
+	}
 	// KEY UP
 	else if (KeyUP(KeyCode::W, Event))
 	{
@@ -91,7 +96,6 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 		//printf("Key Released\n");
 	}
 
-	camera->HandleEvents(Event);
 }
 
 PlayerController::~PlayerController()

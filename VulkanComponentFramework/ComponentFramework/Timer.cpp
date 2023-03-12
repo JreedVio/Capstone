@@ -2,6 +2,9 @@
 #include "Timer.h"
 #include <iostream>
 
+#define MAX_INTERVAL 0.1f
+
+
 Timer::Timer() {
 	prevTicks = 0;
 	currTicks = 0;
@@ -20,7 +23,13 @@ void Timer::Start() {
 }
 
 float Timer::GetDeltaTime() const {
-	return (float(currTicks - prevTicks)) / 1000.0f;
+	float tickInterval = float(currTicks - prevTicks);
+
+	if (tickInterval / 1000.0f >= MAX_INTERVAL) {
+		tickInterval = 0.0f;
+	}
+
+	return (tickInterval / 1000.0f);
 }
 
 unsigned int Timer::GetSleepTime(const unsigned int fps) const {
@@ -42,4 +51,8 @@ unsigned int Timer::GetSleepTime(const unsigned int fps) const {
 	}
 	//std::cout << sleepTime << std::endl;
 	return sleepTime;
+}
+
+float Timer::GetCurrentTicks() const{
+	return float(currTicks - prevTicks);
 }

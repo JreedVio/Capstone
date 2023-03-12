@@ -7,7 +7,7 @@
 
 Actor::Actor(Component* parent_) :
     pool(0), sets(0), renderer(nullptr),
-    Component(parent_), visible(true) {}
+    Component(parent_), visible(true), alpha(1.0f) {}
 
 Actor::Actor(const Actor& actor_){
     //std::cout << "Copying actor\n";
@@ -16,6 +16,7 @@ Actor::Actor(const Actor& actor_){
     components = new_List;
     visible = actor_.GetVisible();
     parent = actor_.GetParent();
+    alpha = actor_.GetAlpha();
 }
 
 bool Actor::OnCreate() {
@@ -98,7 +99,7 @@ PushConst Actor::GetModelMatrix() {
     //}
 
     pushConst.normal = MMath::transpose(MMath::inverse(pushConst.model));
-
+    pushConst.alpha = GetAlpha();
 	return pushConst;
 }
 

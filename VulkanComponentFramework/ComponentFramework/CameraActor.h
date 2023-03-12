@@ -14,8 +14,7 @@ private:
 	float cameraSpeed;
 	float minZ;
 	float maxZ;
-
-	void reset();
+	bool isActivate;
 
 public:
 	CameraActor(Component* parent_);
@@ -34,5 +33,9 @@ public:
 	void UpdateViewMatrix();
 	PushConst GetModelMatrix() override;
 	Quaternion GetRotation();
+	void Deactivate() { 
+		isActivate = false; 
+		//SDL_ShowCursor(SDL_ENABLE);
+	}
 };
 
