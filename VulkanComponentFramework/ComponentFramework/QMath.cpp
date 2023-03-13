@@ -85,6 +85,84 @@ Matrix4 QMath::toMatrix4(const Quaternion& q) {
 	//return m1 * m2;
 
 }
+
+Quaternion MATH::QMath::mat3ToQuaternion(const float* m)
+{
+	float trace = m[0] + m[4] + m[8];
+	float w, x, y, z;
+
+	if (trace > 0) {
+		float s = sqrt(trace + 1.0f) * 2.0f;
+		w = 0.25f * s;
+		x = (m[7] - m[5]) / s;
+		y = (m[2] - m[6]) / s;
+		z = (m[3] - m[1]) / s;
+	}
+	else if ((m[0] > m[4]) && (m[0] > m[8])) {
+		float s = sqrt(1.0f + m[0] - m[4] - m[8]) * 2.0f;
+		w = (m[7] - m[5]) / s;
+		x = 0.25f * s;
+		y = (m[1] + m[3]) / s;
+		z = (m[2] + m[6]) / s;
+	}
+	else if (m[4] > m[8]) {
+		float s = sqrt(1.0f + m[4] - m[0] - m[8]) * 2.0f;
+		w = (m[2] - m[6]) / s;
+		x = (m[1] + m[3]) / s;
+		y = 0.25f * s;
+		z = (m[5] + m[7]) / s;
+	}
+	else {
+		float s = sqrt(1.0f + m[8] - m[0] - m[4]) * 2.0f;
+		w = (m[3] - m[1]) / s;
+		x = (m[2] + m[6]) / s;
+		y = (m[5] + m[7]) / s;
+		z = 0.25f * s;
+	}
+
+	// Normalize quaternion	
+	// Return quaternion
+	return normalize(Quaternion(w, x, y, z));
+}
+
+Quaternion MATH::QMath::mat4ToQuaternion(const float* m)
+{
+	float trace = m[0] + m[5] + m[10];
+	float w, x, y, z;
+
+	if (trace > 0) {
+		float s = sqrt(trace + 1.0f) * 2.0f;
+		w = 0.25f * s;
+		x = (m[9] - m[6]) / s;
+		y = (m[2] - m[8]) / s;
+		z = (m[4] - m[1]) / s;
+	}
+	else if ((m[0] > m[5]) && (m[0] > m[10])) {
+		float s = sqrt(1.0f + m[0] - m[5] - m[10]) * 2.0f;
+		w = (m[9] - m[6]) / s;
+		x = 0.25f * s;
+		y = (m[1] + m[4]) / s;
+		z = (m[2] + m[8]) / s;
+	}
+	else if (m[5] > m[10]) {
+		float s = sqrt(1.0f + m[5] - m[0] - m[10]) * 2.0f;
+		w = (m[2] - m[8]) / s;
+		x = (m[1] + m[4]) / s;
+		y = 0.25f * s;
+		z = (m[6] + m[9]) / s;
+	}
+	else {
+		float s = sqrt(1.0f + m[10] - m[0] - m[5]) * 2.0f;
+		w = (m[4] - m[1]) / s;
+		x = (m[2] + m[8]) / s;
+		y = (m[6] + m[9]) / s;
+		z = 0.25f * s;
+	}	
+
+	// Normalize quaternion	
+	// Return quaternion
+	return normalize(Quaternion(w, x, y, z));
+}
 Quaternion QMath::angleAxisRotation(const float degrees, const Vec3& axis) {
 	Vec3 rotationAxis = VMath::normalize(axis);
 	float theta = degrees * DEGREES_TO_RADIANS;

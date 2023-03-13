@@ -20,9 +20,12 @@ void Input::GetMouseInput()
 }
 
 bool Input::KeyDown(KeyCode Key, const SDL_Event& Event)
-{	 	 
-	if (Event.type == SDL_KEYDOWN && Event.key.keysym.scancode == (SDL_Scancode)Key) { return true; }
+{	
+	const uint8_t* keystate = SDL_GetKeyboardState(NULL);
+	if(keystate[(int)Key]) { return true; }
 	else { return false; }
+	/*if (Event.type == SDL_KEYDOWN && Event.key.keysym.scancode == (SDL_Scancode)Key) { return true; }
+	else { return false; }*/
 }
 
 bool Input::KeyUP(KeyCode Key, const SDL_Event& Event)

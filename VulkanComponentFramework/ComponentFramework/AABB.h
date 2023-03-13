@@ -38,10 +38,13 @@ namespace PHYSICS
 		void SetBounds(const Vec3 scale_, const Vec3 centre_, const Quaternion orient_);
 
 		void Add(const Vec3 bounds_[]);
+		Vec3 ClosestPoint(Vec3 point) const;
+		Vec3 Penetration(Ref<AABB> b1) const;
 
-		static bool TestAABB(AABB* b1, AABB* b2);
+		static bool TestAABB(Ref<AABB> b1, Ref<AABB> b2);
 
 		void SetCentre(const Vec3 centre_) { centre = centre_; }
+		const Vec3 GetCentre() const { return centre; }
 
 		virtual ~AABB();
 		virtual bool OnCreate() { return true; }

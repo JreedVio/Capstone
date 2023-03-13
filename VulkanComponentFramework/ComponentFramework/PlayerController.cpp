@@ -4,6 +4,8 @@
 #include "UIManager.h"
 #include "AssetManager.h"
 #include "Physics.h"
+#include "DynamicLinearMovement.h"
+
 
 using namespace PHYSICS;
 
@@ -11,26 +13,27 @@ PlayerController::PlayerController(Component* parent_, const char* actorName_): 
 	uiManager = UIManager::getInstance();
 }
 
-void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent* TF_Component)
+void PlayerController::GetPlayerInput(const SDL_Event& Event)
 {	
 
-	Ref<TransformComponent> transform = pawnActor->GetComponent<TransformComponent>();
-	//Ref<TransformComponent> transform = TF_Component;
-	auto dlm = pawnActor->GetComponent<PHYSICS::DynamicLinearMovement>();
-
-	if (!transform)
-		return;
-
-	//Get camera and direction to travel
+	Ref<TransformComponent> transform = pawnActor->GetComponent<TransformComponent>();	
+	
 	Ref<CameraActor> camera = pawnActor->GetComponent<CameraActor>();
+
+	Ref<DynamicLinearMovement> DynamicMovement = pawnActor->GetComponent<DynamicLinearMovement>();
+
 	Vec3 forward = Vec3(0.0f, 0.0f, -1.0f);
 	Vec3 upVector = Vec3(0.0f, 1.0f, 0.0f);
 	Vec3 rightDirection = Vec3(1.0f, 0.0f, 0.0f);
 
+	if (!transform)
+		return;
+	
 	// temp var(s)
-	float moveSpeed = 0.5f;
+	float moveSpeed = 5.0f;//0.5f;
 	Vec3 pos = transform->GetPosition();
 	Quaternion orient = transform->GetOrientation();
+
 
 	//UI events first
 	if (KeyDown(KeyCode::ESC, Event))
@@ -52,34 +55,53 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event, TransformComponent
 		rightDirection = VMath::cross(forward, upVector);
 		camera->HandleEvents(Event);
 	}
+
+	Vec3 dir = Vec3();
+
+
 	// Key DOWN
 	if (KeyDown(KeyCode::W, Event))
 	{	
-		pos = transform->GetPosition() + (moveSpeed * forward);
+		//pos += (moveSpeed * forward * 0.15f * 0.15f);	
+		dir += forward;		
 		//pos.z -= moveSpeed;
-		transform->SetTransform(pos, orient);
+		//transform->SetTransform(pos, orient);
+		
+		printf("W\n");
 	}
-	else if (KeyDown(KeyCode::A, Event))
+	if (KeyDown(KeyCode::A, Event))
 	{
-		pos = transform->GetPosition() + (moveSpeed * -rightDirection);
-		transform->SetTransform(pos, orient);
+		//pos += (moveSpeed * -rightDirection * 0.15f * 0.15f);		
+		dir += -rightDirection;
+		//transform->SetTransform(pos, orient);
+		printf("A\n");
 	}
 	if (KeyDown(KeyCode::S, Event))
 	{
-		pos = transform->GetPosition() + (moveSpeed * -forward);
-		transform->SetTransform(pos, orient);
+		//pos += (moveSpeed * -forward * 0.15f * 0.15f);		
+		dir += -forward;
+		//transform->SetTransform(pos, orient);
 	}
-	else if (KeyDown(KeyCode::D, Event))
+	if (KeyDown(KeyCode::D, Event))
 	{
 		//pos.x += moveSpeed;
-		pos = transform->GetPosition() + (moveSpeed * rightDirection);
-		transform->SetTransform(pos, orient);
+		//pos += (moveSpeed * rightDirection * 0.15f * 0.15f);		
+		dir += rightDirection;
+		//transform->SetTransform(pos, orient);
 	}
-	else if (KeyDown(KeyCode::LCTRL, Event)) {
+
+	if (VMath::mag(dir) > VERY_SMALL)
+	{
+		dir = VMath::normalize(dir);
+	}
+	DynamicMovement->SetVel(moveSpeed * dir);
+
+	if (KeyDown(KeyCode::LCTRL, Event)) {
 		camera->Deactivate();
 	}
+
 	// KEY UP
-	else if (KeyUP(KeyCode::W, Event))
+	if (KeyUP(KeyCode::W, Event))
 	{
 		//printf("Key Released\n");
 	}

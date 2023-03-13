@@ -268,7 +268,14 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 		  Top, Bottom is height calcultion */
 		Vec3 position;
 		Quaternion rotation;
-		Vec3 scale = Vec3(width * 0.15f, 1.0f, length * 0.15f);
+
+		Vec3 scale = Vec3(10.0f, 1.0f, 10.0f);
+		Vec3 Forward_BackwardScale = Vec3(10.0f, 10.0f, 1.0f);
+		Vec3 Left_RightScale = Vec3(10.0f, 10.0f, 10.0f);
+		Vec3 scaleX = Vec3(0.1f, width, width);
+		Vec3 scaleY = Vec3(length, length, 0.1f);
+		Vec3 scaleZ = Vec3(height, 0.1f, height);
+
 		float floorY = -0.5f;
 		if (strcmp(wallName_, "Left") == 0) {
 			float x_ = 0.0f - width / 2.0f;
@@ -302,12 +309,24 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 			float y_ = 0.0f;
 			position = Vec3(0.0f, floorY, 0.0f);
 		}
-		Ref<TransformComponent> transform_ = std::make_shared<TransformComponent>(wallActor_.get(), position, rotation, scale);
+
+		Ref<TransformComponent> transform_;
+		if (strcmp(wallName_, "Bottom") == 0 || strcmp(wallName_, "Top") == 0)
+		{
+			transform_ = std::make_shared<TransformComponent>(wallActor_.get(), position, rotation, scale);
+		} 
+		else if (strcmp(wallName_, "Backward") == 0 || strcmp(wallName_, "Forward") == 0)
+		{
+			transform_ = std::make_shared<TransformComponent>(wallActor_.get(), position, rotation, Forward_BackwardScale);
+		}
+		else if (strcmp(wallName_, "Right") == 0 || strcmp(wallName_, "Left") == 0)
+		{
+			transform_ = std::make_shared<TransformComponent>(wallActor_.get(), position, rotation, Left_RightScale);
+		}
 		wallActor_->AddComponent(transform_);
-		wallActor_->AddComponent<AABB>(wallActor_.get(), transform_, transform_->GetPosition(), Vec3(50.0f, 1.5f, 50.0f), transform_->GetOrientation());
 		wallActor_->OnCreate();
 		room_->AddActor(wallName_, wallActor_);
-		wall_ = wall_->NextSiblingElement("Wall");
+		wall_ = wall_->NextSiblingElement("Wall");		
 	}
 
 	//Add light data
