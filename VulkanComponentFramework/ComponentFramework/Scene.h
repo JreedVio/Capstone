@@ -14,12 +14,13 @@ class CameraActor;
 
 enum SceneStatus {
 	MENUTRANSIT = 0,
-	ROOMTRANSIT
+	ROOMTRANSIT,
+	REGULAR
 };
 
 class Scene {
 public:
-	explicit Scene(VulkanRenderer* renderer_):renderer(renderer_){};
+	explicit Scene(VulkanRenderer* renderer_):renderer(renderer_), sceneStatus(REGULAR){};
 	virtual ~Scene() {}
 
 	virtual bool OnCreate() = 0;

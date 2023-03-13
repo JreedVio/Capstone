@@ -76,7 +76,7 @@ void MainMenu::showMainMenu(){
 
     //Calculate Text size and location
     ImGui::SetWindowFontScale(5.0f);
-    const char* gameTitle = "Game Title";
+    const char* gameTitle = "Quantum Maze";
     float textWidth = ImGui::CalcTextSize(gameTitle).x;
     ImGui::SetCursorPos(ImVec2((windowW - textWidth) * 0.5f, windowH * 0.1f));
     ImGui::Text(gameTitle);

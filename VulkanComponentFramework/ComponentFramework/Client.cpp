@@ -125,6 +125,29 @@ void Client::Send(){
     enet_peer_send(peer, 0, tempPacket);
 }
 
+void Client::SendRoomName(const char* roomName) {
+    if (peer == nullptr) return;
+
+    Message msg;
+    msg.header.type = CustomMessageType::RoomName;
+
+    //AddRoom(msg);
+    //msg << roomName;
+
+    //Serialize
+    std::stringstream ss;
+    cereal::BinaryOutputArchive archive(ss);
+    archive(msg);
+
+    std::string str = ss.str();
+
+    // Send over the network
+    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
+        str.length() + 1,
+        ENET_PACKET_FLAG_RELIABLE);
+    enet_peer_send(peer, 0, tempPacket);
+}
+
 void Client::AddPosition(Message& msg)
 {
     Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
@@ -136,8 +159,15 @@ void Client::AddRotation(Message& msg)
 {
     Vec3 ijk = localPlayer->GetComponent<TransformComponent>()->GetOrientation().ijk;
     float w = localPlayer->GetComponent<TransformComponent>()->GetOrientation().w;
-
+    
     msg << ijk.x << ijk.y << ijk.z << w;
+}
+
+void Client::AddRoom(Message& msg)
+{
+    const char* roomName;
+
+    msg << roomName;
 }
 
 void Client::SendPositionPacket() {
@@ -230,9 +260,16 @@ void Client::ProcessMessage(Message& msg)
 
         float x, y, z, w;
         msg >> w >> z >> y >> x;
-        //remotePlayer->GetComponent<TransformComponent>()->orientation = Quaternion(w, x, y, z);
+        remotePlayer->GetComponent<TransformComponent>()->orientation = Quaternion(w, x, y, z);
         remotePlayer->GetComponent<TransformComponent>()->SetTransform(receivedPos, Quaternion(w, x, y, z));
         //std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
+    }
+    else if (msg.header.type == CustomMessageType::RoomName) {
+        //const char* roomName;
+        //msg >> roomName;
+        SceneManager* sceneManager = SceneManager::GetInstance();
+        sceneManager->GetCurrentScene()->SetStatus(ROOMTRANSIT);
+        sceneManager->SetNextScene("TestScene2");
     }
 }
 

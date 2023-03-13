@@ -27,8 +27,10 @@ public:
 	void OnDestroy();
 	void Update();
 	void Send();
+	void SendRoomName(const char* roomName);
 	void AddPosition(Message& msg);
 	void AddRotation(Message& msg);
+	void AddRoom(Message& msg);
 	void SendPositionPacket();
 	void Recieve(int tickrate);
 	void ProcessMessage(Message& msg);

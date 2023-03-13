@@ -41,8 +41,8 @@ bool RoomScene::OnCreate(){
     
     //Set the enter location
     Vec3 playerStart = Vec3(0.0f, 1.0f, 0.0f);
-    remoteTransform_->SetTransform(playerStart, Quaternion(), remoteTransform_->GetScale());
-    localTransform_->SetTransform(playerStart, Quaternion(), localTransform_->GetScale());
+    remoteTransform_->SetTransform(playerStart, remoteTransform_->GetOrientation(), remoteTransform_->GetScale());
+    localTransform_->SetTransform(playerStart, localTransform_->GetOrientation(), localTransform_->GetScale());
     AddActor("RemotePlayer", remotePlayer->GetPawn());
     AddActor("LocalPlayer", localPlayer->GetPawn());
 

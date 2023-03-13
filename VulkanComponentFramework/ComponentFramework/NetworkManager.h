@@ -13,10 +13,12 @@ private:
 	class Timer* timer;
 	int isServer;
 	unsigned int tickrate;
+	const char* roomName;
 
 public:
 	NetworkManager();
 	~NetworkManager();
+	NetworkUnit* GetUnit() { return unit; }
 	bool OnCreate();
 	void OnDestroy();
 	void Update();

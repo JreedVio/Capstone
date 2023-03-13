@@ -52,7 +52,8 @@
 enum class CustomMessageType : uint32_t {
 	Position,
 	Rotation,
-	RotationAndPosition
+	RotationAndPosition,
+	RoomName
 };
 
 ///[OLC_HEADERIFYIER] START "MESSAGE"

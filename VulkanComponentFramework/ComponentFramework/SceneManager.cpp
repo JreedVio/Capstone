@@ -190,6 +190,7 @@ void SceneManager::RoomChange(const char* roomName_) {
 	//When room change occurs, check the winning condition
 	if (GameWin()) return;
 	//Change room
+	networkManager->GetUnit()->SendRoomName(roomName_);
 	currentScene->SetStatus(ROOMTRANSIT);
 	SetNextScene(roomName_);
 }
