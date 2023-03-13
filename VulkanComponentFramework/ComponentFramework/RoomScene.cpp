@@ -36,16 +36,18 @@ bool RoomScene::OnCreate(){
     remotePlayer = SceneManager::GetInstance()->GetRemotePlayer();
     localPlayer = SceneManager::GetInstance()->GetLocalPlayer();
     Ref<Actor> remotePawn = remotePlayer->GetPawn();
+    remotePawn->OnCreate();
     Ref<Actor> localPawn = localPlayer->GetPawn();
+    localPawn->OnCreate();
     Ref<TransformComponent> remoteTransform_ = remotePawn->GetComponent<TransformComponent>();
     Ref<TransformComponent> localTransform_ = localPawn->GetComponent<TransformComponent>();
     
     //Set the enter location
 
-    Vec3 playerStart = Vec3(0.0f, 2.0f, 0.0f);
+    Vec3 playerStart = Vec3(0.0f, 3.0f, 0.0f);
 
-    remoteTransform_->SetTransform(playerStart, remoteTransform_->GetOrientation(), remoteTransform_->GetScale());
-    localTransform_->SetTransform(playerStart, localTransform_->GetOrientation(), localTransform_->GetScale());
+    remoteTransform_->SetTransform(playerStart, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), remoteTransform_->GetScale());
+    localTransform_->SetTransform(playerStart, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), localTransform_->GetScale());
     AddActor("RemotePlayer", remotePlayer->GetPawn());
     AddActor("LocalPlayer", localPlayer->GetPawn());
 

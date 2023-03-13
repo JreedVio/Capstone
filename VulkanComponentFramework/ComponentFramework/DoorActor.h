@@ -27,6 +27,7 @@ public:
 	bool RoomTransition();
 	void SetIsOpened(bool isOpened_) { isOpened = isOpened_; }
 	bool GetIsOpened() { return isOpened; }
+	const char* GetConnectedRoom() { return connectedRoom; }
 	void CollisionResponse() override;
 };
 
