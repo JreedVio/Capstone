@@ -17,7 +17,7 @@ namespace PHYSICS
 		
 		Physics(Component* parent_);
 		
-		bool TestTwoAABB(AABB* b1, AABB* b2);
+		bool TestTwoAABB(Ref<AABB> b1, Ref<AABB> b2);
 		void Update(const float deltaTime, Ref<DynamicLinearMovement> DLM, Ref<AABB> cBox);
 
 		virtual ~Physics() {};

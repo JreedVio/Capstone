@@ -25,7 +25,7 @@
 		<DoorActor>
 			<Door connection="TestScene" actor="Door">
 				<Transform
-					posX ="25.0" posY ="-0.5" posZ ="0.0"
+					posX ="-23.0" posY ="-0.5" posZ ="0.0"
 					angle="90.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 					scaleX="1.0" scaleY="0.8" scaleZ="1.0"/>
 			</Door>
