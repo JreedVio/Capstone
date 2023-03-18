@@ -22,9 +22,9 @@ public:
 	Client();
 	~Client();
 
-	bool ConnectToServer();
 	bool OnCreate();
 	void OnDestroy();
+	void Disconnect();
 	void Update();
 	void Send();
 	void SendRoomName(const char* roomName);

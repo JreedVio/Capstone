@@ -14,13 +14,9 @@ Client::Client() : NetworkUnit(UnitType::CLIENT)
 
 Client::~Client()
 {
+    Disconnect();
     if (client != nullptr) enet_host_destroy(client);
     peer = nullptr;
-}
-
-bool Client::ConnectToServer()
-{
-    return true;
 }
 
 bool Client::OnCreate()
@@ -97,6 +93,12 @@ bool Client::OnCreate()
 
 void Client::OnDestroy()
 {
+}
+
+void Client::Disconnect()
+{
+    if(peer != nullptr) enet_peer_disconnect(peer, 0);
+    if (client != nullptr) enet_host_flush(client);
 }
 
 void Client::Update()

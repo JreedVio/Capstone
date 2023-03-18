@@ -20,6 +20,7 @@ Server::Server() : NetworkUnit(UnitType::SERVER)
 
 Server::~Server()
 {
+    Disconnect();
     if (server != nullptr) enet_host_destroy(server);
     peer = nullptr;
 
@@ -74,6 +75,12 @@ bool Server::OnCreate()
 
 void Server::OnDestroy()
 {
+}
+
+void Server::Disconnect()
+{
+    if (peer != nullptr) enet_peer_disconnect(peer, 0);
+    if (server != nullptr) enet_host_flush(server);
 }
 
 void Server::Update()
@@ -161,12 +168,16 @@ void Server::Recieve(int tickrate)
         switch (event.type)
         {
         case ENET_EVENT_TYPE_CONNECT:
-            printf("A new client connected from %x:%u.\n",
-                event.peer->address.host,
-                event.peer->address.port);
-            if (peer == nullptr)
+            if (peer == nullptr) {
                 peer = event.peer;
-            remotePlayer->SetVisible(true);
+                remotePlayer->SetVisible(true);
+                std::cout << "Accepted connection from " << event.peer->address.host << ":" << event.peer->address.port << std::endl;
+            }
+            else {
+                // Decline the connection from all other clients
+                std::cout << "Declined connection from " << event.peer->address.host << ":" << event.peer->address.port << std::endl;
+                enet_peer_disconnect(event.peer, 0);
+            }
 
             break;
         case ENET_EVENT_TYPE_RECEIVE:

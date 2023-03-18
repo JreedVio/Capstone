@@ -62,6 +62,7 @@ void NetworkManager::ResetNetwork()
     isNetworkRunning = false;
 
     if (unit) {
+        unit->Disconnect();
         delete unit;
         unit = nullptr;
     }
@@ -85,8 +86,6 @@ void NetworkManager::Update()
 
             unit->Send();
             unit->Recieve(tickrate);
-
-            //std::cout << "Updating Networking";
         }
         SDL_Delay(timer->GetSleepTime(tickrate));
     }
