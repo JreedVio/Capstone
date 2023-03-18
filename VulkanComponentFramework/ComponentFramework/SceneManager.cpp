@@ -68,7 +68,6 @@ SceneManager::~SceneManager() {
 		networkManager = nullptr;
 	}
 
-
 	Debug::Info("Deleting the GameSceneManager", __FILE__, __LINE__);
 
 }
@@ -105,6 +104,12 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 		return false;
 	}
 
+	networkManager = new NetworkManager();
+	if (!networkManager->Initialize()) {
+		Debug::FatalError("Failed to initialize Network Manager", __FILE__, __LINE__);
+		return false;
+	}
+
 	//StartGame(CLIENT);
 
 	//Open Main Menu
@@ -131,19 +136,11 @@ void SceneManager::Run() {
 			uiManager->Display();
 			currentScene->Render();
 
-			//networkManager->Update();
-			//std::async(std::launch::async, RunNetworkUpdate, networkManager);
-
 			GetEvents();
 		}
 
 		SDL_Delay(timer->GetSleepTime(fps));
 	}
-}
-
-void SceneManager::RunNetworkUpdate(NetworkManager* networkManager_) {
-	
-	networkManager_->Update();
 }
 
 
@@ -156,20 +153,22 @@ bool SceneManager::StartGame(USERTYPE userType_){
 	remotePlayer = std::make_shared<PlayerController>(nullptr, "RemotePlayer");
 	remotePlayer->OnCreate();
 
-	networkManager = new NetworkManager();
 	//Set usertype
 	switch (userType_) {
 		case SERVER:
-			networkManager->SetUnitType(1);
+			if (!networkManager->StartNetwork((int)userType_)) {
+				Debug::FatalError("Failed to start Network Manager as a Server", __FILE__, __LINE__);
+				networkManager->ResetNetwork();
+				return false;
+			}
 			break;
 		case CLIENT:
-			networkManager->SetUnitType(0);
+			if (!networkManager->StartNetwork((int)userType_)) {
+				Debug::FatalError("Failed to start Network Manager as a Client", __FILE__, __LINE__);
+				networkManager->ResetNetwork();
+				return false;
+			}
 			break;
-	}
-
-	if (!networkManager->OnCreate()) {
-		Debug::FatalError("Failed to initialize Network Manager", __FILE__, __LINE__);
-		return false;
 	}
 
 	std::thread networking(&NetworkManager::Update, this->networkManager);
@@ -198,11 +197,8 @@ void SceneManager::RoomChange(const char* roomName_) {
 void SceneManager::MainMenu() {
 	//TODO Cleanup players
 	//Cleanup Network Manager
-	if (networkManager) {
-		//networkManager->OnDestroy();
-		delete networkManager;
-		networkManager = nullptr;
-	}
+	if(networkManager != nullptr)
+		networkManager->ResetNetwork();
 
 	BuildScene(MENUSCENE, "MainMenu");
 }

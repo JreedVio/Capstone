@@ -20,7 +20,9 @@ Server::Server() : NetworkUnit(UnitType::SERVER)
 
 Server::~Server()
 {
-    enet_host_destroy(server);
+    if (server != nullptr) enet_host_destroy(server);
+    peer = nullptr;
+
 }
 
 bool Server::OnCreate()
@@ -187,7 +189,8 @@ void Server::Recieve(int tickrate)
             printf("%x:%u disconnected.\n", event.peer->address.host, event.peer->address.port);
             /* Reset the peer's client information. */
             enet_peer_reset(peer);
-            //event.peer->data = NULL;
+            peer = nullptr;
+            event.peer->data = NULL;
             break;
         }
     }

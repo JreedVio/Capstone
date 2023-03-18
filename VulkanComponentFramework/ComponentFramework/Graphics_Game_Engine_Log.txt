@@ -1,4 +1,18 @@
 [INFO]: Starting the GameSceneManager
 [INFO]: AssetManager Created
 [INFO]: Succeed to Load Asset RendererAssets
+[FATAL ERROR]: Failed to start Network Manager as a Client in file: C:\Users\jreed\OneDrive\??????? ????\GitHub\Capstone\VulkanComponentFramework\ComponentFramework\SceneManager.cpp on line: 167
+[INFO]: Succeed to Load Scene TestScene
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
 [INFO]: Deleting the GameSceneManager

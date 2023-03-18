@@ -67,14 +67,14 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event)
 		//pos.z -= moveSpeed;
 		//transform->SetTransform(pos, orient);
 		
-		printf("W\n");
+		//printf("W\n");
 	}
 	if (KeyDown(KeyCode::A, Event))
 	{
 		//pos += (moveSpeed * -rightDirection * 0.15f * 0.15f);		
 		dir += -rightDirection;
 		//transform->SetTransform(pos, orient);
-		printf("A\n");
+		//printf("A\n");
 	}
 	if (KeyDown(KeyCode::S, Event))
 	{

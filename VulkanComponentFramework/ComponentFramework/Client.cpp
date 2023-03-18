@@ -15,6 +15,7 @@ Client::Client() : NetworkUnit(UnitType::CLIENT)
 Client::~Client()
 {
     if (client != nullptr) enet_host_destroy(client);
+    peer = nullptr;
 }
 
 bool Client::ConnectToServer()
@@ -232,7 +233,19 @@ void Client::Recieve(int tickrate)
             enet_packet_destroy(event.packet);
 
             break;
+
+        case ENET_EVENT_TYPE_DISCONNECT:
+            printf("%x:%u disconnected.\n", event.peer->address.host, event.peer->address.port);
+            /* Reset the peer's client information. */
+            enet_peer_reset(peer);
+            peer = nullptr;
+            event.peer->data = NULL;
+
+            SceneManager::GetInstance()->MainMenu();
+
+            break;
         }
+
     }
 }
 

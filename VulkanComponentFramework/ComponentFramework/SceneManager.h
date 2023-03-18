@@ -17,8 +17,8 @@ enum SCENETYPE {
 };
 
 enum USERTYPE {
-	SERVER = 0,
-	CLIENT
+	CLIENT = 0,
+	SERVER
 };
 
 

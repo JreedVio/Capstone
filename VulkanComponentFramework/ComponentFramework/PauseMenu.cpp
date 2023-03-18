@@ -73,8 +73,8 @@ void PauseMenu::showPauseMenu() {
     ImGui::SetCursorPos(buttonLocation);
     if (ImGui::Button("Main Menu", buttonSize)) {
         //Got back to main menu
-        //ShowWindow(false);
-        //SceneManager::GetInstance()->MainMenu();
+        ShowWindow(false);
+        SceneManager::GetInstance()->MainMenu();
     }
 
     buttonLocation.y += heightInterval;

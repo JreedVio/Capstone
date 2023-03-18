@@ -4,13 +4,15 @@
 #include "SceneManager.h"
 #include "Timer.h"
 
-NetworkManager::NetworkManager() : tickrate(30), isServer(0){
+NetworkManager::NetworkManager() : tickrate(30), isNetworkRunning(false){
 }
 
 NetworkManager::~NetworkManager()
 {
-    delete unit;
-    unit = nullptr;
+    if (unit) {
+        delete unit;
+        unit = nullptr;
+    }
 
     if (timer) {
         delete timer;
@@ -18,7 +20,7 @@ NetworkManager::~NetworkManager()
     }
 }
 
-bool NetworkManager::OnCreate()
+bool NetworkManager::Initialize()
 {
     timer = new Timer();
     if (timer == nullptr) {
@@ -33,39 +35,47 @@ bool NetworkManager::OnCreate()
     }
     atexit(enet_deinitialize);
 
-    //while (true) {
-    //    std::cout << "Enter 0 if you are a client or 1 if you are a server\n";
-    //    std::cin >> isServer;
-        if (isServer == 0) {
-            // Create Client
-            unit = new Client();
-            if (!unit->OnCreate()) return false;
-
-            //break;
-        }
-        else if (isServer == 1) {
-            // Create Server
-            unit = new Server();
-            if (!unit->OnCreate()) return false;
-
-            //break;
-        }
-        else {
-            std::cout << "Wrong input. Try again\n";
-        }
-    //}
     return true;
 }
 
-void NetworkManager::OnDestroy()
+bool NetworkManager::StartNetwork(int isServer)
 {
+    if (isServer == 0) {
+        // Create Client
+        unit = new Client();
+        if (!unit->OnCreate()) return false;
+    }
+    else if (isServer == 1) {
+        // Create Server
+        unit = new Server();
+        if (!unit->OnCreate()) return false;
+    }
+    else {
+        Debug::Error("Failed to use input parameter for Network Manager (it has to be 0 or 1)\n", __FILE__, __LINE__);
+    }
+    isNetworkRunning = true;
+    return true;
 }
+
+void NetworkManager::ResetNetwork()
+{
+    isNetworkRunning = false;
+
+    if (unit) {
+        delete unit;
+        unit = nullptr;
+    }
+}
+
+void NetworkManager::OnDestroy()
+{}
 
 void NetworkManager::Update()
 {
     timer->Start();
 
-    while (SceneManager::GetInstance()->GetIsRunning()) {
+    while (isNetworkRunning && SceneManager::GetInstance()->GetIsRunning() &&
+           SceneManager::GetInstance() != nullptr) {
         {
             //ChronoTimer chronoTimer;
 
@@ -75,6 +85,8 @@ void NetworkManager::Update()
 
             unit->Send();
             unit->Recieve(tickrate);
+
+            //std::cout << "Updating Networking";
         }
         SDL_Delay(timer->GetSleepTime(tickrate));
     }
