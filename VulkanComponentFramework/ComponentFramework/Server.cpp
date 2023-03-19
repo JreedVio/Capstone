@@ -195,9 +195,12 @@ void Server::Recieve(int tickrate)
         case ENET_EVENT_TYPE_DISCONNECT:
             printf("%x:%u disconnected.\n", event.peer->address.host, event.peer->address.port);
             /* Reset the peer's client information. */
-            enet_peer_reset(peer);
-            peer = nullptr;
-            event.peer->data = NULL;
+            if (peer == event.peer) {
+                enet_peer_reset(peer);
+                peer = nullptr;
+                event.peer->data = NULL;
+                remotePlayer->SetVisible(false);
+            }
             break;
         }
     }
