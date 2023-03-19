@@ -11,6 +11,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Room.h"
+#include "CodePuzzleRoom.h"
 #include "RoomScene.h"
 #include "Physics.h"
 
@@ -238,19 +239,38 @@ bool AssetManager::CreateActors(){
 	return true;
 }
 
-Scene* AssetManager::CreateRoom(XMLElement* roomData){
+Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 
+	Ref<Room> room_;
 	//Get information for room (size, time)
 	XMLElement* sizeData = roomData->FirstChildElement("Size");
 	float width = sizeData->FloatAttribute("x");
 	float height = sizeData->FloatAttribute("y");
 	float length = sizeData->FloatAttribute("z");
-	Ref<Room> room_ = std::make_shared<Room>(width, length, height);
-
-	Scene* scene_ = new RoomScene(renderer, room_);
 	XMLElement* timeData = roomData->FirstChildElement("RoomTime");
 	float time_ = timeData->FloatAttribute("time");
+	XMLElement* typeData = roomData->FirstChildElement("PuzzleType");
+
+	if (typeData) {
+		const char* puzzleType = typeData->FindAttribute("name")->Value();
+		if (strcmp(puzzleType, "CodePuzzle") == 0) {
+			room_ = std::make_shared<CodePuzzleRoom>(width, length, height);
+		}
+		//else if(strcmp(puzzleType, "Puzzle2") == 0) {
+
+		//}
+		//else if (strcmp(puzzleType, "Puzzle3") == 0) {
+
+		//}
+	}
+
+	else {
+		room_ = std::make_shared<Room>(width, length, height);
+	}
+
 	room_->SetRoomTime(time_);
+
+	Scene* scene_ = new RoomScene(renderer, room_);
 	
 	//Add WallData
 	XMLElement* wallData = roomData->FirstChildElement("WallActor");

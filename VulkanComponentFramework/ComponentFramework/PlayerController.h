@@ -25,12 +25,10 @@ private:
 public:
 
     PlayerController(Component* parent_, const char* actorName_);   
-
     
     void GetPlayerInput(const SDL_Event& Event);
 
     virtual ~PlayerController();
-
     
     bool OnCreate() override;
     void OnDestroy() override;

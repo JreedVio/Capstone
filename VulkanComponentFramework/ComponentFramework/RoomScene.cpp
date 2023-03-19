@@ -4,6 +4,7 @@
 #include "MMath.h"
 #include "Debug.h"
 #include "VulkanRenderer.h"
+#include "UIManager.h"
 #include "Camera.h"
 #include "GlobalLighting.h"
 #include "SceneManager.h"
@@ -11,6 +12,7 @@
 #include "TransformComponent.h"
 #include "Physics.h"
 #include <thread>
+#include "CodeActor.h"
 
 using namespace PHYSICS;
 
@@ -18,9 +20,8 @@ RoomScene::RoomScene(VulkanRenderer* renderer_):Scene(renderer_) {
     camera = std::make_shared<CameraActor>(nullptr);
 }
 
-RoomScene::RoomScene(VulkanRenderer* renderer_, Ref<Room> room_):Scene(renderer_), room(room_){
+RoomScene::RoomScene(VulkanRenderer* renderer_, Ref<Room> room_):Scene(renderer_), room(room_) {
     camera = std::make_shared<CameraActor>(nullptr);
-
 }
 
 RoomScene::~RoomScene(){
@@ -30,7 +31,6 @@ RoomScene::~RoomScene(){
 bool RoomScene::OnCreate(){
 
     float aspectRatio = static_cast<float>(renderer->GetWidth()) / static_cast<float>(renderer->GetHeight());
-
 
     //Add the players to the scene, and spawn at the desired location
     remotePlayer = SceneManager::GetInstance()->GetRemotePlayer();
@@ -132,11 +132,15 @@ void RoomScene::Update(const float deltaTime) {
             }
 
         }
+        if (std::dynamic_pointer_cast<CodeActor>(actor_)) {
+            actor_->Update(deltaTime);
+            if (!actorCollision) continue;
 
-        if (actorCollision) {
-            //localPawn->GetComponent<Physics>()->TestTwoAABB(localPawnCollision.get(), actorCollision.get());
+            if (localPawn->GetComponent<Physics>()->TestTwoAABB(localPawnCollision, actorCollision)) {
+                actor_->CollisionResponse();
+
+            }
         }
-
     }        
     
     localPlayer->GetPawn()->GetComponent<AABB>()->SetCentre(localPlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition());
@@ -170,6 +174,14 @@ void RoomScene::HandleEvents(const SDL_Event& sdlEvent) {
         if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_O) {
             Ref<DoorActor> doorActor = std::dynamic_pointer_cast<DoorActor>(GetActor("Door"));
             doorActor->SetIsOpened(!doorActor->GetIsOpened());
+        }
+        else if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_O) {
+            Ref<DoorActor> doorActor = std::dynamic_pointer_cast<DoorActor>(GetActor("Door"));
+            doorActor->SetIsOpened(!doorActor->GetIsOpened());
+        }
+        else if (sdlEvent.key.keysym.scancode == SDL_SCANCODE_L) {
+            UIManager::getInstance()->openMenu("CodeUI");
+
         }
     }
 }

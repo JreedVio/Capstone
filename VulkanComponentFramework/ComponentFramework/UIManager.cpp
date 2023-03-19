@@ -3,6 +3,7 @@
 #include "SettingMenu.h"
 #include "MainMenu.h"
 #include "PauseMenu.h"
+#include "CodeUI.h"
 
 
 UIManager* UIManager::instance_(nullptr);
@@ -58,6 +59,10 @@ bool UIManager::OnCreate(){
 	pauseMenu_->AddChildUI("SettingMenu", settingMenu);
 	UIManager::getInstance()->AddUserInterface("PauseMenu", pauseMenu_);
 
+	//Add Code menu to the ui manager
+	CodeUI* codeUIMenu_ = new CodeUI(nullptr);
+	AddUserInterface("CodeUI", codeUIMenu_);
+	codeUIMenu_->ShowWindow(false);
 
 	return true;
 }

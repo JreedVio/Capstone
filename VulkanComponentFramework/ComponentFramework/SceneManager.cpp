@@ -247,7 +247,7 @@ void SceneManager::GetEvents() {
 				break;
 
 			case SDL_SCANCODE_F2:
-				BuildScene(ROOMSCENE, "TestScene2");
+				BuildScene(ROOMSCENE, "CodePuzzle");
 				break;
 
 			case SDL_SCANCODE_F3:

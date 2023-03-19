@@ -2,15 +2,21 @@
 
 
 Room::Room(int width_, int length_, int height_): width(width_), length(length_), height(height_),
-                                                  roomTime(10.0f) {
+                                                  roomTime(10.0f), puzzleSolved(false) {
     currentTime = roomTime;
 }
 
-Room::~Room()
-{
+Room::~Room(){
+}
+
+bool Room::OnCreate(){
+    return false;
 }
 
 void Room::Update(float deltaTime){
+
+
+    if (puzzleSolved) door->SetIsOpened(true);
 
     //When reaches 0, call the time over function.
     if (currentTime <= 0.0f) {
@@ -18,10 +24,8 @@ void Room::Update(float deltaTime){
         TimeOver();
         return;
     }
-
     //Update timer for the room
     currentTime -= deltaTime;
-    //printf("Current Time: %f\n", currentTime);
 
 }
 
