@@ -14,12 +14,9 @@ Client::Client() : NetworkUnit(UnitType::CLIENT)
 
 Client::~Client()
 {
+    Disconnect();
     if (client != nullptr) enet_host_destroy(client);
-}
-
-bool Client::ConnectToServer()
-{
-    return true;
+    peer = nullptr;
 }
 
 bool Client::OnCreate()
@@ -59,25 +56,23 @@ bool Client::OnCreate()
         return false;
     }
 
-    // Get scene and actors
-    SceneManager* sceneManager = SceneManager::GetInstance();
-    //if (scene == nullptr) {
-    //    Debug::FatalError("Failed to get Current Scene", __FILE__, __LINE__);
-    //    return false;
-    //}
-
-    localPlayer = sceneManager->GetLocalPlayer()->GetPawn();
-    remotePlayer = sceneManager->GetRemotePlayer()->GetPawn();
-    if (localPlayer == nullptr || remotePlayer == nullptr) {
-        Debug::FatalError("Failed to get Player Actors", __FILE__, __LINE__);
-        return false;
-    }
+    
 
     /* Wait up to 5 seconds for the connection attempt to succeed. */
     if (enet_host_service(client, &event, 5000) > 0 &&
         event.type == ENET_EVENT_TYPE_CONNECT)
     {
         std::cout << "Connection to " << hostName << " succeeded.\n";
+        
+        // Get scene and actors
+        SceneManager* sceneManager = SceneManager::GetInstance();
+        sceneManager->CreatePlayers();
+        localPlayer = sceneManager->GetLocalPlayer()->GetPawn();
+        remotePlayer = sceneManager->GetRemotePlayer()->GetPawn();
+        if (localPlayer == nullptr || remotePlayer == nullptr) {
+            Debug::FatalError("Failed to get Player Actors", __FILE__, __LINE__);
+            return false;
+        }
         remotePlayer->SetVisible(true);
 
         return true;
@@ -96,6 +91,12 @@ bool Client::OnCreate()
 
 void Client::OnDestroy()
 {
+}
+
+void Client::Disconnect()
+{
+    if(peer != nullptr) enet_peer_disconnect(peer, 0);
+    if (client != nullptr) enet_host_flush(client);
 }
 
 void Client::Update()
@@ -232,7 +233,19 @@ void Client::Recieve(int tickrate)
             enet_packet_destroy(event.packet);
 
             break;
+
+        case ENET_EVENT_TYPE_DISCONNECT:
+            printf("%x:%u disconnected.\n", event.peer->address.host, event.peer->address.port);
+            /* Reset the peer's client information. */
+            enet_peer_reset(peer);
+            peer = nullptr;
+            event.peer->data = NULL;
+
+            SceneManager::GetInstance()->SetOpenMainMenu(true);
+
+            break;
         }
+
     }
 }
 
@@ -269,7 +282,7 @@ void Client::ProcessMessage(Message& msg)
         //msg >> roomName;
         SceneManager* sceneManager = SceneManager::GetInstance();
         sceneManager->GetCurrentScene()->SetStatus(ROOMTRANSIT);
-        sceneManager->SetNextScene("TestScene2");
+        sceneManager->SetNextScene(std::dynamic_pointer_cast<DoorActor>(sceneManager->GetCurrentScene()->GetActor("Door"))->GetConnectedRoom());
     }
 }
 

@@ -28,6 +28,12 @@ bool Input::KeyDown(KeyCode Key, const SDL_Event& Event)
 	else { return false; }*/
 }
 
+bool Input::KeyPressed(KeyCode Key, const SDL_Event& Event)
+{
+	if (Event.type == SDL_KEYDOWN && Event.key.keysym.scancode == (SDL_Scancode)Key) { return true; }
+	else { return false; }
+}
+
 bool Input::KeyUP(KeyCode Key, const SDL_Event& Event)
 {
 	if (Event.type == SDL_KEYUP && Event.key.keysym.scancode == (SDL_Scancode)Key) { return true; }

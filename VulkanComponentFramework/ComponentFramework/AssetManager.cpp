@@ -67,6 +67,7 @@ Scene* AssetManager::LoadRoom(const char* sceneName_) {
 	Scene* room_ = CreateRoom(fileData);
 
 	Debug::Info("Succeed to Load Scene " + std::string(sceneName_), __FILE__, __LINE__);
+	room_->SetSceneName(sceneName_);
 	return room_;
 }
 

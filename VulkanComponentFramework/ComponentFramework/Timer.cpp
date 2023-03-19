@@ -25,9 +25,9 @@ void Timer::Start() {
 float Timer::GetDeltaTime() const {
 	float tickInterval = float(currTicks - prevTicks);
 
-	if (tickInterval / 1000.0f >= MAX_INTERVAL) {
-		tickInterval = 0.0f;
-	}
+	//if (tickInterval / 1000.0f >= MAX_INTERVAL) {
+	//	tickInterval = 0.0f;
+	//}
 
 	return (tickInterval / 1000.0f);
 }
@@ -36,10 +36,6 @@ unsigned int Timer::GetSleepTime(const unsigned int fps) const {
 	unsigned int milliSecsPerFrame = 1000 / fps;
 	if (milliSecsPerFrame == 0) {
 		return 0;
-	}
-
-	if (fps == 64) {
-		//std::cout << "YO";
 	}
 
 	unsigned int sleepTime = milliSecsPerFrame - (SDL_GetTicks() - currTicks);

@@ -20,7 +20,8 @@ SceneManager* SceneManager::Instance(nullptr);
 SceneManager::SceneManager(): 
 	currentScene(nullptr), timer(nullptr),
 	fps(60), isRunning(false), rendererType(RendererType::VULKAN), 
-	renderer(nullptr), assetManager(nullptr), uiManager(nullptr) {}
+	renderer(nullptr), assetManager(nullptr), uiManager(nullptr),
+	openMainMenu(false){}
 
 SceneManager* SceneManager::GetInstance(){
 	if (!Instance) {
@@ -68,7 +69,6 @@ SceneManager::~SceneManager() {
 		networkManager = nullptr;
 	}
 
-
 	Debug::Info("Deleting the GameSceneManager", __FILE__, __LINE__);
 
 }
@@ -105,6 +105,12 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 		return false;
 	}
 
+	networkManager = new NetworkManager();
+	if (!networkManager->Initialize()) {
+		Debug::FatalError("Failed to initialize Network Manager", __FILE__, __LINE__);
+		return false;
+	}
+
 	//StartGame(CLIENT);
 
 	//Open Main Menu
@@ -123,16 +129,19 @@ void SceneManager::Run() {
 	{
 			//ChronoTimer chronoTimer;
 			timer->UpdateFrameTicks();
-			currentScene->Update(timer->GetDeltaTime());
-			uiManager->Update(currentScene);
 			if (currentScene->GetStatus() == ROOMTRANSIT) {
 				BuildScene(ROOMSCENE, nextScene);
 			}
+			if (openMainMenu && !dynamic_cast<MenuScene*>(currentScene)) {
+				MainMenu();
+				openMainMenu = false;
+			}
+			if(openMainMenu) openMainMenu = false;
+
+			currentScene->Update(timer->GetDeltaTime());
+			uiManager->Update(currentScene);
 			uiManager->Display();
 			currentScene->Render();
-
-			//networkManager->Update();
-			//std::async(std::launch::async, RunNetworkUpdate, networkManager);
 
 			GetEvents();
 		}
@@ -141,35 +150,24 @@ void SceneManager::Run() {
 	}
 }
 
-void SceneManager::RunNetworkUpdate(NetworkManager* networkManager_) {
-	
-	networkManager_->Update();
-}
-
 
 bool SceneManager::StartGame(USERTYPE userType_){
-
-	//Create Players
-	localPlayer = std::make_shared<PlayerController>(nullptr, "LocalPlayer");
-	localPlayer->OnCreate();
-
-	remotePlayer = std::make_shared<PlayerController>(nullptr, "RemotePlayer");
-	remotePlayer->OnCreate();
-
-	networkManager = new NetworkManager();
 	//Set usertype
 	switch (userType_) {
 		case SERVER:
-			networkManager->SetUnitType(1);
+			if (!networkManager->StartNetwork((int)userType_)) {
+				Debug::FatalError("Failed to start Network Manager as a Server", __FILE__, __LINE__);
+				networkManager->ResetNetwork();
+				return false;
+			}
 			break;
 		case CLIENT:
-			networkManager->SetUnitType(0);
+			if (!networkManager->StartNetwork((int)userType_)) {
+				Debug::FatalError("Failed to start Network Manager as a Client", __FILE__, __LINE__);
+				networkManager->ResetNetwork();
+				return false;
+			}
 			break;
-	}
-
-	if (!networkManager->OnCreate()) {
-		Debug::FatalError("Failed to initialize Network Manager", __FILE__, __LINE__);
-		return false;
 	}
 
 	std::thread networking(&NetworkManager::Update, this->networkManager);
@@ -198,11 +196,10 @@ void SceneManager::RoomChange(const char* roomName_) {
 void SceneManager::MainMenu() {
 	//TODO Cleanup players
 	//Cleanup Network Manager
-	if (networkManager) {
-		//networkManager->OnDestroy();
-		delete networkManager;
-		networkManager = nullptr;
-	}
+	if(networkManager != nullptr)
+		networkManager->ResetNetwork();
+
+	uiManager->GetUI("PauseMenu")->ShowWindow(false);
 
 	BuildScene(MENUSCENE, "MainMenu");
 }
@@ -225,6 +222,16 @@ bool SceneManager::GameWin(){
 		return true;
 	}
 	return false;
+}
+
+void SceneManager::CreatePlayers()
+{
+	//Create Players
+	localPlayer = std::make_shared<PlayerController>(nullptr, "LocalPlayer");
+	localPlayer->OnCreate();
+
+	remotePlayer = std::make_shared<PlayerController>(nullptr, "RemotePlayer");
+	remotePlayer->OnCreate();
 }
 
 void SceneManager::GetEvents() {

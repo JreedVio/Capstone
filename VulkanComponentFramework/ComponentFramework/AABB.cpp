@@ -154,7 +154,7 @@ void PHYSICS::AABB::Update(const float deltaTime_)
 	}
 	else
 	{
-		SetCentre(ParentTransform->GetPosition() + Vec3(0.0f, 2.0f, 0.0f));
+		SetCentre(ParentTransform->GetPosition() + Vec3(0.0f, 1.7f, 0.0f));
 	}
 	SetBounds(scale, centre, orientation);
 	Add(bounds);

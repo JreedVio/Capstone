@@ -32,12 +32,12 @@ void PHYSICS::DynamicLinearMovement::Update(const float deltaTime)
 	
 	orient = TransformRef->GetOrientation();
 	pos = TransformRef->GetPosition();
-	vel.print();
+	//vel.print();
 	//accel.print();
 	if (!collision)
 	{
 		accel = Gravity / mass;	
-		accel.print();
+		//accel.print();
 	}
 	else
 	{

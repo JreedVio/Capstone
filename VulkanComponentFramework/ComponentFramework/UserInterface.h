@@ -55,7 +55,10 @@ public:
 		height = height_;
 	}
 	void SetParent(UserInterface* parent_) { parent = parent_; }
-	void ShowWindow(bool showWindow_) { showWindow = showWindow_; }
+	void ShowWindow(bool showWindow_) { 
+		showWindow = showWindow_; 
+		//printf("Showing\n");
+	}
 	bool isOpened() { 
 		if (showWindow) return showWindow;
 		for (auto ui_ : UIChildList) {

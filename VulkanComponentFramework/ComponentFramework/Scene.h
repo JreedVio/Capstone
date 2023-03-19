@@ -44,6 +44,8 @@ public:
 	virtual Ref<Actor> GetActor(const char* name_) = 0;
 	virtual SceneStatus GetStatus() { return sceneStatus; }
 	virtual void SetStatus(SceneStatus status_) { sceneStatus = status_; }
+	virtual const char* GetSceneName() { return sceneName; }
+	virtual void SetSceneName(const char* sceneName_) { sceneName = sceneName_; }
 
 protected:
 	VulkanRenderer* renderer;
@@ -51,5 +53,6 @@ protected:
 	std::unordered_map<const char*, Ref<Actor>> actorList;
 	std::vector<Ref<LightActor>> globalLights;
 	SceneStatus sceneStatus;
+	const char* sceneName;
 };
 #endif

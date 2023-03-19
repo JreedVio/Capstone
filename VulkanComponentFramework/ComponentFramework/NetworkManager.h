@@ -11,17 +11,18 @@ class NetworkManager
 private:
 	NetworkUnit* unit;
 	class Timer* timer;
-	int isServer;
 	unsigned int tickrate;
 	const char* roomName;
+	bool isNetworkRunning;
 
 public:
 	NetworkManager();
 	~NetworkManager();
 	NetworkUnit* GetUnit() { return unit; }
-	bool OnCreate();
+	bool Initialize();
+	bool StartNetwork(int isServer);
+	void ResetNetwork();
 	void OnDestroy();
 	void Update();
-	void SetUnitType(int type_) { isServer = type_; }
 };
 

@@ -1,3 +1,56 @@
 [INFO]: Starting the GameSceneManager
 [INFO]: AssetManager Created
 [INFO]: Succeed to Load Asset RendererAssets
+[INFO]: Succeed to Load Scene TestScene
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Succeed to Load Scene TestScene2
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Succeed to Load Scene TestScene
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Succeed to Load Scene TestScene2
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting the GameSceneManager

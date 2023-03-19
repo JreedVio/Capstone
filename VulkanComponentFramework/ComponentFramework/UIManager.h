@@ -23,10 +23,10 @@ protected:
 	ImGuiStyle* style;
 	bool menuHovered;
 
-	UserInterface* GetUI(const char*);
 
 public:
 
+	UserInterface* GetUI(const char*);
 	VkDescriptorPool descriptorPool;
 
 	~UIManager();

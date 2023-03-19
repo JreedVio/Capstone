@@ -80,6 +80,7 @@ public:
 	void GetMouseInput();
 
 	bool KeyDown(KeyCode Key, const SDL_Event& Event);
+	bool KeyPressed(KeyCode Key, const SDL_Event& Event);
 	bool KeyUP(KeyCode Key, const SDL_Event& Event);
 	bool MButtonDown(MouseButton Button, const SDL_Event& Event);
 	bool MButtonUP(MouseButton Button, const SDL_Event& Event);
