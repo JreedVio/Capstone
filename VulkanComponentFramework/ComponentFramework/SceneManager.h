@@ -34,6 +34,7 @@ public:
 	bool GetIsRunning() { return isRunning; }
 	Scene* GetCurrentScene() { return currentScene; }
 	void SetNextScene(const char* nextScene_) { nextScene = nextScene_; }
+	void SetOpenMainMenu(bool openMainMenu_) { openMainMenu = openMainMenu_; }
 	Ref<PlayerController> GetRemotePlayer() { return remotePlayer; }
 	Ref<PlayerController> GetLocalPlayer() { return localPlayer; }
 	bool StartGame(USERTYPE userType_);
@@ -42,6 +43,7 @@ public:
 	void MainMenu();
 	bool GameOver();
 	bool GameWin();
+	void CreatePlayers();
 	
 private:
 
@@ -62,6 +64,7 @@ private:
 	UIManager* uiManager;
 	unsigned int fps;
 	bool isRunning;
+	bool openMainMenu;
 	void BuildScene(SCENETYPE scenetype_, const char* fileName);
 
 	int winCondition = 10;

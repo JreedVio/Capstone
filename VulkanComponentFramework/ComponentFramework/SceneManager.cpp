@@ -20,7 +20,8 @@ SceneManager* SceneManager::Instance(nullptr);
 SceneManager::SceneManager(): 
 	currentScene(nullptr), timer(nullptr),
 	fps(60), isRunning(false), rendererType(RendererType::VULKAN), 
-	renderer(nullptr), assetManager(nullptr), uiManager(nullptr) {}
+	renderer(nullptr), assetManager(nullptr), uiManager(nullptr),
+	openMainMenu(false){}
 
 SceneManager* SceneManager::GetInstance(){
 	if (!Instance) {
@@ -128,11 +129,17 @@ void SceneManager::Run() {
 	{
 			//ChronoTimer chronoTimer;
 			timer->UpdateFrameTicks();
-			currentScene->Update(timer->GetDeltaTime());
-			uiManager->Update(currentScene);
 			if (currentScene->GetStatus() == ROOMTRANSIT) {
 				BuildScene(ROOMSCENE, nextScene);
 			}
+			if (openMainMenu && !dynamic_cast<MenuScene*>(currentScene)) {
+				MainMenu();
+				openMainMenu = false;
+			}
+			if(openMainMenu) openMainMenu = false;
+
+			currentScene->Update(timer->GetDeltaTime());
+			uiManager->Update(currentScene);
 			uiManager->Display();
 			currentScene->Render();
 
@@ -145,14 +152,6 @@ void SceneManager::Run() {
 
 
 bool SceneManager::StartGame(USERTYPE userType_){
-
-	//Create Players
-	localPlayer = std::make_shared<PlayerController>(nullptr, "LocalPlayer");
-	localPlayer->OnCreate();
-
-	remotePlayer = std::make_shared<PlayerController>(nullptr, "RemotePlayer");
-	remotePlayer->OnCreate();
-
 	//Set usertype
 	switch (userType_) {
 		case SERVER:
@@ -200,6 +199,8 @@ void SceneManager::MainMenu() {
 	if(networkManager != nullptr)
 		networkManager->ResetNetwork();
 
+	uiManager->GetUI("PauseMenu")->ShowWindow(false);
+
 	BuildScene(MENUSCENE, "MainMenu");
 }
 
@@ -221,6 +222,16 @@ bool SceneManager::GameWin(){
 		return true;
 	}
 	return false;
+}
+
+void SceneManager::CreatePlayers()
+{
+	//Create Players
+	localPlayer = std::make_shared<PlayerController>(nullptr, "LocalPlayer");
+	localPlayer->OnCreate();
+
+	remotePlayer = std::make_shared<PlayerController>(nullptr, "RemotePlayer");
+	remotePlayer->OnCreate();
 }
 
 void SceneManager::GetEvents() {

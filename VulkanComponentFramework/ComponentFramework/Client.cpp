@@ -56,25 +56,23 @@ bool Client::OnCreate()
         return false;
     }
 
-    // Get scene and actors
-    SceneManager* sceneManager = SceneManager::GetInstance();
-    //if (scene == nullptr) {
-    //    Debug::FatalError("Failed to get Current Scene", __FILE__, __LINE__);
-    //    return false;
-    //}
-
-    localPlayer = sceneManager->GetLocalPlayer()->GetPawn();
-    remotePlayer = sceneManager->GetRemotePlayer()->GetPawn();
-    if (localPlayer == nullptr || remotePlayer == nullptr) {
-        Debug::FatalError("Failed to get Player Actors", __FILE__, __LINE__);
-        return false;
-    }
+    
 
     /* Wait up to 5 seconds for the connection attempt to succeed. */
     if (enet_host_service(client, &event, 5000) > 0 &&
         event.type == ENET_EVENT_TYPE_CONNECT)
     {
         std::cout << "Connection to " << hostName << " succeeded.\n";
+        
+        // Get scene and actors
+        SceneManager* sceneManager = SceneManager::GetInstance();
+        sceneManager->CreatePlayers();
+        localPlayer = sceneManager->GetLocalPlayer()->GetPawn();
+        remotePlayer = sceneManager->GetRemotePlayer()->GetPawn();
+        if (localPlayer == nullptr || remotePlayer == nullptr) {
+            Debug::FatalError("Failed to get Player Actors", __FILE__, __LINE__);
+            return false;
+        }
         remotePlayer->SetVisible(true);
 
         return true;
@@ -243,7 +241,7 @@ void Client::Recieve(int tickrate)
             peer = nullptr;
             event.peer->data = NULL;
 
-            SceneManager::GetInstance()->MainMenu();
+            SceneManager::GetInstance()->SetOpenMainMenu(true);
 
             break;
         }

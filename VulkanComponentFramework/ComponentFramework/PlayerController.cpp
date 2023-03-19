@@ -36,9 +36,9 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event)
 
 
 	//UI events first
-	if (KeyDown(KeyCode::ESC, Event))
+	if (KeyPressed(KeyCode::ESC, Event))
 	{
-		//printf("Key Pressed\n");
+		printf("ESC Pressed\n");
 		uiManager->openMenu("PauseMenu");
 	}
 

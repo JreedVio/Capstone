@@ -257,6 +257,6 @@ UserInterface* UIManager::GetUI(const char* uiName_) {
 			return ui_.second;
 		}
 
-		return nullptr;
 	}
+	return nullptr;
 }

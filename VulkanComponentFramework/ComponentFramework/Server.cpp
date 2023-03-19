@@ -59,11 +59,7 @@ bool Server::OnCreate()
 
     // Get scene and actors
     SceneManager* sceneManager = SceneManager::GetInstance();
-    //if (scene == nullptr) {
-    //    Debug::FatalError("Failed to get Current Scene", __FILE__, __LINE__);
-    //    return false;
-    //}
-
+    sceneManager->CreatePlayers();
     localPlayer = sceneManager->GetLocalPlayer()->GetPawn();
     remotePlayer = sceneManager->GetRemotePlayer()->GetPawn();
     if (localPlayer == nullptr || remotePlayer == nullptr) {
