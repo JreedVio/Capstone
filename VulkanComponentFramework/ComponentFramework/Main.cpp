@@ -1,5 +1,5 @@
 #define _CRTDBG_MAP_ALLOC  
-#include <stdlib.h>  
+#include <stdlib.h>   
 #include <crtdbg.h>
 #include <string>
 #include "SceneManager.h"
@@ -23,9 +23,9 @@ int main(int argc, char* args[]) {
 			gsm->Run();
 		}
 		delete gsm;
-		Memory::PrintTotalMemoryAndAllocations();		
+		//Memory::PrintTotalMemoryAndAllocations();		
 		
 	}	
-
+	//std::atexit(Utilities::Memory::PrintCurrentMemoryAndAllocations);
 	exit(0);
 }

@@ -44,7 +44,7 @@ namespace PHYSICS
 		static bool TestAABB(Ref<AABB> b1, Ref<AABB> b2);
 
 		void SetCentre(const Vec3 centre_) { centre = centre_; }
-		const Vec3 GetCentre() const { return centre; }
+		Vec3 GetCentre() const { return centre; }
 
 		virtual ~AABB();
 		virtual bool OnCreate() { return true; }

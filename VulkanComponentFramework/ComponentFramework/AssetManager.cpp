@@ -252,6 +252,75 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 	XMLElement* timeData = roomData->FirstChildElement("RoomTime");
 	float time_ = timeData->FloatAttribute("time");
 	room_->SetRoomTime(time_);
+
+	//Add PuzzleData
+	XMLElement* puzzleData = roomData->FirstChildElement("PuzzleActor");
+	if (puzzleData)
+	{
+		XMLElement* pressurePlate = puzzleData->FirstChildElement("PressurePlate");
+		while (pressurePlate)
+		{
+			const char* plateName = pressurePlate->FindAttribute("name")->Value();
+			const char* plateActorName = pressurePlate->FindAttribute("actor")->Value();
+
+			Ref<Actor> plateActorData = GetActor(plateActorName);
+			Ref<Actor> plateActor = std::make_shared<Actor>(*plateActorData.get());
+
+			Vec3 position;
+			Quaternion rotation;
+			Vec3 scale(0.45f, 0.05f, 0.45f);
+
+			// 0 - 1 - 2
+			// 3 - 4 - 5
+			// 6 - 7 - 8		
+
+			float floorY = -0.5f;
+			if (strcmp(plateName, "Plate0") == 0) {
+
+				position = Vec3(-1.0f, floorY, -1.0f);
+			}
+			else if (strcmp(plateName, "Plate1") == 0) {
+
+				position = Vec3(0.0f, floorY, -1.0f);
+			}
+			else if (strcmp(plateName, "Plate2") == 0) {
+
+				position = Vec3(1.0f, floorY, -1.0f);
+			}
+			else if (strcmp(plateName, "Plate3") == 0) {
+
+				position = Vec3(-1.0f, floorY, 0.0f);
+
+			}
+			else if (strcmp(plateName, "Plate4") == 0) {
+
+				position = Vec3(0.0f, floorY, 0.0f);
+			}
+			else if (strcmp(plateName, "Plate5") == 0) {
+
+				position = Vec3(1.0f, floorY, 0.0f);
+			}
+			else if (strcmp(plateName, "Plate6") == 0) {
+
+				position = Vec3(-1.0f, floorY, 1.0f);
+			}
+			else if (strcmp(plateName, "Plate7") == 0) {
+
+				position = Vec3(0.0f, floorY, 1.0f);
+			}
+			else if (strcmp(plateName, "Plate8") == 0) {
+
+				position = Vec3(1.0f, floorY, 1.0f);
+			}
+
+			Ref<TransformComponent> transform;
+			transform = std::make_shared<TransformComponent>(plateActor.get(), position, rotation, scale);
+			plateActor->AddComponent(transform);
+			plateActor->OnCreate();
+			room_->AddActor(plateName, plateActor);
+			pressurePlate = pressurePlate->NextSiblingElement("PressurePlate");
+		}
+	}
 	
 	//Add WallData
 	XMLElement* wallData = roomData->FirstChildElement("WallActor");
