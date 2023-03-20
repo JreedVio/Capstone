@@ -36,6 +36,7 @@ namespace PHYSICS
 
 
 		void SetVel(Vec3 vel_) { vel = vel_; }
+		void SetAccel(Vec3 accel_) { accel = accel_; }
 
 		virtual ~DynamicLinearMovement();
 		virtual bool OnCreate() { return true; }

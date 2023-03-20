@@ -14,6 +14,19 @@
 	<Wall name="Bottom" actor="Floor"/>
 	</WallActor>
 
+	<PuzzleActor>
+
+		<PressurePlate name="Plate0" actor="Cube"/>
+		<PressurePlate name="Plate1" actor="Cube"/>
+		<PressurePlate name="Plate2" actor="Cube"/>
+		<PressurePlate name="Plate3" actor="Cube"/>
+		<PressurePlate name="Plate4" actor="Cube"/> <!-->	0 - 1 - 2	<-->
+		<PressurePlate name="Plate5" actor="Cube"/> <!-->   3 - 4 - 5	<-->
+		<PressurePlate name="Plate6" actor="Cube"/> <!-->	6 - 7 - 8	<-->
+		<PressurePlate name="Plate7" actor="Cube"/> 
+		<PressurePlate name="Plate8" actor="Cube"/>
+		
+	</PuzzleActor>
 		
 	<LightActor>
 		<Light posX ="0.0" posY ="5.0" posZ ="0.0"

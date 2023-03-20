@@ -14,12 +14,20 @@ void* operator new(std::size_t amount)
 	return malloc(amount);
 }
 
-void operator delete(void* memLoc, std::size_t amount)
+void* operator new[](std::size_t amount)
 {
+	MemoryManager::GetManager().PlusEqualTotalMemory(amount);
+	MemoryManager::GetManager().IncrementTotalAllocations();
+	MemoryManager::GetManager().PlusEqualCurrentMemory(amount);
+	MemoryManager::GetManager().IncrementCurrentAllocations();
+
+	return malloc(amount);
+}
+
+void operator delete(void* memLoc, std::size_t amount)
+{	
 	MemoryManager::GetManager().MinusEqualCurrentMemory(amount);
-	MemoryManager::GetManager().DecrementCurrentAllocations();
-	if (MemoryManager::GetManager().GetCurrentAllocations() <= 1)
-		std::atexit(Utilities::Memory::PrintCurrentMemoryAndAllocations);
+	MemoryManager::GetManager().DecrementCurrentAllocations();	
 
 	free(memLoc);
 }
@@ -27,9 +35,7 @@ void operator delete(void* memLoc, std::size_t amount)
 void operator delete[](void* memLoc, std::size_t amount)
 {
 	MemoryManager::GetManager().MinusEqualCurrentMemory(amount);
-	MemoryManager::GetManager().DecrementCurrentAllocations();
-	if (MemoryManager::GetManager().GetCurrentAllocations() <= 1)
-		std::atexit(Utilities::Memory::PrintCurrentMemoryAndAllocations);
+	MemoryManager::GetManager().DecrementCurrentAllocations();		
 
 	free(memLoc);
 }
@@ -41,7 +47,7 @@ MemoryManager& Utilities::Memory::GetMemoryManager()
 
 void Utilities::Memory::PrintCurrentMemoryAndAllocations()
 {
-	printf("Current Memory: %d Bytes\nCurrent Allocations: %d\n", MemoryManager::GetManager().GetCurrentMemory(), MemoryManager::GetManager().GetCurrentAllocations());
+	printf("Currents At Exit:\nCurrent Memory: %d Bytes\nCurrent Allocations: %d\n", MemoryManager::GetManager().GetCurrentMemory(), MemoryManager::GetManager().GetCurrentAllocations());
 }
 
 void Utilities::Memory::PrintTotalMemoryAndAllocations()

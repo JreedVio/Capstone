@@ -212,6 +212,8 @@
     </ClCompile>
     <ClCompile Include="CodeActor.cpp">
       <Filter>Source Files\Components</Filter>
+    <ClCompile Include="PressurePlate.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -406,6 +408,8 @@
     </ClInclude>
     <ClInclude Include="CodeActor.h">
       <Filter>Header Files\Components</Filter>
+    <ClInclude Include="PressurePlate.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

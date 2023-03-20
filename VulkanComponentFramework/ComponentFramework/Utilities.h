@@ -15,14 +15,13 @@ namespace Utilities {
 		{			
 			
 		private:
-			int TotalMemory;
-			int TotalAllocations;
-			int CurrentMemory;
-			int CurrentAllocations;			
+			int TotalMemory = 0;
+			int TotalAllocations = 0;
+			int CurrentMemory = 0;
+			int CurrentAllocations = 0;			
 
 			static MemoryManager Manager;
-
-			// DO NOT initialize, it gives the variables weird values
+			
 			MemoryManager(){};						
 
 		public:

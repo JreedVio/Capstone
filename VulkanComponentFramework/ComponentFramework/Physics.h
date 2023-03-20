@@ -12,6 +12,7 @@ namespace PHYSICS
 	{
 		
 		bool Collision = false;
+		
 
 	public:
 		
@@ -19,6 +20,8 @@ namespace PHYSICS
 		
 		bool TestTwoAABB(Ref<AABB> b1, Ref<AABB> b2);
 		void Update(const float deltaTime, Ref<DynamicLinearMovement> DLM, Ref<AABB> cBox);
+
+		void UpdatePuzzle(const float deltaTime);
 
 		virtual ~Physics() {};
 		virtual bool OnCreate() { return true; }

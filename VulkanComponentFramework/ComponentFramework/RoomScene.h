@@ -25,7 +25,7 @@ public:
 	virtual std::unordered_map<const char*, Ref<Actor>> GetActorList() override{ 
 		return room->GetActorList();
 	}
-	Ref<Actor> GetActor(const char* name_);
+	Ref<Actor> GetActor(const char* name_);	
 
 	void AddActor(const char* name_, Ref<Actor> actor_) { room->AddActor(name_, actor_); }
 

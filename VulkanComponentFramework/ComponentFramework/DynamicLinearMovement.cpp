@@ -1,7 +1,7 @@
 #include "DynamicLinearMovement.h"
 #include "AABB.h"
 #include "VMath.h"
-
+#include "SceneManager.h"
 
 PHYSICS::DynamicLinearMovement::DynamicLinearMovement()
 {
@@ -34,16 +34,16 @@ void PHYSICS::DynamicLinearMovement::Update(const float deltaTime)
 	pos = TransformRef->GetPosition();
 	//vel.print();
 	//accel.print();
-	if (!collision)
-	{
-		accel = Gravity / mass;	
-		//accel.print();
-	}
-	else
-	{
-		accel = Vec3();
-		vel.y = 0.0f;
-	}
+	//if (!collision)
+	//{
+	//	accel = Gravity / mass;	
+	//	//accel.print();
+	//}
+	//else
+	//{
+	//	accel.y = 0.0f;
+	//	vel.y = 0.0f;
+	//}
 	UpdateFall(deltaTime);
 	UpdateWall(deltaTime);	
 }
@@ -65,6 +65,8 @@ void PHYSICS::DynamicLinearMovement::UpdateFall(const float deltaTime)
 
 void PHYSICS::DynamicLinearMovement::UpdateWall(const float deltaTime)
 {	
+	auto Actor = SceneManager::GetInstance()->GetCurrentScene();
+
 	/*auto wall = room->GetActor("Forward");
 	
 	auto status = wall->GetComponent<AABB>();
@@ -87,26 +89,26 @@ void PHYSICS::DynamicLinearMovement::UpdateWall(const float deltaTime)
 	}
 	
 	// Right
-	if (pos.x >= 23.5f)
+	if (pos.x >= Actor->GetActor("Right")->GetComponent<TransformComponent>()->GetPosition().x - 1.5f)
 	{
 		TransformRef->SetTransform(Vec3(23.5f, pos.y, pos.z), orient);
 		printf("collision!\n");
 	}
 	// Left
-	else if (pos.x <= -23.5f)
+	else if (pos.x <= Actor->GetActor("Left")->GetComponent<TransformComponent>()->GetPosition().x + 1.5f)
 	{
 		TransformRef->SetTransform(Vec3(-23.5f, pos.y, pos.z), orient);
 		printf("collision!\n");
 	}
 	
 	// Front
-	else if (pos.z <= -23.5f)
+	else if (pos.z <= Actor->GetActor("Forward")->GetComponent<TransformComponent>()->GetPosition().z + 1.5f)
 	{
 		TransformRef->SetTransform(Vec3(pos.x, pos.y, -23.5f), orient);
 		printf("collision!\n");
 	}
 	//Back
-	else if (pos.z >= 23.5f)
+	else if (pos.z >= Actor->GetActor("Backward")->GetComponent<TransformComponent>()->GetPosition().z - 1.5f)
 	{
 		TransformRef->SetTransform(Vec3(pos.x, pos.y, 23.5f), orient);
 		printf("collision!\n");
