@@ -43,12 +43,12 @@ bool RoomScene::OnCreate(){
     Ref<TransformComponent> remoteTransform_ = remotePawn->GetComponent<TransformComponent>();
     Ref<TransformComponent> localTransform_ = localPawn->GetComponent<TransformComponent>();
     
-    remotePawn->SetVisible(true);
+    //remotePawn->SetVisible(false);
     //Set the enter location
 
     Vec3 playerStart = Vec3(0.0f, 3.0f, 0.0f);
 
-    remoteTransform_->SetTransform(Vec3(-1.0, -0.5f, 0.0f), QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), remoteTransform_->GetScale());
+    remoteTransform_->SetTransform(playerStart, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), remoteTransform_->GetScale());
     localTransform_->SetTransform(playerStart, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), localTransform_->GetScale());
     AddActor("RemotePlayer", remotePlayer->GetPawn());
     AddActor("LocalPlayer", localPlayer->GetPawn());
@@ -99,12 +99,12 @@ bool RoomScene::OnCreate(){
     {
         plate3->AddComponent<AABB>(plate3.get(), plate3->GetComponent<TransformComponent>(),
             plate3->GetComponent<TransformComponent>()->GetPosition(),
-            Vec3(plate3->GetComponent<TransformComponent>()->GetScale().x - 0.5f, 1.0f,
+            Vec3(plate3->GetComponent<TransformComponent>()->GetScale().x - 0.5f, 5.0f,
                  plate3->GetComponent<TransformComponent>()->GetScale().z - 0.5f));
 
         plate2->AddComponent<AABB>(plate2.get(), plate2->GetComponent<TransformComponent>(),
             plate2->GetComponent<TransformComponent>()->GetPosition(),
-            Vec3(plate2->GetComponent<TransformComponent>()->GetScale().x - 0.5f, 1.0f,
+            Vec3(plate2->GetComponent<TransformComponent>()->GetScale().x - 0.5f, 5.0f,
                 plate2->GetComponent<TransformComponent>()->GetScale().z - 0.5f));
     }
 
