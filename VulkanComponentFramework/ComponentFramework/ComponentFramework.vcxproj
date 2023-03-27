@@ -253,6 +253,7 @@
     <None Include="shaders\vert.spv" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="Level1.xml" />
     <Xml Include="RendererAssets.xml" />
     <Xml Include="Scene0.xml" />
     <Xml Include="Scene1.xml" />

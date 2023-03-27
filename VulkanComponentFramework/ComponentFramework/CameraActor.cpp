@@ -190,7 +190,8 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 			Vec3 destination = QMath::rotate(forward, newOrientation_);
 			destination *= -1.0f; //flip upside down
 			//if (ijk.x >= 0.0f && ijk.x <= 0.05f) {
-			if (destination.y >= -0.2f && destination.y <= 0.35f){
+			// LookUp & Down threshold
+			if (destination.y >= -0.52f && destination.y <= 0.735f){
 				transform_->SetTransform(transform_->GetPosition(), newOrientation_);
 			}
 		}

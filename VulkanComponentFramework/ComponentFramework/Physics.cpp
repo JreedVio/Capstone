@@ -13,7 +13,7 @@ bool Physics::TestTwoAABB(Ref<AABB> b1, Ref<AABB> b2)
 {
 	if (!b1 || !b2)
 	{
-		printf("either b1 or b2 is null!\n");
+		//printf("either b1 or b2 is null!\n");
 		return false;
 	}
 	return Collision = AABB::TestAABB(b1, b2);	
@@ -34,6 +34,7 @@ void Physics::Update(const float deltaTime, Ref<DynamicLinearMovement> DLM, Ref<
 
 void PHYSICS::Physics::UpdatePuzzle(const float deltaTime)
 {
+	// only works if you don't need to go back to the first room
 	static int status = 0;
 	if (status == 0)
 	{
