@@ -204,6 +204,15 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="CodePuzzleRoom.cpp">
+      <Filter>Source Files\Scenes\Room</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeActor.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -392,6 +401,15 @@
     <ClInclude Include="PressurePlate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CodePuzzleRoom.h">
+      <Filter>Header Files\Scenes\Room</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeUI.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeActor.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Graphics Game Engine_Log.txt">
@@ -453,6 +471,9 @@
       <Filter>XML</Filter>
     </Xml>
     <Xml Include="Level1.xml">
+      <Filter>XML</Filter>
+    </Xml>
+    <Xml Include="CodePuzzle.xml">
       <Filter>XML</Filter>
     </Xml>
   </ItemGroup>

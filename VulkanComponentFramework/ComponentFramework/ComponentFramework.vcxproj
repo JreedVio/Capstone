@@ -129,6 +129,9 @@
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="CameraActor.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="CodeActor.cpp" />
+    <ClCompile Include="CodePuzzleRoom.cpp" />
+    <ClCompile Include="CodeUI.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DoorActor.cpp" />
     <ClCompile Include="DynamicLinearMovement.cpp" />
@@ -178,6 +181,9 @@
     <ClInclude Include="CameraActor.h" />
     <ClInclude Include="ChronoTimer.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="CodeActor.h" />
+    <ClInclude Include="CodePuzzleRoom.h" />
+    <ClInclude Include="CodeUI.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="DoorActor.h" />
@@ -253,6 +259,7 @@
     <None Include="shaders\vert.spv" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="CodePuzzle.xml" />
     <Xml Include="Level1.xml" />
     <Xml Include="RendererAssets.xml" />
     <Xml Include="Scene0.xml" />
