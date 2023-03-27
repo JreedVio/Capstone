@@ -204,9 +204,6 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="PressurePlate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -453,6 +450,9 @@
       <Filter>XML</Filter>
     </Xml>
     <Xml Include="Scene1.xml">
+      <Filter>XML</Filter>
+    </Xml>
+    <Xml Include="Level1.xml">
       <Filter>XML</Filter>
     </Xml>
   </ItemGroup>

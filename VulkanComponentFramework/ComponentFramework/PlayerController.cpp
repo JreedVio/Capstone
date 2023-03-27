@@ -94,7 +94,7 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event)
 	{
 		dir = VMath::normalize(dir);
 	}
-	DynamicMovement->SetVel(moveSpeed * dir);
+	DynamicMovement->SetVel(Vec3(moveSpeed * dir.x, DynamicMovement->GetVel().y, moveSpeed * dir.z));
 
 	if (KeyDown(KeyCode::LCTRL, Event)) {
 		camera->Deactivate();

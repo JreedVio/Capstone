@@ -152,7 +152,6 @@
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
-    <ClCompile Include="PressurePlate.cpp" />
     <ClCompile Include="SettingMenu.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PlayerController.cpp" />
@@ -254,6 +253,7 @@
     <None Include="shaders\vert.spv" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="Level1.xml" />
     <Xml Include="RendererAssets.xml" />
     <Xml Include="Scene0.xml" />
     <Xml Include="Scene1.xml" />
