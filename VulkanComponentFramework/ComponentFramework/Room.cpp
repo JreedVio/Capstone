@@ -35,6 +35,10 @@ void Room::OnDestroy(){
     }
 }
 
+void Room::CheckPuzzle()
+{
+}
+
 void Room::SetRoomTime(float roomTime_){
     roomTime = roomTime_;
     currentTime = roomTime;

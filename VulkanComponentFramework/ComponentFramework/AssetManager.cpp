@@ -12,6 +12,7 @@
 #include "Scene.h"
 #include "Room.h"
 #include "CodePuzzleRoom.h"
+#include "CodeActor.h"
 #include "RoomScene.h"
 #include "Physics.h"
 
@@ -256,6 +257,22 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 		const char* puzzleType = typeData->FindAttribute("name")->Value();
 		if (strcmp(puzzleType, "CodePuzzle") == 0) {
 			room_ = std::make_shared<CodePuzzleRoom>(width, length, height);
+			Ref<CodeActor> codeActor_ = std::make_shared<CodeActor>(nullptr);
+			Ref<Actor> codeActorData_ = GetActor("CubeWhite");
+			//Get and set the actor data
+			Ref<MeshComponent> mesh_ = codeActorData_->GetComponent<MeshComponent>();
+			Ref<MaterialComponent> material_ = codeActorData_->GetComponent<MaterialComponent>();
+			Ref<ShaderComponent> shader_ = codeActorData_->GetComponent<ShaderComponent>();
+			codeActor_->AddComponent(mesh_);
+			codeActor_->AddComponent(material_);
+			codeActor_->AddComponent(shader_);
+
+			Ref<TransformComponent> transform_ = std::make_shared<TransformComponent>(nullptr, Vec3(-7.0f, 1.0f, -25.0f), Quaternion(), Vec3(0.5f, 0.5f, 0.1f));
+			codeActor_->AddComponent(transform_);
+			codeActor_->AddComponent<AABB>(codeActor_.get(), transform_, transform_->GetPosition(), Vec3(1.5f, 2.0f, 1.5f), transform_->GetOrientation());
+			codeActor_->OnCreate();
+			room_->AddActor("CodePanel", codeActor_);
+
 		}
 		//else if(strcmp(puzzleType, "Puzzle2") == 0) {
 
@@ -461,6 +478,7 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 		doorActor_->AddComponent<AABB>(doorActor_.get(), transform_, transform_->GetPosition(), Vec3(1.0f, 10.0f, 1.5f), transform_->GetOrientation());
 		doorActor_->OnCreate();
 		room_->AddActor(doorActorName, doorActor_);
+		room_->SetDoor(doorActor_);
 		door_ = door_->NextSiblingElement("Door");
 	}
 

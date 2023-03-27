@@ -44,11 +44,10 @@ bool RoomScene::OnCreate(){
     Ref<TransformComponent> remoteTransform_ = remotePawn->GetComponent<TransformComponent>();
     Ref<TransformComponent> localTransform_ = localPawn->GetComponent<TransformComponent>();
     
-    remotePawn->SetVisible(true);
+    remotePawn->SetVisible(false);
+
     //Set the enter location
-
     Vec3 playerStart = Vec3(0.0f, 3.0f, 0.0f);
-
     remoteTransform_->SetTransform(Vec3(-1.0, -0.5f, 0.0f), QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), remoteTransform_->GetScale());
     localTransform_->SetTransform(playerStart, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), localTransform_->GetScale());
     AddActor("RemotePlayer", remotePlayer->GetPawn());
@@ -62,6 +61,9 @@ bool RoomScene::OnCreate(){
     }
     camera->SetParent(localPlayer->GetPawn().get());
     localPlayer->GetPawn()->AddComponent(camera);
+
+    //Oncreate the room
+    room->OnCreate();
 
     //** example on how to currently use the collision
     auto floor = GetActor("Bottom");
@@ -134,6 +136,13 @@ void RoomScene::OnDestroy() {
 
 void RoomScene::Update(const float deltaTime) {
 
+    if (room->IsSolved()) {
+        room->OpenDoor();
+    }
+    else {
+        room->CheckPuzzle();
+    }
+
     /*TODO:
       Check for collision and update actors, room
       When door collision happens, call RoomTransittion()
@@ -155,8 +164,6 @@ void RoomScene::Update(const float deltaTime) {
 
         Ref<Actor> actor_ = e.second;
         Ref<AABB> actorCollision = actor_->GetComponent<AABB>();
-        //if (std::dynamic_pointer_cast<DoorActor>(actor_)) {
-            //if (!actorCollision) continue;
 
         if (localPawn->GetComponent<Physics>()->TestTwoAABB(localPawnCollision, actorCollision)) {
             actor_->CollisionResponse();
@@ -169,13 +176,16 @@ void RoomScene::Update(const float deltaTime) {
                 localPawn->GetComponent<DynamicLinearMovement>()->SetVel(Vec3(tempVel.x , 0.0f, tempVel.z));
             }
             
-        }       
+        }
+        else {
+            actor_->NotCollided();
+        }
     }        
     
 
     //localPlayer->GetPawn()->GetComponent<Physics>()->TestTwoAABB(localPlayer->GetPawn()->GetComponent<AABB>(), GetActor("Forward")->GetComponent<AABB>());
     remotePlayer->GetPawn()->GetComponent<AABB>()->SetCentre(remotePlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition());
-    remotePlayer->GetPawn()->GetComponent<AABB>()->GetCentre().print();
+    //remotePlayer->GetPawn()->GetComponent<AABB>()->GetCentre().print();
     auto plate2 = GetActor("Plate2");
     auto plate3 = GetActor("Plate3");
     if (plate2 && plate3)
@@ -232,15 +242,7 @@ void RoomScene::HandleEvents(const SDL_Event& sdlEvent) {
 
 Ref<Actor> RoomScene::GetActor(const char* name_){
 
-    for (auto actor_ : GetActorList()) {
-        if (strcmp(actor_.first, name_) == 0) {
-            return actor_.second;
-        }
-    }
-    //Debug message when fail
-    std::string message = std::string(name_) + " -> Actor not found in AssetManager";
-    Debug::FatalError(message, __FILE__, __LINE__);
-    return nullptr;
+    return room->GetActor(name_);
 }
 
 

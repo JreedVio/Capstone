@@ -4,25 +4,29 @@
 #include <memory>
 #include "Room.h"
 
+#define CODE_SIZE 4
+
 class UserInterface;
+class CodeActor;
 
 class CodePuzzleRoom : public Room{
 
 private:
 
-	UserInterface* codeUI;
-	const char* passCode;
+	Ref<CodeActor> codePanel;
+	std::vector<int> passCode;
 
 public:
-	CodePuzzleRoom(int width_, int length_, int height_): Room(width_, length_, height_), passCode("1234") {}
+	CodePuzzleRoom(int width_, int length_, int height_);
 	~CodePuzzleRoom();
 
 	virtual bool OnCreate() override;
 	virtual void Update(float deltaTime) override;
 	virtual void OnDestroy() override;
 
-	void SetCode(const char* code_) { passCode = code_; }
-
+	virtual void CheckPuzzle() override;
+	void SetCode(const char* code_);
+	
 
 };
 

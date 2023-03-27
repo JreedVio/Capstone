@@ -48,12 +48,21 @@ void PlayerController::GetPlayerInput(const SDL_Event& Event)
 		return;
 	}
 
+
 	if (camera) {
-		//Get forward direction
-		forward = QMath::rotate(forward, camera->GetComponent<TransformComponent>()->GetOrientation());
-		forward.y = 0.0f;
-		rightDirection = VMath::cross(forward, upVector);
-		camera->HandleEvents(Event);
+
+		//When option menu is opened, don't receive any in game input
+		if (uiManager->isOpened("CodeUI")) {
+			camera->Deactivate();
+		}
+		else {
+			//Get forward direction
+			forward = QMath::rotate(forward, camera->GetComponent<TransformComponent>()->GetOrientation());
+			forward.y = 0.0f;
+			rightDirection = VMath::cross(forward, upVector);
+			camera->HandleEvents(Event);
+		}
+
 	}
 
 	Vec3 dir = Vec3();

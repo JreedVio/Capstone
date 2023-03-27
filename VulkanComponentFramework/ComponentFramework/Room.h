@@ -32,6 +32,9 @@ public:
 	virtual bool OnCreate();
 	virtual void Update(float deltaTime);
 	virtual void OnDestroy();
+	virtual void CheckPuzzle();
+	bool IsSolved() { return puzzleSolved; }
+	void OpenDoor() { door->SetIsOpened(true); }
 	void SetRoomTime(float roomTime_);
 	void SetDoor(Ref<DoorActor> door_) { door = door_; }
 
@@ -45,6 +48,15 @@ public:
 			std::cerr << "WARNING: Trying to add a non-actor type to actor list - ignored\n";
 #endif
 		}
+	}
+
+	Ref<Actor> GetActor(const char* name_) {
+		for (auto actor_ : GetActorList()) {
+			if (strcmp(actor_.first, name_) == 0) {
+				return actor_.second;
+			}
+		}
+		return nullptr;
 	}
 
 };
