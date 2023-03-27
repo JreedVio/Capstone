@@ -311,46 +311,88 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 			// 6 - 7 - 8		
 
 			float floorY = -0.5f;
-			if (strcmp(plateName, "Plate0") == 0) {
+
+			// first set of plates
+			if (strcmp(plateName, "PlateA0") == 0) {
 
 				position = Vec3(-1.0f, floorY, -1.0f);
 			}
-			else if (strcmp(plateName, "Plate1") == 0) {
+			else if (strcmp(plateName, "PlateA1") == 0) {
 
 				position = Vec3(0.0f, floorY, -1.0f);
 			}
-			else if (strcmp(plateName, "Plate2") == 0) {
+			else if (strcmp(plateName, "PlateA2") == 0) {
 
 				position = Vec3(1.0f, floorY, -1.0f);
 			}
-			else if (strcmp(plateName, "Plate3") == 0) {
+			else if (strcmp(plateName, "PlateA3") == 0) {
 
 				position = Vec3(-1.0f, floorY, 0.0f);
 
 			}
-			else if (strcmp(plateName, "Plate4") == 0) {
+			else if (strcmp(plateName, "PlateA4") == 0) {
 
 				position = Vec3(0.0f, floorY, 0.0f);
 			}
-			else if (strcmp(plateName, "Plate5") == 0) {
+			else if (strcmp(plateName, "PlateA5") == 0) {
 
 				position = Vec3(1.0f, floorY, 0.0f);
 			}
-			else if (strcmp(plateName, "Plate6") == 0) {
+			else if (strcmp(plateName, "PlateA6") == 0) {
 
 				position = Vec3(-1.0f, floorY, 1.0f);
 			}
-			else if (strcmp(plateName, "Plate7") == 0) {
+			else if (strcmp(plateName, "PlateA7") == 0) {
 
 				position = Vec3(0.0f, floorY, 1.0f);
 			}
-			else if (strcmp(plateName, "Plate8") == 0) {
+			else if (strcmp(plateName, "PlateA8") == 0) {
 
 				position = Vec3(1.0f, floorY, 1.0f);
 			}
 
+			// second set of plates
+			if (strcmp(plateName, "PlateB0") == 0) {
+
+				position = Vec3(-1.0f * 5.0f, floorY, -1.0f);
+			}
+			else if (strcmp(plateName, "PlateB1") == 0) {
+
+				position = Vec3(-4.0f, floorY, -1.0f);
+			}
+			else if (strcmp(plateName, "PlateB2") == 0) {
+
+				position = Vec3(1.0f * -3.0f, floorY, -1.0f);
+			}
+			else if (strcmp(plateName, "PlateB3") == 0) {
+
+				position = Vec3(-1.0f * 5.0f, floorY, 0.0f);
+
+			}
+			else if (strcmp(plateName, "PlateB4") == 0) {
+
+				position = Vec3(-4.0f, floorY, 0.0f);
+			}
+			else if (strcmp(plateName, "PlateB5") == 0) {
+
+				position = Vec3(1.0f * -3.0f, floorY, 0.0f);
+			}
+			else if (strcmp(plateName, "PlateB6") == 0) {
+
+				position = Vec3(-1.0f * 5.0f, floorY, 1.0f);
+			}
+			else if (strcmp(plateName, "PlateB7") == 0) {
+
+				position = Vec3(-4.0f, floorY, 1.0f);
+			}
+			else if (strcmp(plateName, "PlateB8") == 0) {
+
+				position = Vec3(1.0f * -3.0f, floorY, 1.0f);
+			}
+
 			Ref<TransformComponent> transform;
 			transform = std::make_shared<TransformComponent>(plateActor.get(), position, rotation, scale);
+			plateActor->SetAlpha(0.5f);
 			plateActor->AddComponent(transform);
 			plateActor->OnCreate();
 			room_->AddActor(plateName, plateActor);
@@ -486,14 +528,18 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 	//Store a temp list for refecrenced actor
 	std::unordered_map<const char*, Ref<Actor>> actorRefList;
 	XMLElement* referenceData = roomData->FirstChildElement("ReferenceActor");
-	XMLElement* refActorData = referenceData->FirstChildElement("RefName");
-	while (refActorData) {
-		//Get the actor data and add it to the reference list
-		const char* refActorName_ = refActorData->FindAttribute("name")->Value();
-		Ref<Actor> actorData_ = GetActor(refActorName_);
-		actorRefList[refActorName_] = actorData_;
 
-		refActorData = refActorData->NextSiblingElement("RefName");
+	if (referenceData)
+	{
+		XMLElement* refActorData = referenceData->FirstChildElement("RefName");
+		while (refActorData) {
+			//Get the actor data and add it to the reference list
+			const char* refActorName_ = refActorData->FindAttribute("name")->Value();
+			Ref<Actor> actorData_ = GetActor(refActorName_);
+			actorRefList[refActorName_] = actorData_;
+
+			refActorData = refActorData->NextSiblingElement("RefName");
+		}
 	}
 
 	//Get First child element and check if it exists;

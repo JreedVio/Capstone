@@ -175,7 +175,7 @@ bool SceneManager::StartGame(USERTYPE userType_){
 
 	uiManager->openMenu("MainMenu");
 	//Enter the start room
-	BuildScene(ROOMSCENE, "TestScene");
+	BuildScene(ROOMSCENE, "Level1");
 	//Restart the timer
 	//timer->Start();
 
