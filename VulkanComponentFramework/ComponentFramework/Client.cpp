@@ -190,6 +190,26 @@ void Client::SendRoomName(const char* roomName) {
     enet_peer_send(peer, 0, tempPacket);
 }
 
+void Client::SendPuzzleSolved() {
+    if (peer == nullptr) return;
+
+    Message msg;
+    msg.header.type = CustomMessageType::PuzzleSolved;
+
+    //Serialize
+    std::stringstream ss;
+    cereal::BinaryOutputArchive archive(ss);
+    archive(msg);
+
+    std::string str = ss.str();
+
+    // Send over the network
+    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
+        str.length() + 1,
+        ENET_PACKET_FLAG_RELIABLE);
+    enet_peer_send(peer, 0, tempPacket);
+}
+
 void Client::AddPosition(Message& msg)
 {
     Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
@@ -205,37 +225,37 @@ void Client::AddRotation(Message& msg)
     msg << ijk.x << ijk.y << ijk.z << w;
 }
 
-void Client::SendPositionPacket() {
-    if (peer == nullptr) return;
-    float x = 7.0f, y = 8.0f, z = 9.0f;
-
-    std::vector<uint8_t> buffer(sizeof(float) * 3);
-
-    // Copy the float values into the buffer
-    std::memcpy(buffer.data(), &x, sizeof(float));
-    std::memcpy(buffer.data() + sizeof(float), &y, sizeof(float));
-    std::memcpy(buffer.data() + 2 * sizeof(float), &z, sizeof(float));
-
-    // Get a const void* pointer to the buffer
-    const void* data_ptr = static_cast<const void*>(buffer.data());
-    Packet packet(Type::Position, data_ptr, sizeof(data_ptr));
-
-    std::stringstream ss;
-    cereal::BinaryOutputArchive archive(ss);
-    archive(packet);
-
-    // Set pos vector to pos of the Local Player Actor
-    //Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
-
-    std::string str = ss.str();
-
-    std::cout << str.length() << std::endl;
-
-    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
-        str.length() + 1,
-        ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
-    enet_peer_send(peer, 0, tempPacket);
-}
+//void Client::SendPositionPacket() {
+//    if (peer == nullptr) return;
+//    float x = 7.0f, y = 8.0f, z = 9.0f;
+//
+//    std::vector<uint8_t> buffer(sizeof(float) * 3);
+//
+//    // Copy the float values into the buffer
+//    std::memcpy(buffer.data(), &x, sizeof(float));
+//    std::memcpy(buffer.data() + sizeof(float), &y, sizeof(float));
+//    std::memcpy(buffer.data() + 2 * sizeof(float), &z, sizeof(float));
+//
+//    // Get a const void* pointer to the buffer
+//    const void* data_ptr = static_cast<const void*>(buffer.data());
+//    Packet packet(Type::Position, data_ptr, sizeof(data_ptr));
+//
+//    std::stringstream ss;
+//    cereal::BinaryOutputArchive archive(ss);
+//    archive(packet);
+//
+//    // Set pos vector to pos of the Local Player Actor
+//    //Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
+//
+//    std::string str = ss.str();
+//
+//    std::cout << str.length() << std::endl;
+//
+//    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
+//        str.length() + 1,
+//        ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
+//    enet_peer_send(peer, 0, tempPacket);
+//}
 
 void Client::Recieve(int tickrate)
 {
@@ -318,6 +338,9 @@ void Client::ProcessMessage(Message& msg)
         SceneManager* sceneManager = SceneManager::GetInstance();
         sceneManager->GetCurrentScene()->SetStatus(ROOMTRANSIT);
         sceneManager->SetNextScene(roomName);
+    }
+    else if (msg.header.type == CustomMessageType::PuzzleSolved) {
+        dynamic_cast<RoomScene*>(SceneManager::GetInstance()->GetCurrentScene())->GetRoom()->SetSolved(true);
     }
 }
 

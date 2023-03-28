@@ -3,10 +3,10 @@
 #include "MMath.h"
 #include "SceneManager.h"
 #include "RoomScene.h"
+#include "Room.h"
 #include "Message.h"
 #include "Packet.h"
 #include <string>
-#include <type_traits>
 
 #include <WS2tcpip.h>
 
@@ -114,6 +114,27 @@ void Server::SendRoomName(const char* roomName) {
     msg.header.type = CustomMessageType::RoomName;
 
     msg.AddCharArray(roomName, std::strlen(roomName));
+
+    //Serialize
+    std::stringstream ss;
+    cereal::BinaryOutputArchive archive(ss);
+    archive(msg);
+
+    std::string str = ss.str();
+
+    // Send over the network
+    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
+        str.length() + 1,
+        ENET_PACKET_FLAG_RELIABLE);
+    enet_peer_send(peer, 0, tempPacket);
+}
+
+void Server::SendPuzzleSolved()
+{
+    if (peer == nullptr) return;
+
+    Message msg;
+    msg.header.type = CustomMessageType::PuzzleSolved;
 
     //Serialize
     std::stringstream ss;
@@ -241,6 +262,9 @@ void Server::ProcessMessage(Message& msg)
         SceneManager* sceneManager = SceneManager::GetInstance();
         sceneManager->GetCurrentScene()->SetStatus(ROOMTRANSIT);
         sceneManager->SetNextScene(roomName);
+    }
+    else if (msg.header.type == CustomMessageType::PuzzleSolved) {
+        dynamic_cast<RoomScene*>(SceneManager::GetInstance()->GetCurrentScene())->GetRoom()->SetSolved(true);
     }
 }
 

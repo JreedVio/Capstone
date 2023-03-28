@@ -110,7 +110,7 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 		return false;
 	}
 
-	networkManager = new NetworkManager();
+	networkManager = NetworkManager::GetInstance();
 	if (!networkManager->Initialize()) {
 		Debug::FatalError("Failed to initialize Network Manager", __FILE__, __LINE__);
 		return false;

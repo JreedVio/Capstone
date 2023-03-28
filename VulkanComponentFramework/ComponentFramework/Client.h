@@ -27,9 +27,10 @@ public:
 	void Update();
 	void Send();
 	void SendRoomName(const char* roomName);
+	void SendPuzzleSolved();
 	void AddPosition(Message& msg);
 	void AddRotation(Message& msg);
-	void SendPositionPacket();
+	//void SendPositionPacket();
 	void Recieve(int tickrate);
 	void ProcessMessage(Message& msg);
 };

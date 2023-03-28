@@ -135,10 +135,11 @@ void RoomScene::OnDestroy() {
 
 void RoomScene::Update(const float deltaTime) {
 
-    if (room->IsSolved()) {
+    if (room->IsSolved() && !room->GetDoor()->GetIsOpened()) {
         room->OpenDoor();
+        NetworkManager::GetInstance()->GetUnit()->SendPuzzleSolved();
     }
-    else {
+    else if(!room->IsSolved()) {
         room->CheckPuzzle();
     }
 

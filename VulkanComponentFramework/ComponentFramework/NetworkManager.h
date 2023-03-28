@@ -9,14 +9,19 @@
 class NetworkManager
 {
 private:
+	static NetworkManager* Instance;
 	NetworkUnit* unit;
 	class Timer* timer;
 	unsigned int tickrate;
 	const char* roomName;
 	bool isNetworkRunning;
+	NetworkManager();
 
 public:
-	NetworkManager();
+	static NetworkManager* GetInstance() {
+		if (!Instance) Instance = new NetworkManager();
+		return Instance;
+	}
 	~NetworkManager();
 	NetworkUnit* GetUnit() { return unit; }
 	bool Initialize();
