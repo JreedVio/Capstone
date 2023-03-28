@@ -17,13 +17,11 @@ public:
 	Ref<Actor> localPlayer, remotePlayer;
 
 
-
-
 	Client();
 	~Client();
 
 	bool OnCreate();
-	bool RecieveRoomName(ENetEvent event);
+	bool RecieveRoomName(ENetEvent& event);
 	void OnDestroy();
 	void Disconnect();
 	void Update();

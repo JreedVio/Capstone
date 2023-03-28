@@ -165,7 +165,7 @@ void Server::Recieve(int tickrate)
         case ENET_EVENT_TYPE_CONNECT:
             if (peer == nullptr) {
                 peer = event.peer;
-                //SendRoomName(SceneManager::GetInstance()->GetCurrentScene()->GetSceneName());
+                SendRoomName(SceneManager::GetInstance()->GetCurrentScene()->GetSceneName());
                 remotePlayer->SetVisible(true);
                 std::cout << "Accepted connection from " << event.peer->address.host << ":" << event.peer->address.port << std::endl;
             }

@@ -134,7 +134,7 @@ void SceneManager::Run() {
 	{
 			//ChronoTimer chronoTimer;
 			timer->UpdateFrameTicks();
-			if(nextScene != nullptr) std::cout << "Current nextScene is: " << nextScene << std::endl;
+			//if(nextScene != nullptr) std::cout << "Current nextScene is: " << nextScene << std::endl;
 			if (currentScene->GetStatus() == ROOMTRANSIT) {
 				BuildScene(ROOMSCENE, nextScene);
 			}
@@ -166,6 +166,7 @@ bool SceneManager::StartGame(USERTYPE userType_){
 				networkManager->ResetNetwork();
 				return false;
 			}
+			SetNextScene("TestScene");
 			break;
 		case CLIENT:
 			if (!networkManager->StartNetwork((int)userType_)) {
@@ -176,12 +177,14 @@ bool SceneManager::StartGame(USERTYPE userType_){
 			break;
 	}
 
-	std::thread networking(&NetworkManager::Update, this->networkManager);
-	networking.detach();
 
 	uiManager->openMenu("MainMenu");
 	//Enter the start room
-	BuildScene(ROOMSCENE, "TestScene");
+	BuildScene(ROOMSCENE, nextScene);
+
+	std::thread networking(&NetworkManager::Update, this->networkManager);
+	networking.detach();
+
 	//Restart the timer
 	//timer->Start();
 
@@ -316,7 +319,7 @@ void SceneManager::BuildScene(SCENETYPE scenetype_, const char* fileName) {
 	switch (scenetype_) {
 	case ROOMSCENE:
 
-		currentScene = assetManager->LoadRoom(sceneName_.c_str());
+		currentScene = assetManager->LoadRoom(fileName);
 		status = currentScene->OnCreate();
 		break;
 

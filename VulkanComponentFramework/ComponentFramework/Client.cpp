@@ -64,10 +64,10 @@ bool Client::OnCreate()
     {
         std::cout << "Connection to " << hostName << " succeeded.\n";
         
-        /*if (!RecieveRoomName(event)) {
+        if (!RecieveRoomName(event)) {
             Debug::FatalError("Failed to Recieve Room Name", __FILE__, __LINE__);
             return false;
-        }*/
+        }
 
         // Get scene and actors
         SceneManager* sceneManager = SceneManager::GetInstance();
@@ -94,7 +94,7 @@ bool Client::OnCreate()
     }
 }
 
-bool Client::RecieveRoomName(ENetEvent event)
+bool Client::RecieveRoomName(ENetEvent& event)
 {
     if (enet_host_service(client, &event, 5000) > 0 &&
         event.type == ENET_EVENT_TYPE_RECEIVE)
@@ -115,14 +115,19 @@ bool Client::RecieveRoomName(ENetEvent event)
             const char* roomName = reinterpret_cast<const char*>(msg.body.data());
 
             SceneManager* sceneManager = SceneManager::GetInstance();
-            sceneManager->GetCurrentScene()->SetStatus(ROOMTRANSIT);
             sceneManager->SetNextScene(roomName);
+
+            /* Clean up the packet now that we're done using it. */
+            enet_packet_destroy(event.packet);
+
             return true;
         }
 
-        return false;
         /* Clean up the packet now that we're done using it. */
         enet_packet_destroy(event.packet);
+
+        return false;
+        
     }
 }
 
