@@ -6,6 +6,7 @@
 #include "Message.h"
 #include "Packet.h"
 #include <string>
+#include <type_traits>
 
 #include <WS2tcpip.h>
 
@@ -106,15 +107,13 @@ void Server::Send() {
     enet_peer_send(peer, 0, tempPacket);
 }
 
-void Server::SendRoomName(const char* roomName)
-{
+void Server::SendRoomName(const char* roomName) {
     if (peer == nullptr) return;
 
     Message msg;
     msg.header.type = CustomMessageType::RoomName;
 
-    //AddRoom(msg);
-    //msg << temp.c_str();
+    msg.AddCharArray(roomName, std::strlen(roomName));
 
     //Serialize
     std::stringstream ss;
@@ -166,6 +165,7 @@ void Server::Recieve(int tickrate)
         case ENET_EVENT_TYPE_CONNECT:
             if (peer == nullptr) {
                 peer = event.peer;
+                //SendRoomName(SceneManager::GetInstance()->GetCurrentScene()->GetSceneName());
                 remotePlayer->SetVisible(true);
                 std::cout << "Accepted connection from " << event.peer->address.host << ":" << event.peer->address.port << std::endl;
             }
@@ -235,12 +235,12 @@ void Server::ProcessMessage(Message& msg)
         //std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
     }
     else if (msg.header.type == CustomMessageType::RoomName) {
-        //const char* roomName;
-        //msg >> roomName;
+
+        const char* roomName = reinterpret_cast<const char*>(msg.body.data());
+
         SceneManager* sceneManager = SceneManager::GetInstance();
         sceneManager->GetCurrentScene()->SetStatus(ROOMTRANSIT);
-        sceneManager->SetNextScene(std::dynamic_pointer_cast<DoorActor>(sceneManager->GetCurrentScene()->GetActor("Door"))->GetConnectedRoom());
-
+        sceneManager->SetNextScene(roomName);
     }
 }
 

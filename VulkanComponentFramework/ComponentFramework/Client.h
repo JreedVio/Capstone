@@ -23,6 +23,7 @@ public:
 	~Client();
 
 	bool OnCreate();
+	bool RecieveRoomName(ENetEvent event);
 	void OnDestroy();
 	void Disconnect();
 	void Update();
@@ -30,7 +31,6 @@ public:
 	void SendRoomName(const char* roomName);
 	void AddPosition(Message& msg);
 	void AddRotation(Message& msg);
-	void AddRoom(Message& msg);
 	void SendPositionPacket();
 	void Recieve(int tickrate);
 	void ProcessMessage(Message& msg);

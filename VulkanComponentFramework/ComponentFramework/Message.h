@@ -97,6 +97,14 @@ struct Message
 		return body.size();
 	}
 
+	void AddCharArray(const char* arr, size_t size)
+	{
+		body.reserve(body.size() + size);
+		//std::copy(arr, arr + size, std::back_inserter(body));
+		body.insert(body.end(), arr, arr + size);
+		body.push_back('\0');
+	}
+
 	// Convenience Operator overloads - These allow us to add and remove stuff from
 	// the body vector as if it were a stack, so First in, Last Out. These are a 
 	// template in itself, because we dont know what data type the user is pushing or 

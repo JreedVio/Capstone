@@ -13,7 +13,7 @@ bool Physics::TestTwoAABB(Ref<AABB> b1, Ref<AABB> b2)
 {
 	if (!b1 || !b2)
 	{
-		printf("either b1 or b2 is null!\n");
+		//printf("either b1 or b2 is null!\n");
 		return false;
 	}
 	return Collision = AABB::TestAABB(b1, b2);	

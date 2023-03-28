@@ -64,6 +64,11 @@ bool Client::OnCreate()
     {
         std::cout << "Connection to " << hostName << " succeeded.\n";
         
+        /*if (!RecieveRoomName(event)) {
+            Debug::FatalError("Failed to Recieve Room Name", __FILE__, __LINE__);
+            return false;
+        }*/
+
         // Get scene and actors
         SceneManager* sceneManager = SceneManager::GetInstance();
         sceneManager->CreatePlayers();
@@ -86,6 +91,38 @@ bool Client::OnCreate()
         std::cout << "Connection to " << hostName << " failed.\n";
 
         return false;
+    }
+}
+
+bool Client::RecieveRoomName(ENetEvent event)
+{
+    if (enet_host_service(client, &event, 5000) > 0 &&
+        event.type == ENET_EVENT_TYPE_RECEIVE)
+    {
+        Message msg;
+        std::stringstream ss;
+        cereal::BinaryInputArchive archive(ss);
+
+        // Put data into streamstring          
+        ss.write(reinterpret_cast<const char*>(event.packet->data), event.packet->dataLength);
+
+        // Deserialize it
+        archive(msg);
+
+        // Process the packet
+        if (msg.header.type == CustomMessageType::RoomName) {
+
+            const char* roomName = reinterpret_cast<const char*>(msg.body.data());
+
+            SceneManager* sceneManager = SceneManager::GetInstance();
+            sceneManager->GetCurrentScene()->SetStatus(ROOMTRANSIT);
+            sceneManager->SetNextScene(roomName);
+            return true;
+        }
+
+        return false;
+        /* Clean up the packet now that we're done using it. */
+        enet_packet_destroy(event.packet);
     }
 }
 
@@ -132,8 +169,7 @@ void Client::SendRoomName(const char* roomName) {
     Message msg;
     msg.header.type = CustomMessageType::RoomName;
 
-    //AddRoom(msg);
-    //msg << roomName;
+    msg.AddCharArray(roomName, std::strlen(roomName));
 
     //Serialize
     std::stringstream ss;
@@ -162,13 +198,6 @@ void Client::AddRotation(Message& msg)
     float w = localPlayer->GetComponent<TransformComponent>()->GetOrientation().w;
     
     msg << ijk.x << ijk.y << ijk.z << w;
-}
-
-void Client::AddRoom(Message& msg)
-{
-    const char* roomName;
-
-    msg << roomName;
 }
 
 void Client::SendPositionPacket() {
@@ -278,11 +307,12 @@ void Client::ProcessMessage(Message& msg)
         //std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
     }
     else if (msg.header.type == CustomMessageType::RoomName) {
-        //const char* roomName;
-        //msg >> roomName;
+
+        const char* roomName = reinterpret_cast<const char*>(msg.body.data());
+
         SceneManager* sceneManager = SceneManager::GetInstance();
         sceneManager->GetCurrentScene()->SetStatus(ROOMTRANSIT);
-        sceneManager->SetNextScene(std::dynamic_pointer_cast<DoorActor>(sceneManager->GetCurrentScene()->GetActor("Door"))->GetConnectedRoom());
+        sceneManager->SetNextScene(roomName);
     }
 }
 

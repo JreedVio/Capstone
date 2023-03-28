@@ -43,9 +43,10 @@ bool RoomScene::OnCreate(){
     Ref<TransformComponent> remoteTransform_ = remotePawn->GetComponent<TransformComponent>();
     Ref<TransformComponent> localTransform_ = localPawn->GetComponent<TransformComponent>();
     
-    //remotePawn->SetVisible(false);
-    //Set the enter location
+    remotePawn->SetVisible(true);
 
+
+    //Set the enter location
     Vec3 playerStart = Vec3(0.0f, 3.0f, 0.0f);
 
     remoteTransform_->SetTransform(playerStart, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), remoteTransform_->GetScale());
@@ -183,7 +184,7 @@ void RoomScene::Update(const float deltaTime) {
 
     //localPlayer->GetPawn()->GetComponent<Physics>()->TestTwoAABB(localPlayer->GetPawn()->GetComponent<AABB>(), GetActor("Forward")->GetComponent<AABB>());
     remotePlayer->GetPawn()->GetComponent<AABB>()->SetCentre(remotePlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition());
-    remotePlayer->GetPawn()->GetComponent<AABB>()->GetCentre().print();
+    //remotePlayer->GetPawn()->GetComponent<AABB>()->GetCentre().print();
     auto plate2 = GetActor("Plate2");
     auto plate3 = GetActor("Plate3");
     if (plate2 && plate3)

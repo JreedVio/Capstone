@@ -69,6 +69,11 @@ SceneManager::~SceneManager() {
 		networkManager = nullptr;
 	}
 
+	if (nextScene) {
+		delete[] nextScene;
+		nextScene = nullptr;
+	}
+
 	Debug::Info("Deleting the GameSceneManager", __FILE__, __LINE__);
 
 }
@@ -129,6 +134,7 @@ void SceneManager::Run() {
 	{
 			//ChronoTimer chronoTimer;
 			timer->UpdateFrameTicks();
+			if(nextScene != nullptr) std::cout << "Current nextScene is: " << nextScene << std::endl;
 			if (currentScene->GetStatus() == ROOMTRANSIT) {
 				BuildScene(ROOMSCENE, nextScene);
 			}
@@ -285,6 +291,16 @@ void SceneManager::GetEvents() {
 		}	
 		currentScene->HandleEvents(sdlEvent);
 	}
+}
+
+void SceneManager::SetNextScene(const char* nextScene_)
+{
+	if (nextScene != nullptr) delete[] nextScene;
+
+	size_t size = strlen(nextScene_);
+	nextScene = new char[size + 1];
+	std::memcpy(nextScene, nextScene_, size);
+	nextScene[strlen(nextScene_)] = '\0';
 }
 
 void SceneManager::BuildScene(SCENETYPE scenetype_, const char* fileName) {
