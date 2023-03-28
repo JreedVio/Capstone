@@ -31,8 +31,8 @@ namespace PHYSICS
 		const bool GetCollision() const { return collision; }
 		void SetCollision(bool value) { collision = value; }
 
-		const Vec3 GetAccel() const { return accel; }
-		const Vec3 GetVel() const { return vel; }
+		Vec3 GetAccel() const { return accel; }
+		Vec3 GetVel() const { return vel; }
 
 
 		void SetVel(Vec3 vel_) { vel = vel_; }

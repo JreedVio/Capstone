@@ -107,4 +107,5 @@ public:
 	void SetPushConst(const Matrix4& model);
 
 	virtual void CollisionResponse(){}
+	virtual void NotCollided(){}
 };

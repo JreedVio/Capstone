@@ -166,7 +166,7 @@ bool SceneManager::StartGame(USERTYPE userType_){
 				networkManager->ResetNetwork();
 				return false;
 			}
-			SetNextScene("TestScene");
+			SetNextScene("Level1");
 			break;
 		case CLIENT:
 			if (!networkManager->StartNetwork((int)userType_)) {
@@ -176,7 +176,6 @@ bool SceneManager::StartGame(USERTYPE userType_){
 			}
 			break;
 	}
-
 
 	uiManager->openMenu("MainMenu");
 	//Enter the start room
@@ -263,7 +262,7 @@ void SceneManager::GetEvents() {
 				break;
 
 			case SDL_SCANCODE_F2:
-				BuildScene(ROOMSCENE, "TestScene2");
+				BuildScene(ROOMSCENE, "CodePuzzle");
 				break;
 
 			case SDL_SCANCODE_F3:

@@ -34,6 +34,7 @@ void Physics::Update(const float deltaTime, Ref<DynamicLinearMovement> DLM, Ref<
 
 void PHYSICS::Physics::UpdatePuzzle(const float deltaTime)
 {
+	// only works if you don't need to go back to the first room
 	static int status = 0;
 	if (status == 0)
 	{

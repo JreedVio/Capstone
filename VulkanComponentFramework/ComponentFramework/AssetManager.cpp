@@ -11,6 +11,8 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Room.h"
+#include "CodePuzzleRoom.h"
+#include "CodeActor.h"
 #include "RoomScene.h"
 #include "Physics.h"
 
@@ -240,20 +242,54 @@ bool AssetManager::CreateActors(){
 	return true;
 }
 
-Scene* AssetManager::CreateRoom(XMLElement* roomData){
+Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 
+	Ref<Room> room_;
 	//Get information for room (size, time)
 	XMLElement* sizeData = roomData->FirstChildElement("Size");
 	float width = sizeData->FloatAttribute("x");
 	float height = sizeData->FloatAttribute("y");
 	float length = sizeData->FloatAttribute("z");
-	Ref<Room> room_ = std::make_shared<Room>(width, length, height);
-
-	Scene* scene_ = new RoomScene(renderer, room_);
 	XMLElement* timeData = roomData->FirstChildElement("RoomTime");
 	float time_ = timeData->FloatAttribute("time");
+	XMLElement* typeData = roomData->FirstChildElement("PuzzleType");
+
+	if (typeData) {
+		const char* puzzleType = typeData->FindAttribute("name")->Value();
+		if (strcmp(puzzleType, "CodePuzzle") == 0) {
+			room_ = std::make_shared<CodePuzzleRoom>(width, length, height);
+			Ref<CodeActor> codeActor_ = std::make_shared<CodeActor>(nullptr);
+			Ref<Actor> codeActorData_ = GetActor("CubeWhite");
+			//Get and set the actor data
+			Ref<MeshComponent> mesh_ = codeActorData_->GetComponent<MeshComponent>();
+			Ref<MaterialComponent> material_ = codeActorData_->GetComponent<MaterialComponent>();
+			Ref<ShaderComponent> shader_ = codeActorData_->GetComponent<ShaderComponent>();
+			codeActor_->AddComponent(mesh_);
+			codeActor_->AddComponent(material_);
+			codeActor_->AddComponent(shader_);
+
+			Ref<TransformComponent> transform_ = std::make_shared<TransformComponent>(nullptr, Vec3(-7.0f, 1.0f, -25.0f), Quaternion(), Vec3(0.5f, 0.5f, 0.1f));
+			codeActor_->AddComponent(transform_);
+			codeActor_->AddComponent<AABB>(codeActor_.get(), transform_, transform_->GetPosition(), Vec3(1.5f, 2.0f, 1.5f), transform_->GetOrientation());
+			codeActor_->OnCreate();
+			room_->AddActor("CodePanel", codeActor_);
+
+		}
+		//else if(strcmp(puzzleType, "Puzzle2") == 0) {
+
+		//}
+		//else if (strcmp(puzzleType, "Puzzle3") == 0) {
+
+		//}
+	}
+
+	else {
+		room_ = std::make_shared<Room>(width, length, height);
+	}
+
 	room_->SetRoomTime(time_);
 
+	Scene* scene_ = new RoomScene(renderer, room_);
 	//Add PuzzleData
 	XMLElement* puzzleData = roomData->FirstChildElement("PuzzleActor");
 	if (puzzleData)
@@ -276,46 +312,88 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 			// 6 - 7 - 8		
 
 			float floorY = -0.5f;
-			if (strcmp(plateName, "Plate0") == 0) {
+
+			// first set of plates
+			if (strcmp(plateName, "PlateA0") == 0) {
 
 				position = Vec3(-1.0f, floorY, -1.0f);
 			}
-			else if (strcmp(plateName, "Plate1") == 0) {
+			else if (strcmp(plateName, "PlateA1") == 0) {
 
 				position = Vec3(0.0f, floorY, -1.0f);
 			}
-			else if (strcmp(plateName, "Plate2") == 0) {
+			else if (strcmp(plateName, "PlateA2") == 0) {
 
 				position = Vec3(1.0f, floorY, -1.0f);
 			}
-			else if (strcmp(plateName, "Plate3") == 0) {
+			else if (strcmp(plateName, "PlateA3") == 0) {
 
 				position = Vec3(-1.0f, floorY, 0.0f);
 
 			}
-			else if (strcmp(plateName, "Plate4") == 0) {
+			else if (strcmp(plateName, "PlateA4") == 0) {
 
 				position = Vec3(0.0f, floorY, 0.0f);
 			}
-			else if (strcmp(plateName, "Plate5") == 0) {
+			else if (strcmp(plateName, "PlateA5") == 0) {
 
 				position = Vec3(1.0f, floorY, 0.0f);
 			}
-			else if (strcmp(plateName, "Plate6") == 0) {
+			else if (strcmp(plateName, "PlateA6") == 0) {
 
 				position = Vec3(-1.0f, floorY, 1.0f);
 			}
-			else if (strcmp(plateName, "Plate7") == 0) {
+			else if (strcmp(plateName, "PlateA7") == 0) {
 
 				position = Vec3(0.0f, floorY, 1.0f);
 			}
-			else if (strcmp(plateName, "Plate8") == 0) {
+			else if (strcmp(plateName, "PlateA8") == 0) {
 
 				position = Vec3(1.0f, floorY, 1.0f);
 			}
 
+			// second set of plates
+			if (strcmp(plateName, "PlateB0") == 0) {
+
+				position = Vec3(-1.0f * 5.0f, floorY, -1.0f);
+			}
+			else if (strcmp(plateName, "PlateB1") == 0) {
+
+				position = Vec3(-4.0f, floorY, -1.0f);
+			}
+			else if (strcmp(plateName, "PlateB2") == 0) {
+
+				position = Vec3(1.0f * -3.0f, floorY, -1.0f);
+			}
+			else if (strcmp(plateName, "PlateB3") == 0) {
+
+				position = Vec3(-1.0f * 5.0f, floorY, 0.0f);
+
+			}
+			else if (strcmp(plateName, "PlateB4") == 0) {
+
+				position = Vec3(-4.0f, floorY, 0.0f);
+			}
+			else if (strcmp(plateName, "PlateB5") == 0) {
+
+				position = Vec3(1.0f * -3.0f, floorY, 0.0f);
+			}
+			else if (strcmp(plateName, "PlateB6") == 0) {
+
+				position = Vec3(-1.0f * 5.0f, floorY, 1.0f);
+			}
+			else if (strcmp(plateName, "PlateB7") == 0) {
+
+				position = Vec3(-4.0f, floorY, 1.0f);
+			}
+			else if (strcmp(plateName, "PlateB8") == 0) {
+
+				position = Vec3(1.0f * -3.0f, floorY, 1.0f);
+			}
+
 			Ref<TransformComponent> transform;
 			transform = std::make_shared<TransformComponent>(plateActor.get(), position, rotation, scale);
+			plateActor->SetAlpha(0.5f);
 			plateActor->AddComponent(transform);
 			plateActor->OnCreate();
 			room_->AddActor(plateName, plateActor);
@@ -443,6 +521,7 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 		doorActor_->AddComponent<AABB>(doorActor_.get(), transform_, transform_->GetPosition(), Vec3(1.0f, 10.0f, 1.5f), transform_->GetOrientation());
 		doorActor_->OnCreate();
 		room_->AddActor(doorActorName, doorActor_);
+		room_->SetDoor(doorActor_);
 		door_ = door_->NextSiblingElement("Door");
 	}
 
@@ -450,14 +529,18 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData){
 	//Store a temp list for refecrenced actor
 	std::unordered_map<const char*, Ref<Actor>> actorRefList;
 	XMLElement* referenceData = roomData->FirstChildElement("ReferenceActor");
-	XMLElement* refActorData = referenceData->FirstChildElement("RefName");
-	while (refActorData) {
-		//Get the actor data and add it to the reference list
-		const char* refActorName_ = refActorData->FindAttribute("name")->Value();
-		Ref<Actor> actorData_ = GetActor(refActorName_);
-		actorRefList[refActorName_] = actorData_;
 
-		refActorData = refActorData->NextSiblingElement("RefName");
+	if (referenceData)
+	{
+		XMLElement* refActorData = referenceData->FirstChildElement("RefName");
+		while (refActorData) {
+			//Get the actor data and add it to the reference list
+			const char* refActorName_ = refActorData->FindAttribute("name")->Value();
+			Ref<Actor> actorData_ = GetActor(refActorName_);
+			actorRefList[refActorName_] = actorData_;
+
+			refActorData = refActorData->NextSiblingElement("RefName");
+		}
 	}
 
 	//Get First child element and check if it exists;

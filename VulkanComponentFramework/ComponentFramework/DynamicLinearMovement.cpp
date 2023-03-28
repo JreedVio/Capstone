@@ -92,26 +92,26 @@ void PHYSICS::DynamicLinearMovement::UpdateWall(const float deltaTime)
 	if (pos.x >= Actor->GetActor("Right")->GetComponent<TransformComponent>()->GetPosition().x - 1.5f)
 	{
 		TransformRef->SetTransform(Vec3(23.5f, pos.y, pos.z), orient);
-		printf("collision!\n");
+		//printf("collision!\n");
 	}
 	// Left
 	else if (pos.x <= Actor->GetActor("Left")->GetComponent<TransformComponent>()->GetPosition().x + 1.5f)
 	{
 		TransformRef->SetTransform(Vec3(-23.5f, pos.y, pos.z), orient);
-		printf("collision!\n");
+		//printf("collision!\n");
 	}
 	
 	// Front
 	else if (pos.z <= Actor->GetActor("Forward")->GetComponent<TransformComponent>()->GetPosition().z + 1.5f)
 	{
 		TransformRef->SetTransform(Vec3(pos.x, pos.y, -23.5f), orient);
-		printf("collision!\n");
+		//printf("collision!\n");
 	}
 	//Back
 	else if (pos.z >= Actor->GetActor("Backward")->GetComponent<TransformComponent>()->GetPosition().z - 1.5f)
 	{
 		TransformRef->SetTransform(Vec3(pos.x, pos.y, 23.5f), orient);
-		printf("collision!\n");
+		//printf("collision!\n");
 	}
 
 	//pos += penetration;
