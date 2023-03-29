@@ -28,6 +28,7 @@ public:
 	void Send();
 	void SendRoomName(const char* roomName);
 	void SendPuzzleSolved();
+	void SendReady();
 	void AddPosition(Message& msg);
 	void AddRotation(Message& msg);
 	//void SendPositionPacket();

@@ -17,6 +17,7 @@ public:
 	ENetHost* server;
 	ENetPeer* peer;
 	Ref<Actor> localPlayer, remotePlayer;
+	bool isClientReady;
 
 
 

@@ -15,7 +15,7 @@
 
 using namespace MATH;
 
-Server::Server() : NetworkUnit(UnitType::SERVER)
+Server::Server() : NetworkUnit(UnitType::SERVER), isClientReady(false)
 {
 }
 
@@ -24,7 +24,7 @@ Server::~Server()
     Disconnect();
     if (server != nullptr) enet_host_destroy(server);
     peer = nullptr;
-
+    isClientReady = false;
 }
 
 bool Server::OnCreate()
@@ -85,7 +85,7 @@ void Server::Update()
 }
 
 void Server::Send() {
-    if (peer == nullptr) return;
+    if (peer == nullptr || !isClientReady) return;
 
     Message msg;
     msg.header.type = CustomMessageType::RotationAndPosition;
@@ -233,27 +233,21 @@ void Server::ProcessMessage(Message& msg)
         Vec3 receivedPos;
         msg >> receivedPos.z >> receivedPos.y >> receivedPos.x;
         remotePlayer->GetComponent<TransformComponent>()->pos = receivedPos;
-        //std::cout << "Position: " << receivedPos.x << " " << receivedPos.y
-        //    << " " << receivedPos.z << std::endl;
     }
     else if (msg.header.type == CustomMessageType::Rotation) {
         float x, y, z, w;
         msg >> w >> z >> y >> x;
         remotePlayer->GetComponent<TransformComponent>()->orientation = Quaternion(w, x, y, z);
-        //std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
     }
     else if (msg.header.type == CustomMessageType::RotationAndPosition) {
         Vec3 receivedPos;
         msg >> receivedPos.z >> receivedPos.y >> receivedPos.x;
         remotePlayer->GetComponent<TransformComponent>()->pos = receivedPos;
-        //std::cout << "Position: " << receivedPos.x << " " << receivedPos.y
-        //    << " " << receivedPos.z << std::endl;
 
         float x, y, z, w;
         msg >> w >> z >> y >> x;
         remotePlayer->GetComponent<TransformComponent>()->orientation = Quaternion(w, x, y, z);
         remotePlayer->GetComponent<TransformComponent>()->SetTransform(receivedPos, Quaternion(w, x, y, z));
-        //std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
     }
     else if (msg.header.type == CustomMessageType::RoomName) {
 
@@ -266,17 +260,7 @@ void Server::ProcessMessage(Message& msg)
     else if (msg.header.type == CustomMessageType::PuzzleSolved) {
         dynamic_cast<RoomScene*>(SceneManager::GetInstance()->GetCurrentScene())->GetRoom()->SetSolved(true);
     }
+    else if (msg.header.type == CustomMessageType::Ready) {
+        isClientReady = true;
+    }
 }
-
-/*printf("A packet of length %u containing %s was received from %x:%u on channel %u.\n",
-                event.packet->dataLength,
-                event.packet->data,
-                event.peer->address.host,
-                event.peer->address.port,
-                event.channelID);*/
-
-/*//enet_packet_resize(tempPacket, strlen("packetfoo") + 1);
-//memcpy???
-//strcpy_s(reinterpret_cast<char*>(temptemp->data[strlen("packet")]), strlen("packetfoo") + 1, "foo");
-//strcpy(reinterpret_cast<char*>(tempPacket->data[strlen("packet")]), "foo");
-//strcpy(reinterpret_cast<char*>(temptemp->data[strlen("packet")]), "foo");*/
