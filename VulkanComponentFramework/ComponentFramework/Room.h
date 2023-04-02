@@ -34,9 +34,11 @@ public:
 	virtual void OnDestroy();
 	virtual void CheckPuzzle();
 	bool IsSolved() { return puzzleSolved; }
+	void SetSolved(bool puzzleSolved_) { puzzleSolved = puzzleSolved_; }
 	void OpenDoor() { door->SetIsOpened(true); }
 	void SetRoomTime(float roomTime_);
 	void SetDoor(Ref<DoorActor> door_) { door = door_; }
+	Ref<DoorActor> GetDoor() { return door; }
 
 	template<typename ActorTemplate>
 	void AddActor(const char* name_, Ref<ActorTemplate> actor_) {

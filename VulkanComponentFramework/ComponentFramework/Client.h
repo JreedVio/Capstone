@@ -17,21 +17,20 @@ public:
 	Ref<Actor> localPlayer, remotePlayer;
 
 
-
-
 	Client();
 	~Client();
 
 	bool OnCreate();
+	bool RecieveRoomName(ENetEvent& event);
 	void OnDestroy();
 	void Disconnect();
 	void Update();
 	void Send();
 	void SendRoomName(const char* roomName);
+	void SendPuzzleSolved();
 	void AddPosition(Message& msg);
 	void AddRotation(Message& msg);
-	void AddRoom(Message& msg);
-	void SendPositionPacket();
+	//void SendPositionPacket();
 	void Recieve(int tickrate);
 	void ProcessMessage(Message& msg);
 };

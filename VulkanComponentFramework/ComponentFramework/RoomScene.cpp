@@ -43,8 +43,6 @@ bool RoomScene::OnCreate(){
     localPawn->OnCreate();
     Ref<TransformComponent> remoteTransform_ = remotePawn->GetComponent<TransformComponent>();
     Ref<TransformComponent> localTransform_ = localPawn->GetComponent<TransformComponent>();
-    
-    remotePawn->SetVisible(false);
 
     //Set the enter location
     Vec3 playerStart = Vec3(0.0f, 3.0f, 0.0f);
@@ -130,10 +128,11 @@ void RoomScene::OnDestroy() {
 
 void RoomScene::Update(const float deltaTime) {
 
-    if (room->IsSolved()) {
+    if (room->IsSolved() && !room->GetDoor()->GetIsOpened()) {
         room->OpenDoor();
+        NetworkManager::GetInstance()->GetUnit()->SendPuzzleSolved();
     }
-    else {
+    else if(!room->IsSolved()) {
         room->CheckPuzzle();
     }
 

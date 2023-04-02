@@ -69,6 +69,7 @@ Scene* AssetManager::LoadRoom(const char* sceneName_) {
 
 	Debug::Info("Succeed to Load Scene " + std::string(sceneName_), __FILE__, __LINE__);
 	room_->SetSceneName(sceneName_);
+	std::cout << "Changed scene name to: " << sceneName_ << std::endl;
 	return room_;
 }
 

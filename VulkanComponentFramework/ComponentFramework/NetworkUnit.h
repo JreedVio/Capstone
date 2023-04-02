@@ -19,6 +19,7 @@ public:
 	virtual void Update() = 0;
 	virtual void OnDestroy() = 0;
 	virtual void SendRoomName(const char* roomName) = 0;
+	virtual void SendPuzzleSolved() = 0;
 	UnitType unitType;
 };
 

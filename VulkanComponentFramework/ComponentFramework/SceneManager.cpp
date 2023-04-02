@@ -74,6 +74,11 @@ SceneManager::~SceneManager() {
 		networkManager = nullptr;
 	}
 
+	if (nextScene) {
+		delete[] nextScene;
+		nextScene = nullptr;
+	}
+
 	Debug::Info("Deleting the GameSceneManager", __FILE__, __LINE__);
 
 }
@@ -118,7 +123,7 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 		return false;
 	}
 
-	networkManager = new NetworkManager();
+	networkManager = NetworkManager::GetInstance();
 	if (!networkManager->Initialize()) {
 		Debug::FatalError("Failed to initialize Network Manager", __FILE__, __LINE__);
 		return false;
@@ -142,6 +147,7 @@ void SceneManager::Run() {
 	{
 			//ChronoTimer chronoTimer;
 			timer->UpdateFrameTicks();
+			//if(nextScene != nullptr) std::cout << "Current nextScene is: " << nextScene << std::endl;
 			if (currentScene->GetStatus() == ROOMTRANSIT) {
 				BuildScene(ROOMSCENE, nextScene);
 			}
@@ -174,6 +180,7 @@ bool SceneManager::StartGame(USERTYPE userType_){
 				networkManager->ResetNetwork();
 				return false;
 			}
+			SetNextScene("Level1");
 			break;
 		case CLIENT:
 			if (!networkManager->StartNetwork((int)userType_)) {
@@ -184,12 +191,13 @@ bool SceneManager::StartGame(USERTYPE userType_){
 			break;
 	}
 
+	uiManager->openMenu("MainMenu");
+	//Enter the start room
+	BuildScene(ROOMSCENE, nextScene);
+
 	std::thread networking(&NetworkManager::Update, this->networkManager);
 	networking.detach();
 
-	uiManager->openMenu("MainMenu");
-	//Enter the start room
-	BuildScene(ROOMSCENE, "Level1");
 	//Restart the timer
 	//timer->Start();
 
@@ -301,6 +309,16 @@ void SceneManager::GetEvents() {
 	}
 }
 
+void SceneManager::SetNextScene(const char* nextScene_)
+{
+	if (nextScene != nullptr) delete[] nextScene;
+
+	size_t size = strlen(nextScene_);
+	nextScene = new char[size + 1];
+	std::memcpy(nextScene, nextScene_, size);
+	nextScene[strlen(nextScene_)] = '\0';
+}
+
 void SceneManager::BuildScene(SCENETYPE scenetype_, const char* fileName) {
 	bool status; 
 	std::string sceneName_ = std::string(fileName);
@@ -314,7 +332,7 @@ void SceneManager::BuildScene(SCENETYPE scenetype_, const char* fileName) {
 	switch (scenetype_) {
 	case ROOMSCENE:
 
-		currentScene = assetManager->LoadRoom(sceneName_.c_str());
+		currentScene = assetManager->LoadRoom(fileName);
 		status = currentScene->OnCreate();
 		break;
 

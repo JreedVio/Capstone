@@ -22,6 +22,7 @@ public:
 	virtual void HandleEvents(const SDL_Event& sdlEvent) override;
 
 	void SetRoom(Ref<Room> room_) { room = room_; }
+	Ref<Room> GetRoom() { return room; }
 	virtual std::unordered_map<const char*, Ref<Actor>> GetActorList() override{ 
 		return room->GetActorList();
 	}

@@ -4,6 +4,8 @@
 #include "SceneManager.h"
 #include "Timer.h"
 
+NetworkManager* NetworkManager::Instance(nullptr);
+
 NetworkManager::NetworkManager() : tickrate(30), isNetworkRunning(false){
 }
 

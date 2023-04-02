@@ -53,7 +53,8 @@ enum class CustomMessageType : uint32_t {
 	Position,
 	Rotation,
 	RotationAndPosition,
-	RoomName
+	RoomName,
+	PuzzleSolved
 };
 
 ///[OLC_HEADERIFYIER] START "MESSAGE"
@@ -95,6 +96,14 @@ struct Message
 	size_t size() const
 	{
 		return body.size();
+	}
+
+	void AddCharArray(const char* arr, size_t size)
+	{
+		body.reserve(body.size() + size);
+		//std::copy(arr, arr + size, std::back_inserter(body));
+		body.insert(body.end(), arr, arr + size);
+		body.push_back('\0');
 	}
 
 	// Convenience Operator overloads - These allow us to add and remove stuff from

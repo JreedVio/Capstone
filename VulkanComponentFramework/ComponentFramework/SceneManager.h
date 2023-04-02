@@ -34,7 +34,7 @@ public:
 	static void RunNetworkUpdate(NetworkManager*);
 	bool GetIsRunning() { return isRunning; }
 	Scene* GetCurrentScene() { return currentScene; }
-	void SetNextScene(const char* nextScene_) { nextScene = nextScene_; }
+	void SetNextScene(const char* nextScene_);
 	void SetOpenMainMenu(bool openMainMenu_) { openMainMenu = openMainMenu_; }
 	Ref<PlayerController> GetRemotePlayer() { return remotePlayer; }
 	Ref<PlayerController> GetLocalPlayer() { return localPlayer; }
@@ -53,7 +53,7 @@ private:
 	NetworkManager* networkManager;
 	enum class RendererType rendererType;
 	Scene* currentScene;
-	const char* nextScene;
+	char* nextScene;
 	std::unordered_map<const char*, Scene*> sceneList;
 	class Timer* timer;
 
