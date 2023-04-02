@@ -4,6 +4,8 @@
 
 		<Size x="50" y="10" z="50"/>
 		<RoomTime time="5"/>
+		<PuzzleType name="PlatePuzzle" plate1="PlateA3" plate2="PlateB2"/>
+
 		<WallActor>
 			<!--><-->
 			<Wall name="Left" actor="Wall"/>
@@ -14,29 +16,140 @@
 			<Wall name="Bottom" actor="Floor"/>
 		</WallActor>
 
-		<PuzzleActor>
+		<!-->	 0 - 1 - 2	 <-->
+		<!-->    3 - 4 - 5	 <-->
+		<!-->	 6 - 7 - 8	 <-->
+		<Actor ref="Cube" name="PlateA0">
+			<Transform
+				posX ="-1.0" posY ="-0.5" posZ ="-1.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
 
-			<PressurePlate name="PlateA0" actor="Cube"/>
-			<PressurePlate name="PlateA1" actor="Cube"/>
-			<PressurePlate name="PlateA2" actor="Cube"/>
-			<PressurePlate name="PlateA3" actor="Cube"/>
-			<PressurePlate name="PlateA4" actor="Cube"/> <!-->	 0 - 1 - 2	 <-->
-			<PressurePlate name="PlateA5" actor="Cube"/> <!-->   3 - 4 - 5	 <-->
-			<PressurePlate name="PlateA6" actor="Cube"/> <!-->	 6 - 7 - 8	 <-->
-			<PressurePlate name="PlateA7" actor="Cube"/>
-			<PressurePlate name="PlateA8" actor="Cube"/>
+		<Actor ref="Cube" name="PlateA1">
+			<Transform
+				posX ="0.0" posY ="-0.5" posZ ="-1.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateA2">
+			<Transform
+				posX ="1.0" posY ="-0.5" posZ ="-1.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateA3">
+			<Transform
+				posX ="-1.0" posY ="-0.5" posZ ="0.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateA4">  
+			<Transform
+				posX ="0.0" posY ="-0.5" posZ ="0.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateA5">
+			<Transform
+				posX ="1.0" posY ="-0.5" posZ ="0.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateA6">
+			<Transform
+				posX ="-1.0" posY ="-0.5" posZ ="1.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateA7">
+			<Transform
+				posX ="0.0" posY ="-0.5" posZ ="1.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateA8">
+			<Transform
+				posX ="1.0" posY ="-0.5" posZ ="1.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
 
-			<PressurePlate name="PlateB0" actor="Cube"/>
-			<PressurePlate name="PlateB1" actor="Cube"/>
-			<PressurePlate name="PlateB2" actor="Cube"/>
-			<PressurePlate name="PlateB3" actor="Cube"/>
-			<PressurePlate name="PlateB4" actor="Cube"/> <!-->	 0 - 1 - 2	 <-->
-			<PressurePlate name="PlateB5" actor="Cube"/> <!-->   3 - 4 - 5	 <-->
-			<PressurePlate name="PlateB6" actor="Cube"/> <!-->	 6 - 7 - 8	 <-->
-			<PressurePlate name="PlateB7" actor="Cube"/>
-			<PressurePlate name="PlateB8" actor="Cube"/>
-
-		</PuzzleActor>
+		<!-->	 0 - 1 - 2	 <-->
+		<!-->    3 - 4 - 5	 <-->
+		<!-->	 6 - 7 - 8	 <-->
+		<Actor ref="Cube" name="PlateB0">
+			<Transform
+				posX ="-5.0" posY ="-0.5" posZ ="-1.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateB1">
+			<Transform
+				posX ="-4.0" posY ="-0.5" posZ ="-1.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateB2">
+			<Transform
+				posX ="-3.0" posY ="-0.5" posZ ="-1.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateB3">
+			<Transform
+				posX ="-5.0" posY ="-0.5" posZ ="0.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateB4">
+			<Transform
+				posX ="-4.0" posY ="-0.5" posZ ="0.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateB5">
+			<Transform
+				posX ="-3.0" posY ="-0.5" posZ ="0.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateB6">
+			<Transform
+				posX ="-5.0" posY ="-0.5" posZ ="1.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateB7">
+			<Transform
+				posX ="-4.0" posY ="-0.5" posZ ="1.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+		<Actor ref="Cube" name="PlateB8">
+			<Transform
+				posX ="-3.0" posY ="-0.5" posZ ="1.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
 
 		<LightActor>
 			<Light posX ="0.0" posY ="5.0" posZ ="0.0"

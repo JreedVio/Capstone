@@ -150,9 +150,6 @@
     <ClCompile Include="Server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DoorActor.cpp">
-      <Filter>Source Files\Scenes\Room</Filter>
-    </ClCompile>
     <ClCompile Include="CameraActor.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -221,6 +218,12 @@
     </ClCompile>
     <ClCompile Include="AudioManager.cpp">
       <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="DoorActor.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatePuzzleRoom.cpp">
+      <Filter>Source Files\Scenes\Room</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -335,9 +338,6 @@
     <ClInclude Include="ChronoTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DoorActor.h">
-      <Filter>Header Files\Scenes\Room</Filter>
-    </ClInclude>
     <ClInclude Include="CameraActor.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -421,6 +421,12 @@
     </ClInclude>
     <ClInclude Include="AudioManager.h">
       <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="DoorActor.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatePuzzleRoom.h">
+      <Filter>Header Files\Scenes\Room</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

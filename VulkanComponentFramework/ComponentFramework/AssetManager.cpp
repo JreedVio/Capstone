@@ -12,6 +12,7 @@
 #include "Scene.h"
 #include "Room.h"
 #include "CodePuzzleRoom.h"
+#include "PlatePuzzleRoom.h"
 #include "CodeActor.h"
 #include "RoomScene.h"
 #include "Physics.h"
@@ -278,9 +279,128 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 			room_->AddActor("CodePanel", codeActor_);
 
 		}
-		//else if(strcmp(puzzleType, "Puzzle2") == 0) {
+		else if(strcmp(puzzleType, "PlatePuzzle") == 0) {
+			room_ = std::make_shared<PlatePuzzleRoom>(width, length, height);
+			Ref<PlatePuzzleRoom> plateRoom_ = std::dynamic_pointer_cast<PlatePuzzleRoom>(room_);
+			//Set up the desired puzzle
+			const char* plate1 = typeData->FindAttribute("plate1")->Value();
+			const char* plate2 = typeData->FindAttribute("plate2")->Value();
+			plateRoom_->SetPlate1Name(plate1);
+			plateRoom_->SetPlate2Name(plate2);
 
-		//}
+			//Set up the puzzle
+			//Add PuzzleData
+		//	XMLElement* puzzleData = roomData->FirstChildElement("PuzzleActor");
+		//	if (puzzleData)
+		//	{
+		//		XMLElement* pressurePlate = puzzleData->FirstChildElement("PressurePlate");
+		//		Ref<Actor> plateActorData = GetActor("Cube");
+		//		while (pressurePlate)
+		//		{
+		//			const char* plateName = pressurePlate->FindAttribute("name")->Value();
+		//			const char* plateActorName = pressurePlate->FindAttribute("actor")->Value();
+
+		//			Ref<Actor> plateActor = std::make_shared<Actor>(*plateActorData.get());
+
+		//			Vec3 position;
+		//			Quaternion rotation;
+		//			Vec3 scale(0.45f, 0.05f, 0.45f);
+
+		//			// 0 - 1 - 2
+		//			// 3 - 4 - 5
+		//			// 6 - 7 - 8		
+
+		//			float floorY = -0.5f;
+
+		//			// first set of plates
+		//			if (strcmp(plateName, "PlateA0") == 0) {
+
+		//				position = Vec3(-1.0f, floorY, -1.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateA1") == 0) {
+
+		//				position = Vec3(0.0f, floorY, -1.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateA2") == 0) {
+
+		//				position = Vec3(1.0f, floorY, -1.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateA3") == 0) {
+
+		//				position = Vec3(-1.0f, floorY, 0.0f);
+
+		//			}
+		//			else if (strcmp(plateName, "PlateA4") == 0) {
+
+		//				position = Vec3(0.0f, floorY, 0.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateA5") == 0) {
+
+		//				position = Vec3(1.0f, floorY, 0.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateA6") == 0) {
+
+		//				position = Vec3(-1.0f, floorY, 1.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateA7") == 0) {
+
+		//				position = Vec3(0.0f, floorY, 1.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateA8") == 0) {
+
+		//				position = Vec3(1.0f, floorY, 1.0f);
+		//			}
+
+		//			// second set of plates
+		//			if (strcmp(plateName, "PlateB0") == 0) {
+
+		//				position = Vec3(-1.0f * 5.0f, floorY, -1.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateB1") == 0) {
+
+		//				position = Vec3(-4.0f, floorY, -1.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateB2") == 0) {
+
+		//				position = Vec3(1.0f * -3.0f, floorY, -1.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateB3") == 0) {
+
+		//				position = Vec3(-1.0f * 5.0f, floorY, 0.0f);
+
+		//			}
+		//			else if (strcmp(plateName, "PlateB4") == 0) {
+
+		//				position = Vec3(-4.0f, floorY, 0.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateB5") == 0) {
+
+		//				position = Vec3(1.0f * -3.0f, floorY, 0.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateB6") == 0) {
+
+		//				position = Vec3(-1.0f * 5.0f, floorY, 1.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateB7") == 0) {
+
+		//				position = Vec3(-4.0f, floorY, 1.0f);
+		//			}
+		//			else if (strcmp(plateName, "PlateB8") == 0) {
+
+		//				position = Vec3(1.0f * -3.0f, floorY, 1.0f);
+		//			}
+
+		//			Ref<TransformComponent> transform;
+		//			transform = std::make_shared<TransformComponent>(plateActor.get(), position, rotation, scale);
+		//			plateActor->SetAlpha(0.5f);
+		//			plateActor->AddComponent(transform);
+		//			plateActor->OnCreate();
+		//			room_->AddActor(plateName, plateActor);
+		//			pressurePlate = pressurePlate->NextSiblingElement("PressurePlate");
+		//		}
+		//	}
+
+		}
 		//else if (strcmp(puzzleType, "Puzzle3") == 0) {
 
 		//}
@@ -291,118 +411,7 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 	}
 
 	room_->SetRoomTime(time_);
-
 	Scene* scene_ = new RoomScene(renderer, room_);
-	//Add PuzzleData
-	XMLElement* puzzleData = roomData->FirstChildElement("PuzzleActor");
-	if (puzzleData)
-	{
-		XMLElement* pressurePlate = puzzleData->FirstChildElement("PressurePlate");
-		while (pressurePlate)
-		{
-			const char* plateName = pressurePlate->FindAttribute("name")->Value();
-			const char* plateActorName = pressurePlate->FindAttribute("actor")->Value();
-
-			Ref<Actor> plateActorData = GetActor(plateActorName);
-			Ref<Actor> plateActor = std::make_shared<Actor>(*plateActorData.get());
-
-			Vec3 position;
-			Quaternion rotation;
-			Vec3 scale(0.45f, 0.05f, 0.45f);
-
-			// 0 - 1 - 2
-			// 3 - 4 - 5
-			// 6 - 7 - 8		
-
-			float floorY = -0.5f;
-
-			// first set of plates
-			if (strcmp(plateName, "PlateA0") == 0) {
-
-				position = Vec3(-1.0f, floorY, -1.0f);
-			}
-			else if (strcmp(plateName, "PlateA1") == 0) {
-
-				position = Vec3(0.0f, floorY, -1.0f);
-			}
-			else if (strcmp(plateName, "PlateA2") == 0) {
-
-				position = Vec3(1.0f, floorY, -1.0f);
-			}
-			else if (strcmp(plateName, "PlateA3") == 0) {
-
-				position = Vec3(-1.0f, floorY, 0.0f);
-
-			}
-			else if (strcmp(plateName, "PlateA4") == 0) {
-
-				position = Vec3(0.0f, floorY, 0.0f);
-			}
-			else if (strcmp(plateName, "PlateA5") == 0) {
-
-				position = Vec3(1.0f, floorY, 0.0f);
-			}
-			else if (strcmp(plateName, "PlateA6") == 0) {
-
-				position = Vec3(-1.0f, floorY, 1.0f);
-			}
-			else if (strcmp(plateName, "PlateA7") == 0) {
-
-				position = Vec3(0.0f, floorY, 1.0f);
-			}
-			else if (strcmp(plateName, "PlateA8") == 0) {
-
-				position = Vec3(1.0f, floorY, 1.0f);
-			}
-
-			// second set of plates
-			if (strcmp(plateName, "PlateB0") == 0) {
-
-				position = Vec3(-1.0f * 5.0f, floorY, -1.0f);
-			}
-			else if (strcmp(plateName, "PlateB1") == 0) {
-
-				position = Vec3(-4.0f, floorY, -1.0f);
-			}
-			else if (strcmp(plateName, "PlateB2") == 0) {
-
-				position = Vec3(1.0f * -3.0f, floorY, -1.0f);
-			}
-			else if (strcmp(plateName, "PlateB3") == 0) {
-
-				position = Vec3(-1.0f * 5.0f, floorY, 0.0f);
-
-			}
-			else if (strcmp(plateName, "PlateB4") == 0) {
-
-				position = Vec3(-4.0f, floorY, 0.0f);
-			}
-			else if (strcmp(plateName, "PlateB5") == 0) {
-
-				position = Vec3(1.0f * -3.0f, floorY, 0.0f);
-			}
-			else if (strcmp(plateName, "PlateB6") == 0) {
-
-				position = Vec3(-1.0f * 5.0f, floorY, 1.0f);
-			}
-			else if (strcmp(plateName, "PlateB7") == 0) {
-
-				position = Vec3(-4.0f, floorY, 1.0f);
-			}
-			else if (strcmp(plateName, "PlateB8") == 0) {
-
-				position = Vec3(1.0f * -3.0f, floorY, 1.0f);
-			}
-
-			Ref<TransformComponent> transform;
-			transform = std::make_shared<TransformComponent>(plateActor.get(), position, rotation, scale);
-			plateActor->SetAlpha(0.5f);
-			plateActor->AddComponent(transform);
-			plateActor->OnCreate();
-			room_->AddActor(plateName, plateActor);
-			pressurePlate = pressurePlate->NextSiblingElement("PressurePlate");
-		}
-	}
 	
 	//Add WallData
 	XMLElement* wallData = roomData->FirstChildElement("WallActor");
@@ -579,6 +588,11 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 		Ref<Actor> actor_ = std::make_shared<Actor>(*actorData_.get());
 		//Get data for transform
 		XMLElement* componentTransformElement = actorData->FirstChildElement("Transform");
+		//Get alpha data
+		XMLElement* actorAlphaElement = actorData->FirstChildElement("Alpha");
+		if (actorAlphaElement) {
+			actor_->SetAlpha(actorAlphaElement->FloatAttribute("value"));
+		}
 		//Set transform component
 		actor_->AddComponent(LoadTransform(actor_.get(), componentTransformElement));
 		actor_->OnCreate();

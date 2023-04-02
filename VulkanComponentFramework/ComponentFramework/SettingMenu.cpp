@@ -1,6 +1,7 @@
 #include "SettingMenu.h"
 #include "TransformComponent.h"
 #include "UIManager.h"
+#include "AudioManager.h"
 
 SettingMenu::~SettingMenu(){}
 
@@ -83,6 +84,24 @@ void SettingMenu::Update(Scene* scene_){
 
 void SettingMenu::showAudioControl(){
     float itemWidth = ImGui::GetWindowSize().x * 0.9f;
+    ImGui::Text("Master Volume");
+    ImGui::SetNextItemWidth(itemWidth);
+    int masterVol_ = AudioManager::getInstance()->getMasterVolume() * 100;
+    if (ImGui::SliderInt("##masterVol", &masterVol_, 0, 100)) {
+        AudioManager::getInstance()->setMasterVolume(masterVol_ * 0.01f);
+    }
+    ImGui::Text("BGM Volume");
+    ImGui::SetNextItemWidth(itemWidth);
+    int bgmVol_ = AudioManager::getInstance()->getBGMVolume() * 100;
+    if (ImGui::SliderInt("##bgmVol", &bgmVol_, 0, 100)) {
+        AudioManager::getInstance()->setBGMVolume(bgmVol_ * 0.01f);
+    }
+    ImGui::Text("SFX Volume");
+    ImGui::SetNextItemWidth(itemWidth);
+    int sfxVol_ = AudioManager::getInstance()->getSFXVolume() * 100;
+    if (ImGui::SliderInt("##sfxVol", &sfxVol_, 0, 100)) {
+        AudioManager::getInstance()->setSFXVolume(sfxVol_ * 0.01f);
+    }
 }
 
 void SettingMenu::toParent(){

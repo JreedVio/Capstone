@@ -62,6 +62,7 @@ bool UIManager::OnCreate(){
 	//Add Code menu to the ui manager
 	CodeUI* codeUIMenu_ = new CodeUI(nullptr);
 	AddUserInterface("CodeUI", codeUIMenu_);
+	codeUIMenu_->setSoundFile("audio/scifiNotification.wav");
 	codeUIMenu_->ShowWindow(false);
 
 	return true;

@@ -156,6 +156,7 @@
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
+    <ClCompile Include="PlatePuzzleRoom.cpp" />
     <ClCompile Include="SettingMenu.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PlayerController.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="NetworkUnit.h" />
     <ClInclude Include="OpenGLRenderer.h" />
     <ClInclude Include="PauseMenu.h" />
+    <ClInclude Include="PlatePuzzleRoom.h" />
     <ClInclude Include="PressurePlate.h" />
     <ClInclude Include="SettingMenu.h" />
     <ClInclude Include="Packet.h" />
