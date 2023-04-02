@@ -15,6 +15,7 @@ private:
 
 	Ref<CodeActor> codePanel;
 	std::vector<int> passCode;
+	void ParseCode(int tempCode);
 
 public:
 	CodePuzzleRoom(int width_, int length_, int height_);
@@ -26,7 +27,7 @@ public:
 
 	virtual void CheckPuzzle() override;
 	void SetCode(const char* code_);
-	
+	void SetCode(float code_);
 
 };
 

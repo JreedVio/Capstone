@@ -8,6 +8,7 @@
 
 class PlayerController;
 class AssetManager;
+class AudioManager;
 class UIManager;
 class Scene;
 
@@ -61,6 +62,7 @@ private:
 
 	VulkanRenderer* renderer;
 	AssetManager* assetManager;
+	AudioManager* audioManager;
 	UIManager* uiManager;
 	unsigned int fps;
 	bool isRunning;

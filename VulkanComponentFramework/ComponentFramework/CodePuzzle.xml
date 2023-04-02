@@ -4,7 +4,7 @@
 
 		<Size x="50" y="10" z="50"/>
 		<RoomTime time="5"/>
-		<PuzzleType name="CodePuzzle"/>
+		<PuzzleType name="CodePuzzle" pass="1234"/>
 		
 		<WallActor>
 			<!--><-->

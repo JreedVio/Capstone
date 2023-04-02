@@ -4,7 +4,7 @@
 
 
 CodePuzzleRoom::CodePuzzleRoom(int width_, int length_, int height_): Room(width_, length_, height_) {
-	SetCode("1234");
+	SetCode("0000");
 
 }
 
@@ -30,11 +30,11 @@ void CodePuzzleRoom::CheckPuzzle(){
 
 	std::vector<int> codeEntered = codePanel->GetCodeEntered();
 	if (codeEntered.size() != CODE_SIZE) return;
-	std::cout << "Check Puzzled\n";
+	//std::cout << "Check Puzzled\n";
 	for (int i = 0; i < CODE_SIZE; i++) {
 		int code_ = codeEntered.at(i);
 		int passCode_ = passCode.at(i);
-		printf("%d, %d\n", code_, passCode_);
+		//printf("%d, %d\n", code_, passCode_);
 		if (code_ != passCode_) {
 			return;
 		}
@@ -43,8 +43,18 @@ void CodePuzzleRoom::CheckPuzzle(){
 }
 
 void CodePuzzleRoom::SetCode(const char* code_){
+	ParseCode(atoi(code_));
+}
+
+void CodePuzzleRoom::SetCode(float code_) {
 	//TODO::Set code
-	int tempCode = atoi(code_);
+	ParseCode(code_);
+}
+
+void CodePuzzleRoom::ParseCode(int tempCode){
+	//Clean the previous code
+	passCode.clear();
+	//Add code to vector
 	passCode.push_back(tempCode / 1000.0f);
 	tempCode = tempCode % 1000;
 	passCode.push_back(tempCode / 100.0f);
@@ -53,4 +63,3 @@ void CodePuzzleRoom::SetCode(const char* code_){
 	tempCode = tempCode % 10;
 	passCode.push_back(tempCode);
 }
-

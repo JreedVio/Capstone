@@ -5,6 +5,7 @@
 #include "VulkanRenderer.h"
 #include "OpenGLRenderer.h"
 #include "AssetManager.h"
+#include "AudioManager.h"
 #include "UIManager.h"
 #include "Timer.h"
 #include "RoomScene.h"
@@ -20,7 +21,7 @@ SceneManager* SceneManager::Instance(nullptr);
 SceneManager::SceneManager(): 
 	currentScene(nullptr), timer(nullptr),
 	fps(60), isRunning(false), rendererType(RendererType::VULKAN), 
-	renderer(nullptr), assetManager(nullptr), uiManager(nullptr),
+	renderer(nullptr), assetManager(nullptr), audioManager(nullptr), uiManager(nullptr),
 	openMainMenu(false){}
 
 SceneManager* SceneManager::GetInstance(){
@@ -50,6 +51,10 @@ SceneManager::~SceneManager() {
 		renderer = nullptr;
 	}
 
+	if (audioManager) {
+		delete audioManager;
+		audioManager = nullptr;
+	}
 
 	if (assetManager) {
 		assetManager->OnDestroy();
@@ -99,6 +104,14 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 	Debug::Info("AssetManager Created", __FILE__, __LINE__);
 	assetManager->LoadAssets("RendererAssets");
 
+	//Setup Audio Manager
+	audioManager = AudioManager::getInstance();
+	if (!audioManager->OnCreate()) {
+		return false;
+		Debug::FatalError("AudioManager Failed", __FILE__, __LINE__);
+	}
+	Debug::Info("AudioManager Created", __FILE__, __LINE__);
+
 	timer = new Timer();
 	if (timer == nullptr) {
 		Debug::FatalError("Failed to initialize Timer object", __FILE__, __LINE__);
@@ -141,6 +154,7 @@ void SceneManager::Run() {
 			currentScene->Update(timer->GetDeltaTime());
 			uiManager->Update(currentScene);
 			uiManager->Display();
+			audioManager->Update();
 			currentScene->Render();
 
 			GetEvents();

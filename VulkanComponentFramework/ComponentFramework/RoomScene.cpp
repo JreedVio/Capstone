@@ -1,19 +1,19 @@
 #include "RoomScene.h"
 #include <iostream>
+#include <thread>
+#include <mutex>
 #include "Debug.h"
 #include "MMath.h"
 #include "Debug.h"
 #include "VulkanRenderer.h"
 #include "UIManager.h"
-#include "Camera.h"
-#include "GlobalLighting.h"
+#include "AudioManager.h"
 #include "SceneManager.h"
+#include "GlobalLighting.h"
 #include "CameraActor.h"
 #include "TransformComponent.h"
 #include "Physics.h"
-#include <thread>
 #include "CodeActor.h"
-#include <mutex>
 
 
 using namespace PHYSICS;
@@ -115,15 +115,8 @@ bool RoomScene::OnCreate(){
     }   
 
     //**
-
-    //globalLights.push_back(std::make_shared<LightActor>(nullptr));
-    //globalLights.push_back(std::make_shared<LightActor>(nullptr));
-
-    //globalLights[0]->SetPosition(Vec4(5.0f, 0.0f, -3.0f, 0.0f));
-    //globalLights[0]->SetDiffuse(Vec4(0.0f, 0.1f, 0.0f, 1.0f));
-    //globalLights[1]->SetPosition(Vec4(-5.0f, 0.0f, -3.0f, 0.0f));
-    //globalLights[0]->SetDiffuse(Vec4(0.6f, 0.0f, 0.0f, 1.0f));
-    //globalLights.diffuse = Vec4(0.0f, 0.1f, 0.0f, 1.0f);
+    //Play Background music
+    AudioManager::getInstance()->PlayBGM("audio/Loadingloop.wav");
 
     return false;
 }

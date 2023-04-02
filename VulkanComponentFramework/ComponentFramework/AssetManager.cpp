@@ -258,8 +258,11 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 		if (strcmp(puzzleType, "CodePuzzle") == 0) {
 			room_ = std::make_shared<CodePuzzleRoom>(width, length, height);
 			Ref<CodeActor> codeActor_ = std::make_shared<CodeActor>(nullptr);
+			//Get pass code
+			float passCode = typeData->FloatAttribute("pass");
+			std::dynamic_pointer_cast<CodePuzzleRoom>(room_)->SetCode(passCode);
+			//Get and set the actor data for code panel
 			Ref<Actor> codeActorData_ = GetActor("CubeWhite");
-			//Get and set the actor data
 			Ref<MeshComponent> mesh_ = codeActorData_->GetComponent<MeshComponent>();
 			Ref<MaterialComponent> material_ = codeActorData_->GetComponent<MaterialComponent>();
 			Ref<ShaderComponent> shader_ = codeActorData_->GetComponent<ShaderComponent>();

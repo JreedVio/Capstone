@@ -48,6 +48,7 @@ void CodeUI::Display(){
     ImGui::SetCursorPos(ImVec2((windowW - textWidth) * 0.5f, windowH * 0.05f));
     ImGui::Text(code);
 
+    //Set up the number buttons
     ImGui::SetWindowFontScale(3.0f);
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
@@ -71,10 +72,10 @@ void CodeUI::Display(){
     buttonSize = ImVec2(windowW * 0.3f, windowH * 0.15f);
     buttonLocation.x = buttonLocX;
     buttonLocation.y = buttonLocY + heightInterval * 3.0f;
-    ImGui::SetCursorPos(buttonLocation);
-    if (ImGui::Button("Enter", buttonSize)) {
+    //ImGui::SetCursorPos(buttonLocation);
+    //if (ImGui::Button("Enter", buttonSize)) {
 
-    }
+    //}
     //Delete
     buttonLocation.x = buttonLocX + heightInterval * 1.8f;
     ImGui::SetCursorPos(buttonLocation);

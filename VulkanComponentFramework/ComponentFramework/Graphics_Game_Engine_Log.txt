@@ -1,6 +1,7 @@
 [INFO]: Starting the GameSceneManager
 [INFO]: AssetManager Created
 [INFO]: Succeed to Load Asset RendererAssets
+[INFO]: AudioManager Created
 [INFO]: Succeed to Load Scene Level1
 [INFO]: Deleting assets for Actor: 
 [INFO]: Deleting assets for Actor: 
@@ -29,5 +30,4 @@
 [INFO]: Deleting assets for Actor: 
 [INFO]: Deleting assets for Actor: 
 [INFO]: Deleting assets for Actor: 
-[INFO]: Succeed to Load Scene CodePuzzle
 [INFO]: Deleting the GameSceneManager
