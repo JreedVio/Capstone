@@ -7,6 +7,7 @@
 			<Mesh name="MarioModel" filename= "./meshes/Mario.obj"/>
 			<Mesh name="SkullModel" filename= "./meshes/Skull.obj"/>
 			<Mesh name="CubeModel" filename= "./meshes/Cube.obj"/>
+			<Mesh name="CrateModel" filename= "./meshes/Crate.obj"/>
 			<Mesh name="WallModel" filename= "./meshes/Wall_Empty.obj"/>
 			<Mesh name="FloorModel" filename= "./meshes/FloorTile_Empty.obj"/>
 			<Mesh name="RobotModel" filename= "./meshes/Robot.obj"/>
@@ -20,6 +21,7 @@
 			<Material name="WallRed" filename="./textures/redWall.png"/>
 			<Material name="ScifiColor" filename="./textures/ScifiColor.png"/>
 			<Material name="WhiteColour" filename="./textures/White.png"/>
+			<Material name="ScifiCrateTexture" filename="./textures/Crate.png"/>
 			
 			<Shader name ="PhongShader" vertFilename ="shaders/multiPhong.vert.spv" fragFilename="shaders/multiPhong.frag.spv"/>
 
@@ -106,6 +108,13 @@
 			<Parent componentName="None"/>
 			<Mesh componentName="CubeModel"/>
 			<Material componentName="WallRed"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+
+		<Actor name="Crate">
+			<Parent componentName="None"/>
+			<Mesh componentName="CrateModel"/>
+			<Material componentName="ScifiCrateTexture"/>
 			<Shader componentName="PhongShader"/>
 		</Actor>
 

@@ -8,26 +8,22 @@ using namespace MATH;
 
 namespace PHYSICS
 {
-	class Physics: public Component
-	{
+	class Physics {
 		
-		bool Collision = false;
+		//bool Collision = false;
 		
 
 	public:
 		
-		Physics(Component* parent_);
-		
-		bool TestTwoAABB(Ref<AABB> b1, Ref<AABB> b2);
-		void Update(const float deltaTime, Ref<DynamicLinearMovement> DLM, Ref<AABB> cBox);
+		static bool TestTwoAABB(Ref<AABB> b1, Ref<AABB> b2);
+		//void Update(const float deltaTime, Ref<DynamicLinearMovement> DLM, Ref<AABB> cBox);
 
-		void UpdatePuzzle(const float deltaTime);
+		static void RigidBodyMove(Ref<Actor> Player, Ref<Actor> Object, bool CollisionStatus, bool Dynamic = false);
 
-		virtual ~Physics() {};
-		virtual bool OnCreate() { return true; }
-		virtual void OnDestroy() {};
-		virtual void Update(const float deltaTime_) {};
-		virtual void Render()const {}
+		static void ApplyForce(Ref<DynamicLinearMovement> DynamicLinearMovementComp, const Vec3 force, const float mass);
+		static void ApplyLinearForce(Ref<DynamicLinearMovement> DynamicLinearMovementComp, const Vec3 force);
+
+		//void UpdatePuzzle(const float deltaTime);
 		
 	};
 }

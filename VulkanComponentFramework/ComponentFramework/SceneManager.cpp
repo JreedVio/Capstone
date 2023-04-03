@@ -280,7 +280,7 @@ void SceneManager::GetEvents() {
 				break;
 
 			case SDL_SCANCODE_F3:
-				///BuildScene(SCENE3);
+				BuildScene(ROOMSCENE, "PhysicsPuzzle");
 				break;
 
 			case SDL_SCANCODE_F4:

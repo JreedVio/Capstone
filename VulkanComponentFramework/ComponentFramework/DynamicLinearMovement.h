@@ -11,7 +11,6 @@ namespace PHYSICS
 	{
 		const Vec3 Gravity = Vec3(0.0f, -9.81f, 0.0f);
 		Ref<TransformComponent> TransformRef;
-		const float FallSpeed = 1600.0f;
 		Vec3 vel;
 		Vec3 accel;
 		Vec3 pos;

@@ -13,6 +13,7 @@ namespace PHYSICS
 
 		Vec3 bounds[8];
 		Vec3 centre;
+		Vec3 offset;
 		Vec3 min;
 		Vec3 max;
 		Vec3 scale;
@@ -23,10 +24,10 @@ namespace PHYSICS
 
 
 		AABB(Component* parent_, Ref<TransformComponent> ParentTransform_,Vec3 centre_ = Vec3(0.0f, 0.0f, 0.0f), Vec3 scale_ = Vec3(1.0f, 1.0f, 1.0f),
-			Quaternion orientation_ = Quaternion(1.0f, 0.0f, 0.0f, 0.0f));
+			Quaternion orientation_ = Quaternion(1.0f, 0.0f, 0.0f, 0.0f), Vec3 offset_ = Vec3());
 
 		AABB(Ref<TransformComponent> ParentTransform_, Vec3 centre_ = Vec3(0.0f, 0.0f, 0.0f), Vec3 scale_ = Vec3(1.0f, 1.0f, 1.0f),
-			 Quaternion orientation_ = Quaternion(1.0f, 0.0f, 0.0f, 0.0f));
+			 Quaternion orientation_ = Quaternion(1.0f, 0.0f, 0.0f, 0.0f), Vec3 offset_ = Vec3());
 
 
 		void Empty()
@@ -45,6 +46,8 @@ namespace PHYSICS
 
 		void SetCentre(const Vec3 centre_) { centre = centre_; }
 		Vec3 GetCentre() const { return centre; }
+		Vec3 GetMin() const { return min; }
+		Vec3 GetMax() const { return max; }
 
 		virtual ~AABB();
 		virtual bool OnCreate() { return true; }

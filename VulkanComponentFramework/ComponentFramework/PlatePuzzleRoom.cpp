@@ -48,34 +48,30 @@ void PlatePuzzleRoom::CheckPuzzle(){
     Ref<Actor> localPlayer = sceneManager->GetLocalPlayer()->GetPawn();
     Ref<Actor> remotePlayer = sceneManager->GetRemotePlayer()->GetPawn();
 
-    auto localPlayerPhysics = localPlayer->GetComponent<Physics>();
-    auto remotePlayerPhysics = remotePlayer->GetComponent<Physics>();
-
+    Ref<Physics> localPlayerPhysics = localPlayer->GetComponent<Physics>();
+    Ref<Physics> remotePlayerPhysics = remotePlayer->GetComponent<Physics>();
 
     if (plate2 && plate1)
     {
 
-        bool status1 = localPlayerPhysics->TestTwoAABB(localPlayer->GetComponent<AABB>(), plate2->GetComponent<AABB>());
-        bool status2 = remotePlayerPhysics->TestTwoAABB(remotePlayer->GetComponent<AABB>(), plate2->GetComponent<AABB>());
+        bool status1 = Physics::TestTwoAABB(localPlayer->GetComponent<AABB>(), plate2->GetComponent<AABB>());
+        bool status2 = Physics::TestTwoAABB(remotePlayer->GetComponent<AABB>(), plate2->GetComponent<AABB>());
 
-        bool status3 = localPlayerPhysics->TestTwoAABB(localPlayer->GetComponent<AABB>(), plate1->GetComponent<AABB>());
-        bool status4 = remotePlayerPhysics->TestTwoAABB(remotePlayer->GetComponent<AABB>(), plate1->GetComponent<AABB>());
+        bool status3 = Physics::TestTwoAABB(localPlayer->GetComponent<AABB>(), plate1->GetComponent<AABB>());
+        bool status4 = Physics::TestTwoAABB(remotePlayer->GetComponent<AABB>(), plate1->GetComponent<AABB>());
+
+        plate2->SetAlpha(0.5f);
+        plate1->SetAlpha(0.5f);
 
         // change alpha
         if (status1 || status2)
         {
             plate2->SetAlpha(1.0f);
         }
-        else if (status3 || status4)
+        if (status3 || status4)
         {
             plate1->SetAlpha(1.0f);
         }
-        else
-        {
-            plate2->SetAlpha(0.5f);
-            plate1->SetAlpha(0.5f);
-        }
-
         // open door
         if ((status1 || status2) && (status3 || status4))
         {

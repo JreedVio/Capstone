@@ -1,7 +1,7 @@
 #include "AABB.h"
 #include "Debug.h"
 
-PHYSICS::AABB::AABB(Component* parent_, Ref<TransformComponent> ParentTransform_, Vec3 centre_, Vec3 scale_, Quaternion orientation_) : Component(parent_)
+PHYSICS::AABB::AABB(Component* parent_, Ref<TransformComponent> ParentTransform_, Vec3 centre_, Vec3 scale_, Quaternion orientation_, Vec3 offset_) : Component(parent_)
 {
 	Empty();
 
@@ -14,7 +14,7 @@ PHYSICS::AABB::AABB(Component* parent_, Ref<TransformComponent> ParentTransform_
 	Add(bounds);
 }
 
-PHYSICS::AABB::AABB(Ref<TransformComponent> ParentTransform_, Vec3 centre_, Vec3 scale_, Quaternion orientation_)
+PHYSICS::AABB::AABB(Ref<TransformComponent> ParentTransform_, Vec3 centre_, Vec3 scale_, Quaternion orientation_, Vec3 offset_)
 {
 	Empty();
 
@@ -154,7 +154,8 @@ void PHYSICS::AABB::Update(const float deltaTime_)
 	}
 	else
 	{
-		SetCentre(ParentTransform->GetPosition() + Vec3(0.0f, 1.7f, 0.0f));
+		//SetCentre(ParentTransform->GetPosition() + Vec3(0.0f, 1.7f, 0.0f));
+		SetCentre(ParentTransform->GetPosition() + offset);
 	}
 	SetBounds(scale, centre, orientation);
 	Add(bounds);

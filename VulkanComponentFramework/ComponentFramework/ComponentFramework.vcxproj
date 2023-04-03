@@ -157,6 +157,7 @@
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="PlatePuzzleRoom.cpp" />
+    <ClCompile Include="PhysicsPuzzleRoom.cpp" />
     <ClCompile Include="SettingMenu.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PlayerController.cpp" />
@@ -216,7 +217,7 @@
     <ClInclude Include="OpenGLRenderer.h" />
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="PlatePuzzleRoom.h" />
-    <ClInclude Include="PressurePlate.h" />
+    <ClInclude Include="PhysicsPuzzleRoom.h" />
     <ClInclude Include="SettingMenu.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="Physics.h" />
@@ -265,6 +266,7 @@
   <ItemGroup>
     <Xml Include="CodePuzzle.xml" />
     <Xml Include="Level1.xml" />
+    <Xml Include="PhysicsPuzzle.xml" />
     <Xml Include="RendererAssets.xml" />
     <Xml Include="Scene0.xml" />
     <Xml Include="Scene1.xml" />

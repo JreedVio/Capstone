@@ -70,6 +70,12 @@
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{dee4c809-a954-422d-b706-f2b7d65d9c2e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{ead4815b-f774-47ea-b35b-e940e9d570b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{cae3b99f-ed8f-41e0-bb4b-5399f9985227}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -132,9 +138,6 @@
     <ClCompile Include="Room.cpp">
       <Filter>Source Files\Scenes\Room</Filter>
     </ClCompile>
-    <ClCompile Include="GlobalLighting.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -152,15 +155,6 @@
     </ClCompile>
     <ClCompile Include="CameraActor.cpp">
       <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="AABB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DynamicLinearMovement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Message.cpp">
       <Filter>Source Files</Filter>
@@ -225,6 +219,21 @@
     <ClCompile Include="PlatePuzzleRoom.cpp">
       <Filter>Source Files\Scenes\Room</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicsPuzzleRoom.cpp">
+      <Filter>Source Files\Scenes\Room</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicLinearMovement.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalLighting.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -265,9 +274,6 @@
     </ClInclude>
     <ClInclude Include="Vector.h">
       <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="GlobalLighting.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MaterialComponent.h">
       <Filter>Header Files\Components</Filter>
@@ -341,15 +347,6 @@
     <ClInclude Include="CameraActor.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="AABB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DynamicLinearMovement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Message.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -407,9 +404,6 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="PressurePlate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CodePuzzleRoom.h">
       <Filter>Header Files\Scenes\Room</Filter>
     </ClInclude>
@@ -427,6 +421,21 @@
     </ClInclude>
     <ClInclude Include="PlatePuzzleRoom.h">
       <Filter>Header Files\Scenes\Room</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsPuzzleRoom.h">
+      <Filter>Header Files\Scenes\Room</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicLinearMovement.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalLighting.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -492,6 +501,9 @@
       <Filter>XML</Filter>
     </Xml>
     <Xml Include="CodePuzzle.xml">
+      <Filter>XML</Filter>
+    </Xml>
+    <Xml Include="PhysicsPuzzle.xml">
       <Filter>XML</Filter>
     </Xml>
   </ItemGroup>

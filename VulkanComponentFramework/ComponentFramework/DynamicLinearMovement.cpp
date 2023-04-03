@@ -32,18 +32,7 @@ void PHYSICS::DynamicLinearMovement::Update(const float deltaTime)
 	
 	orient = TransformRef->GetOrientation();
 	pos = TransformRef->GetPosition();
-	//vel.print();
-	//accel.print();
-	//if (!collision)
-	//{
-	//	accel = Gravity / mass;	
-	//	//accel.print();
-	//}
-	//else
-	//{
-	//	accel.y = 0.0f;
-	//	vel.y = 0.0f;
-	//}
+
 	UpdateFall(deltaTime);
 	UpdateWall(deltaTime);	
 }
@@ -60,6 +49,9 @@ void PHYSICS::DynamicLinearMovement::UpdateFall(const float deltaTime)
 	vel += accel * deltaTime;
 
 	TransformRef->SetTransform(pos, orient);
+	//printf("--------------------\n");
+	//vel.print();
+	//pos.print();
 	
 }
 

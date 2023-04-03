@@ -143,9 +143,9 @@ bool PlayerController::OnCreate(){
 	actor_->OnCreate();
 	actor_->SetVisible(false);
 	actor_->AddComponent<AABB>(actor_.get(), actor_->GetComponent<TransformComponent>(),
-		actor_->GetComponent<TransformComponent>()->GetPosition(), Vec3(1.0f, 1.0f, 1.0f), Quaternion());
+		actor_->GetComponent<TransformComponent>()->GetPosition(), Vec3(0.5f, 0.2f, 0.5f), Quaternion(), Vec3(0.0f, 0.25f, 0.0f));
 	actor_->AddComponent<DynamicLinearMovement>(nullptr, actor_->GetComponent<TransformComponent>());
-	actor_->AddComponent<Physics>(nullptr);
+	//actor_->AddComponent<Physics>(nullptr);
 	SetPawn(actor_);
 
 	isCreated = true;
