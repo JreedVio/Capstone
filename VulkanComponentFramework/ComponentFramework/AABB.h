@@ -45,6 +45,8 @@ namespace PHYSICS
 
 		void SetCentre(const Vec3 centre_) { centre = centre_; }
 		Vec3 GetCentre() const { return centre; }
+		Vec3 GetMin() const { return min; }
+		Vec3 GetMax() const { return max; }
 
 		virtual ~AABB();
 		virtual bool OnCreate() { return true; }

@@ -213,6 +213,9 @@
     <ClCompile Include="CodeActor.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicsPuzzleRoom.cpp">
+      <Filter>Source Files\Scenes\Room</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -410,6 +413,9 @@
     <ClInclude Include="CodeActor.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="PhysicsPuzzleRoom.h">
+      <Filter>Header Files\Scenes\Room</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Graphics Game Engine_Log.txt">
@@ -474,6 +480,9 @@
       <Filter>XML</Filter>
     </Xml>
     <Xml Include="CodePuzzle.xml">
+      <Filter>XML</Filter>
+    </Xml>
+    <Xml Include="PhysicsPuzzle.xml">
       <Filter>XML</Filter>
     </Xml>
   </ItemGroup>
