@@ -29,7 +29,12 @@ class Actor : public Component {
 protected:
 	std::vector<Ref<Component>> components;
 	bool visible;
+	float updateInterval;
 	float alpha;
+	float alphaChange;
+	float elapsedTime;
+	int flash; // controls the flashing times, -1 = loop, 0 = don't falsh
+	int currentFlash;
 	VulkanRenderer* renderer;
 
 public:
@@ -45,8 +50,20 @@ public:
 	void OnDestroy();
 	void Update(const float deltaTime_);
 	void Render() const;
+	float GetUpdateInterval() const { return updateInterval; }
+	void SetUpdateInterval(float updateInterval_) { updateInterval = updateInterval_; }
 	float GetAlpha() const { return alpha; }
 	void SetAlpha(float alpha_) { alpha = alpha_; }
+	float GetAlphaChange() const { return alphaChange; }
+	void SetAlphaChange(float alphaChange_) { alphaChange = alphaChange_; }
+	int IsFlashing() const { return currentFlash; }
+	void SetFlashing(int flash_) { 
+		flash = flash_;	
+		currentFlash = flash;
+	}
+	void ResetFlash() {
+		currentFlash = flash;
+	}
 	bool GetVisible() const { return visible; }
 	void SetVisible(bool visible_) { visible = visible_; }
 

@@ -7,7 +7,8 @@
 
 Actor::Actor(Component* parent_) :
     pool(0), sets(0), renderer(nullptr),
-    Component(parent_), visible(true), alpha(1.0f) {}
+    Component(parent_), visible(true), alpha(1.0f), alphaChange(0.1f), 
+    flash(0), updateInterval(0.5f), elapsedTime(0.0f), currentFlash(0) {}
 
 Actor::Actor(const Actor& actor_){
     //std::cout << "Copying actor\n";
@@ -17,6 +18,11 @@ Actor::Actor(const Actor& actor_){
     visible = actor_.GetVisible();
     parent = actor_.GetParent();
     alpha = actor_.GetAlpha();
+    alphaChange = actor_.GetAlphaChange();
+    flash = actor_.IsFlashing();
+    updateInterval = actor_.GetUpdateInterval();
+    elapsedTime = 0.0f;
+    currentFlash = flash;
 }
 
 bool Actor::OnCreate() {
@@ -38,7 +44,7 @@ bool Actor::OnCreate() {
 }
 
 Actor::~Actor() {
-	//OnDestroy();
+
 }
 void Actor::OnDestroy() {
     //If the actor is not created, don't destroy it
@@ -51,10 +57,16 @@ void Actor::OnDestroy() {
 	isCreated = false;
 }
 
-
-
 void Actor::Update(const float deltaTime) {
 
+    elapsedTime += deltaTime;
+
+    //Update all components
+    //for (auto component : components) {
+    //    component->Update(deltaTime);
+    //}
+
+    //Update Physics
     auto dlm = GetComponent<PHYSICS::DynamicLinearMovement>();
     auto ab = GetComponent<PHYSICS::AABB>();
     if (ab)
@@ -64,16 +76,31 @@ void Actor::Update(const float deltaTime) {
     if (dlm)
     {		
         dlm->Update(deltaTime);
-    }	
+    }
+
+    //Update alpha if needed
+    if (currentFlash != 0) {
+
+        if (elapsedTime >= updateInterval) {
+
+            if (alpha >= 0.01f) {
+                alpha -= alphaChange;
+                currentFlash--;
+            }
+            else {
+                alpha = 1.0f;
+            }
+            elapsedTime = 0.0f;
+        }
+
+    }
+
+
 
 }
 void Actor::Render()const {}
 
 void Actor::RemoveAllComponents() {
-	//for (auto component : components) {
-	//	component->OnDestroy();
-	//	delete component.get();
-	//}
 	components.clear();
 }
 
@@ -94,13 +121,8 @@ PushConst Actor::GetModelMatrix() {
         pushConst.model.loadIdentity();
 	}
 	if (parent) {
-        //pushConst.model = dynamic_cast<Actor*>(parent)->pushConst.model * pushConst.model;
         pushConst.model = dynamic_cast<Actor*>(parent)->GetModelMatrix().model * pushConst.model;
 	}
-    //Ref<CameraActor> camera = GetComponent<CameraActor>();
-    //if (camera) {
-    //    pushConst.model = camera->GetRotation() * pushConst.model;
-    //}
 
     pushConst.normal = MMath::transpose(MMath::inverse(pushConst.model));
     pushConst.alpha = GetAlpha();

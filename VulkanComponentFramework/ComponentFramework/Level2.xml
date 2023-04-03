@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Root>
-	<CodePuzzle>
+	<Level2>
 
 		<Size x="50" y="10" z="50"/>
 		<RoomTime time="5"/>
@@ -185,5 +185,5 @@
 		
 
 
-	</CodePuzzle>
+	</Level2>
 </Root>

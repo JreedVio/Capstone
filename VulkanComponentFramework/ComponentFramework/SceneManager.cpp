@@ -149,7 +149,13 @@ void SceneManager::Run() {
 			timer->UpdateFrameTicks();
 			//if(nextScene != nullptr) std::cout << "Current nextScene is: " << nextScene << std::endl;
 			if (currentScene->GetStatus() == ROOMTRANSIT) {
-				BuildScene(ROOMSCENE, nextScene);
+				//If wins, enter win screen instead
+				if (strcmp(nextScene, "Win") == 0) {
+					BuildScene(MENUSCENE, "WinMenu");
+				}
+				else {
+					BuildScene(ROOMSCENE, nextScene);
+				}
 			}
 			if (openMainMenu && !dynamic_cast<MenuScene*>(currentScene)) {
 				MainMenu();
@@ -206,9 +212,7 @@ bool SceneManager::StartGame(USERTYPE userType_){
 
 
 void SceneManager::RoomChange(const char* roomName_) {
-	//TODO: TEST
-	//When room change occurs, check the winning condition
-	if (GameWin()) return;
+
 	//Change room
 	networkManager->GetUnit()->SendRoomName(roomName_);
 	currentScene->SetStatus(ROOMTRANSIT);
@@ -216,12 +220,12 @@ void SceneManager::RoomChange(const char* roomName_) {
 }
 
 void SceneManager::MainMenu() {
-	//TODO Cleanup players
-	//Cleanup Network Manager
+
 	if(networkManager != nullptr)
 		networkManager->ResetNetwork();
 
 	uiManager->GetUI("PauseMenu")->ShowWindow(false);
+	uiManager->GetUI("WinMenu")->ShowWindow(false);
 
 	BuildScene(MENUSCENE, "MainMenu");
 }
@@ -272,11 +276,11 @@ void SceneManager::GetEvents() {
 				return;
 
 			case SDL_SCANCODE_F1:
-				BuildScene(ROOMSCENE, "TestScene");
+				BuildScene(ROOMSCENE, "Level1");
 				break;
 
 			case SDL_SCANCODE_F2:
-				BuildScene(ROOMSCENE, "CodePuzzle");
+				BuildScene(ROOMSCENE, "Level2");
 				break;
 
 			case SDL_SCANCODE_F3:
@@ -284,7 +288,7 @@ void SceneManager::GetEvents() {
 				break;
 
 			case SDL_SCANCODE_F4:
-				///BuildScene(SCENE4);
+				BuildScene(ROOMSCENE, "Level4");
 				break;
 
 			case SDL_SCANCODE_F5:
@@ -337,7 +341,8 @@ void SceneManager::BuildScene(SCENETYPE scenetype_, const char* fileName) {
 		break;
 
 	case MENUSCENE:
-		uiManager->openMenu("MainMenu");
+
+		uiManager->openMenu(fileName);
 		currentScene = new MenuScene(renderer);
 		status = currentScene->OnCreate();
 		break;

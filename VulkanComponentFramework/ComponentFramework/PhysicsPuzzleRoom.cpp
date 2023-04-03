@@ -21,6 +21,9 @@ bool PhysicsPuzzleRoom::OnCreate()
 {
     if (GetActorList().empty()) return false;
 
+    plate1 = GetActor("Plate1");
+    plate2 = GetActor("Plate2");
+
     Cube1 = GetActor("Cube1");
     Cube2 = GetActor("Cube2");
     Cubes.push_back(Cube1);
@@ -35,7 +38,6 @@ bool PhysicsPuzzleRoom::OnCreate()
             {
                 continue;
             }
-            //obj->AddComponent<Physics>(obj.get());
             obj->AddComponent<DynamicLinearMovement>(nullptr, obj->GetComponent<TransformComponent>());
 
             obj->AddComponent<AABB>(obj.get(), obj->GetComponent<TransformComponent>(),
@@ -44,9 +46,6 @@ bool PhysicsPuzzleRoom::OnCreate()
                 obj->GetComponent<TransformComponent>()->GetOrientation());
         }
     }
-
-    auto plate1 = GetActor("Plate1");
-    auto plate2 = GetActor("Plate2");
 
     // set up Bound box components for the plates
     if (plate1 && plate2)
@@ -126,26 +125,30 @@ void PhysicsPuzzleRoom::Update(const float deltaTime)
             Physics::RigidBodyMove(remotePlayer, Cube2, false, false);
         }
 
-        Cube1->Update(deltaTime);
-        Cube2->Update(deltaTime);
-
     }
 }
 
-void PhysicsPuzzleRoom::CheckPuzzle()
-{
-    auto Plate1 = GetActor("Plate1");
-    auto Plate2 = GetActor("Plate2");
+void PhysicsPuzzleRoom::CheckPuzzle(){
 
-    bool status1 = Physics::TestTwoAABB(Plate1->GetComponent<AABB>(), Cube1->GetComponent<AABB>());
-    bool status2 = Physics::TestTwoAABB(Plate2->GetComponent<AABB>(), Cube2->GetComponent<AABB>());
+    bool status1 = Physics::TestTwoAABB(plate1->GetComponent<AABB>(), Cube1->GetComponent<AABB>());
+    bool status2 = Physics::TestTwoAABB(plate2->GetComponent<AABB>(), Cube2->GetComponent<AABB>());
+    
+    if (status1) {
+        plate1->SetAlpha(1.0f);
+    }
+    else {
+        plate1->SetAlpha(0.5f);
+    }
+
+    if (status2) {
+        plate2->SetAlpha(1.0f);
+    }
+    else {
+        plate2->SetAlpha(0.5f);
+    }
+    
     if (status1 && status2)
     {
         puzzleSolved = true;
     }
-}
-
-Ref<Actor> PhysicsPuzzleRoom::GetActor(const char* name_) {
-
-    return SceneManager::GetInstance()->GetCurrentScene()->GetActor(name_);
 }

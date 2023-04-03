@@ -4,6 +4,7 @@
 #include "MainMenu.h"
 #include "PauseMenu.h"
 #include "CodeUI.h"
+#include "WinMenu.h"
 
 
 UIManager* UIManager::instance_(nullptr);
@@ -64,6 +65,12 @@ bool UIManager::OnCreate(){
 	AddUserInterface("CodeUI", codeUIMenu_);
 	codeUIMenu_->setSoundFile("audio/scifiNotification.wav");
 	codeUIMenu_->ShowWindow(false);
+
+	//Add win menu to the ui manager
+	WinMenu* winMenu_ = new WinMenu(nullptr);
+	AddUserInterface("WinMenu", winMenu_);
+	winMenu_->setSoundFile("audio/bell.wav");
+	winMenu_->ShowWindow(false);
 
 	return true;
 }

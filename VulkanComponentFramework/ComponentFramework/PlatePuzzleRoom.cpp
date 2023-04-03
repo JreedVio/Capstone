@@ -48,9 +48,6 @@ void PlatePuzzleRoom::CheckPuzzle(){
     Ref<Actor> localPlayer = sceneManager->GetLocalPlayer()->GetPawn();
     Ref<Actor> remotePlayer = sceneManager->GetRemotePlayer()->GetPawn();
 
-    Ref<Physics> localPlayerPhysics = localPlayer->GetComponent<Physics>();
-    Ref<Physics> remotePlayerPhysics = remotePlayer->GetComponent<Physics>();
-
     if (plate2 && plate1)
     {
 

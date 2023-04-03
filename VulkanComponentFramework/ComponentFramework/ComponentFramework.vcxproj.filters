@@ -234,6 +234,9 @@
     <ClCompile Include="GlobalLighting.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="WinMenu.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -437,6 +440,9 @@
     <ClInclude Include="GlobalLighting.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="WinMenu.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Graphics Game Engine_Log.txt">
@@ -500,10 +506,13 @@
     <Xml Include="Level1.xml">
       <Filter>XML</Filter>
     </Xml>
-    <Xml Include="CodePuzzle.xml">
+    <Xml Include="Level2.xml">
       <Filter>XML</Filter>
     </Xml>
     <Xml Include="PhysicsPuzzle.xml">
+      <Filter>XML</Filter>
+    </Xml>
+    <Xml Include="Level4.xml">
       <Filter>XML</Filter>
     </Xml>
   </ItemGroup>

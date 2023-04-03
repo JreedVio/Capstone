@@ -17,6 +17,8 @@ protected:
 
 	Ref<DoorActor> door;
 	bool puzzleSolved;
+	bool reset;
+
 
 	std::unordered_map<const char*, Ref<Actor>> actorList;
 	std::unordered_map<const char*, Ref<Actor>> wallList; //Not used, keep it for now
@@ -33,6 +35,7 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void OnDestroy();
 	virtual void CheckPuzzle();
+	virtual void Reset();
 	bool IsSolved() { return puzzleSolved; }
 	void SetSolved(bool puzzleSolved_) { puzzleSolved = puzzleSolved_; }
 	void OpenDoor() { door->SetIsOpened(true); }

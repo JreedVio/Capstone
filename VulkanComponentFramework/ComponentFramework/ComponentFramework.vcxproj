@@ -176,6 +176,7 @@
     <ClCompile Include="Utilities.cpp" />
     <ClCompile Include="VMath.cpp" />
     <ClCompile Include="VulkanRenderer.cpp" />
+    <ClCompile Include="WinMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
@@ -245,6 +246,7 @@
     <ClInclude Include="Vector.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="VulkanRenderer.h" />
+    <ClInclude Include="WinMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Graphics Game Engine_Log.txt" />
@@ -264,8 +266,9 @@
     <None Include="shaders\vert.spv" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="CodePuzzle.xml" />
+    <Xml Include="Level2.xml" />
     <Xml Include="Level1.xml" />
+    <Xml Include="Level4.xml" />
     <Xml Include="PhysicsPuzzle.xml" />
     <Xml Include="RendererAssets.xml" />
     <Xml Include="Scene0.xml" />

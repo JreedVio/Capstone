@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root>
+	<Level4>
+
+		<Size x="50" y="10" z="50"/>
+		<RoomTime time="5"/>
+		<PuzzleType name="CodePuzzle" pass="5473"/>
+
+		<WallActor>
+			<!--><-->
+			<Wall name="Left" actor="Wall"/>
+			<Wall name="Right" actor="Wall"/>
+			<Wall name="Forward" actor="Wall"/>
+			<Wall name="Backward" actor="Wall"/>
+			<Wall name="Top" actor="Floor"/>
+			<Wall name="Bottom" actor="Floor"/>
+		</WallActor>
+
+		<LightActor>
+			<Light posX ="0.0" posY ="2.0" posZ ="0.0"
+				   r="0.5" g="0.3" b="0.3" a="1.0"/>
+			<Light posX ="-5.0" posY ="0.0" posZ ="0.0"
+				   r="0.0" g="0.5" b="0.5" a="0.1"/>
+		</LightActor>
+
+		<DoorActor>
+			<Door connection="Win" actor="Door">
+				<Transform
+					posX ="-2.0" posY ="-0.5" posZ ="-25.0"
+					angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+					scaleX="1.0" scaleY="0.8" scaleZ="1.0"/>
+				<Alpha value="0.5"/>
+			</Door>
+
+		</DoorActor>
+
+		<ReferenceActor>
+			<RefName name="Mario"/>
+			<RefName name="Skull"/>
+			<RefName name="Cube"/>
+		</ReferenceActor>
+
+
+		<Actor ref="Cube" name="Trigger">
+			<Transform
+				posX ="0.0" posY ="-0.5" posZ ="0.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="0.45" scaleY="0.05" scaleZ="0.45"/>
+			<Alpha value="0.5"/>
+		</Actor>
+
+		<Actor ref="CrateRed" name="Hint1">
+			<Transform componentName="transform"
+						   posX ="-10.0" posY ="0.5" posZ ="10.0"
+						   angle="0.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+						   scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
+			<Alpha value="1.0" flash="5" interval="1.0" alphaChange="1.0"/>
+		</Actor>
+
+		<Actor ref="CrateGreen" name="Hint2">
+			<Transform componentName="transform"
+						   posX ="10.0" posY ="0.5" posZ ="10.0"
+						   angle="0.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+						   scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
+			<Alpha value="1.0" flash="4" interval="1.5" alphaChange="1.0"/>
+		</Actor>
+
+		<Actor ref="CrateBlue" name="Hint3">
+			<Transform componentName="transform"
+						   posX ="-10.0" posY ="0.5" posZ ="-10.0"
+						   angle="0.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+						   scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
+			<Alpha value="1.0" flash="7" interval="0.5" alphaChange="1.0"/>
+		</Actor>
+
+		<Actor ref="Crate" name="Hint4">
+			<Transform componentName="transform"
+						   posX ="10.0" posY ="0.5" posZ ="-10.0"
+						   angle="0.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+						   scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
+			<Alpha value="1.0" flash="3" interval="2.0" alphaChange="1.0"/>
+		</Actor>
+
+
+	</Level4>
+</Root>

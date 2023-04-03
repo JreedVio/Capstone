@@ -22,6 +22,9 @@
 			<Material name="ScifiColor" filename="./textures/ScifiColor.png"/>
 			<Material name="WhiteColour" filename="./textures/White.png"/>
 			<Material name="ScifiCrateTexture" filename="./textures/Crate.png"/>
+			<Material name="CrateRed" filename="./textures/CrateRed.png"/>
+			<Material name="CrateBlue" filename="./textures/CrateBlue.png"/>
+			<Material name="CrateGreen" filename="./textures/CrateGreen.png"/>
 			
 			<Shader name ="PhongShader" vertFilename ="shaders/multiPhong.vert.spv" fragFilename="shaders/multiPhong.frag.spv"/>
 
@@ -115,6 +118,27 @@
 			<Parent componentName="None"/>
 			<Mesh componentName="CrateModel"/>
 			<Material componentName="ScifiCrateTexture"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+		
+		<Actor name="CrateRed">
+			<Parent componentName="None"/>
+			<Mesh componentName="CrateModel"/>
+			<Material componentName="CrateRed"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+		
+		<Actor name="CrateBlue">
+			<Parent componentName="None"/>
+			<Mesh componentName="CrateModel"/>
+			<Material componentName="CrateBlue"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+		
+		<Actor name="CrateGreen">
+			<Parent componentName="None"/>
+			<Mesh componentName="CrateModel"/>
+			<Material componentName="CrateGreen"/>
 			<Shader componentName="PhongShader"/>
 		</Actor>
 

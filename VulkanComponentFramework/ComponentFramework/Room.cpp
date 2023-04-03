@@ -2,7 +2,7 @@
 
 
 Room::Room(int width_, int length_, int height_): width(width_), length(length_), height(height_),
-                                                  roomTime(10.0f), puzzleSolved(false) {
+                                                  roomTime(10.0f), puzzleSolved(false), reset(false) {
     currentTime = roomTime;
 }
 
@@ -36,6 +36,10 @@ void Room::OnDestroy(){
 }
 
 void Room::CheckPuzzle()
+{
+}
+
+void Room::Reset()
 {
 }
 

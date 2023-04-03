@@ -18,12 +18,13 @@ public:
 	virtual void OnDestroy() override;
 	virtual void Update(const float deltaTime) override;
 	virtual void CheckPuzzle() override;	
-	Ref<Actor> GetActor(const char* name_);
 
 private:
 		
 	Ref<Actor> Cube1;
 	Ref<Actor> Cube2;
+	Ref<Actor> plate1;
+	Ref<Actor> plate2;
 	std::vector<Ref<Actor>> Cubes;
 
 
