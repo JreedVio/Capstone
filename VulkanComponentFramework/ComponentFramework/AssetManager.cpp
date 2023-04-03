@@ -12,6 +12,7 @@
 #include "Scene.h"
 #include "Room.h"
 #include "CodePuzzleRoom.h"
+#include "PhysicsPuzzleRoom.h"
 #include "CodeActor.h"
 #include "RoomScene.h"
 #include "Physics.h"
@@ -275,9 +276,62 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 			room_->AddActor("CodePanel", codeActor_);
 
 		}
-		//else if(strcmp(puzzleType, "Puzzle2") == 0) {
+		else if(strcmp(puzzleType, "PhysicsPuzzle") == 0) {
+			room_ = std::make_shared<PhysicsPuzzleRoom>(width, length, height);
+			XMLElement* physicsPuzzleData = roomData->FirstChildElement("PhysicsObject");
+			if (physicsPuzzleData)
+			{
+				XMLElement* physicsCube = physicsPuzzleData->FirstChildElement("Cube");
+				while (physicsCube)
+				{
+					const char* cubeName = physicsCube->FindAttribute("name")->Value();
+					const char* cubeActorName = physicsCube->FindAttribute("actor")->Value();
 
-		//}
+					Ref<Actor> cubeActorData = GetActor(cubeActorName);
+					Ref<Actor> cubeActor = std::make_shared<Actor>(*cubeActorData.get());
+
+					Ref<MeshComponent> mesh_ = cubeActorData->GetComponent<MeshComponent>();
+					Ref<MaterialComponent> material_ = cubeActorData->GetComponent<MaterialComponent>();
+					Ref<ShaderComponent> shader_ = cubeActorData->GetComponent<ShaderComponent>();
+					cubeActor->AddComponent(mesh_);
+					cubeActor->AddComponent(material_);
+					cubeActor->AddComponent(shader_);
+
+					Vec3 position;
+					Quaternion rotation;
+					Vec3 scale(0.45f, 0.05f, 0.45f);
+
+					float floorY = -0.5f;
+
+					if (strcmp(cubeName, "Cube1") == 0)
+					{
+						position = Vec3(-12.0f, 2.0f, 5.0f);
+						scale = Vec3(0.5f, 0.5f, 0.5f);
+					}
+					else if (strcmp(cubeName, "Cube2") == 0)
+					{
+						position = Vec3(10.0f, 2.0f, -10.0f);
+						scale = Vec3(0.5f, 0.5f, 0.5f);
+					}
+					else if (strcmp(cubeName, "Plate1") == 0)
+					{
+						position = Vec3(0.0f, floorY, 0.0f);
+					}
+					else if (strcmp(cubeName, "Plate2") == 0)
+					{
+						position = Vec3(-4.0f, floorY, 0.0f);
+					}
+
+					Ref<TransformComponent> transform;
+					transform = std::make_shared<TransformComponent>(cubeActor.get(), position, rotation, scale);
+					//cubeActor->SetAlpha(0.5f);
+					cubeActor->AddComponent(transform);
+					cubeActor->OnCreate();
+					room_->AddActor(cubeName, cubeActor);
+					physicsCube = physicsCube->NextSiblingElement("Cube");
+				}
+			}
+		}
 		//else if (strcmp(puzzleType, "Puzzle3") == 0) {
 
 		//}
@@ -389,7 +443,7 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 			else if (strcmp(plateName, "PlateB8") == 0) {
 
 				position = Vec3(1.0f * -3.0f, floorY, 1.0f);
-			}
+			}			
 
 			Ref<TransformComponent> transform;
 			transform = std::make_shared<TransformComponent>(plateActor.get(), position, rotation, scale);
@@ -400,6 +454,7 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 			pressurePlate = pressurePlate->NextSiblingElement("PressurePlate");
 		}
 	}
+	
 	
 	//Add WallData
 	XMLElement* wallData = roomData->FirstChildElement("WallActor");

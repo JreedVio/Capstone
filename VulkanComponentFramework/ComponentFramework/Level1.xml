@@ -34,7 +34,7 @@
 			<PressurePlate name="PlateB5" actor="Cube"/> <!-->   3 - 4 - 5	 <-->
 			<PressurePlate name="PlateB6" actor="Cube"/> <!-->	 6 - 7 - 8	 <-->
 			<PressurePlate name="PlateB7" actor="Cube"/>
-			<PressurePlate name="PlateB8" actor="Cube"/>
+			<PressurePlate name="PlateB8" actor="Cube"/>			
 
 		</PuzzleActor>
 

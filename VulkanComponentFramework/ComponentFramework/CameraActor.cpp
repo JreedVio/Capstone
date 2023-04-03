@@ -27,7 +27,7 @@ bool CameraActor::OnCreate() {
 	if (isCreated) 	return isCreated; //or return true
 	
 	//viewMatrix = MMath::rotate(0.0f, Vec3(0.0f, 1.0f, 0.0f)) * MMath::translate(0.0f, 0.0f, -5.0f);
-	UpdateProjectionMatrix(45.0f, (16.0f / 9.0f), 0.5f, 100.0f); /// default projection
+	UpdateProjectionMatrix(45.0f, (16.0f / 9.0f), 0.01f, 100.0f); /// default projection
 	UpdateViewMatrix();
 
 	isCreated = true;

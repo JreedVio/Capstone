@@ -149,19 +149,23 @@ void RoomScene::Update(const float deltaTime) {
     */
 
     Ref<Actor> localPawn = localPlayer->GetPawn();
-    Ref<AABB> localPawnCollision = localPawn->GetComponent<AABB>();
+    Ref<AABB> localPawnCollision = localPawn->GetComponent<AABB>();    
+
     room->Update(deltaTime);
     camera->Update(deltaTime);
 
     localPlayer->GetPawn()->GetComponent<AABB>()->SetCentre(localPlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition());
     localPawn->GetComponent<DynamicLinearMovement>()->SetAccel(Vec3(0.0f,-9.81f / 1.0f, 0.0f));
+    
+    
     for (auto e : GetActorList()) {
         if (strcmp(e.first, "LocalPlayer") == 0) continue;
+        //if (strcmp(e.first, "TestCube") == 0) continue;
 
         Ref<Actor> actor_ = e.second;
-        Ref<AABB> actorCollision = actor_->GetComponent<AABB>();
+        Ref<AABB> actorCollision = actor_->GetComponent<AABB>();        
 
-        if (localPawn->GetComponent<Physics>()->TestTwoAABB(localPawnCollision, actorCollision)) {
+        if (Physics::TestTwoAABB(localPawnCollision, actorCollision)) {
             actor_->CollisionResponse();
 
             if (strcmp(e.first, "Bottom") == 0)
@@ -170,24 +174,21 @@ void RoomScene::Update(const float deltaTime) {
                 Vec3 tempAccel = localPawn->GetComponent<DynamicLinearMovement>()->GetAccel();
                 localPawn->GetComponent<DynamicLinearMovement>()->SetAccel(Vec3(tempAccel.x, 0.0f, tempAccel.z));
                 localPawn->GetComponent<DynamicLinearMovement>()->SetVel(Vec3(tempVel.x , 0.0f, tempVel.z));
+
+                
             }
         }       
         else {
             actor_->NotCollided();
         }
-        
+                
         actor_->Update(deltaTime);
 
-    }        
-    
+    }    
 
     //localPlayer->GetPawn()->GetComponent<Physics>()->TestTwoAABB(localPlayer->GetPawn()->GetComponent<AABB>(), GetActor("Forward")->GetComponent<AABB>());
     remotePlayer->GetPawn()->GetComponent<AABB>()->SetCentre(remotePlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition());
-    //remotePlayer->GetPawn()->GetComponent<AABB>()->GetCentre().print();
-    auto plate2 = GetActor("Plate2");
-    auto plate3 = GetActor("Plate3");
-    if (plate2 && plate3)
-    remotePlayer->GetPawn()->GetComponent<AABB>()->SetCentre(remotePlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition());    
+    //remotePlayer->GetPawn()->GetComponent<AABB>()->GetCentre().print();       
     
     auto plateA3 = GetActor("PlateA3");
     auto plateB2 = GetActor("PlateB2");
@@ -196,11 +197,11 @@ void RoomScene::Update(const float deltaTime) {
     auto remotePlayerPhysics = remotePlayer->GetPawn()->GetComponent<Physics>();
     if (plateB2 && plateA3)
     {
-        bool status1 = localPlayerPhysics->TestTwoAABB(localPlayer->GetPawn()->GetComponent<AABB>(), plateB2->GetComponent<AABB>());
-        bool status2 = remotePlayerPhysics->TestTwoAABB(remotePlayer->GetPawn()->GetComponent<AABB>(), plateB2->GetComponent<AABB>());
+        bool status1 = Physics::TestTwoAABB(localPlayer->GetPawn()->GetComponent<AABB>(), plateB2->GetComponent<AABB>());
+        bool status2 = Physics::TestTwoAABB(remotePlayer->GetPawn()->GetComponent<AABB>(), plateB2->GetComponent<AABB>());
         
-        bool status3 = localPlayerPhysics->TestTwoAABB(localPlayer->GetPawn()->GetComponent<AABB>(), plateA3->GetComponent<AABB>());
-        bool status4 = remotePlayerPhysics->TestTwoAABB(remotePlayer->GetPawn()->GetComponent<AABB>(), plateA3->GetComponent<AABB>());
+        bool status3 = Physics::TestTwoAABB(localPlayer->GetPawn()->GetComponent<AABB>(), plateA3->GetComponent<AABB>());
+        bool status4 = Physics::TestTwoAABB(remotePlayer->GetPawn()->GetComponent<AABB>(), plateA3->GetComponent<AABB>());
 
         // change alpha
         if (status1 || status2)
@@ -223,11 +224,15 @@ void RoomScene::Update(const float deltaTime) {
             localPlayer->GetPawn()->GetComponent<Physics>()->UpdatePuzzle(deltaTime);
         }
     }
+
+    
+    
     //plate3->GetComponent<AABB>()->GetCentre().print();
     // needs to be the last test called or it will not update properly
     //localPlayer->GetPawn()->GetComponent<Physics>()->TestTwoAABB(localPlayer->GetPawn()->GetComponent<AABB>(), GetActor("Bottom")->GetComponent<AABB>());   
-       
-    localPlayer->GetPawn()->Update(deltaTime);       
+    
+    
+    localPlayer->GetPawn()->Update(deltaTime);   
 
     //localPlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition().print();
     
