@@ -36,6 +36,9 @@ void CodeUI::Display(){
     float heightInterval = windowH * 0.18f;
     float widthInterval = windowW * 0.22f;
 
+    ImGui::SetWindowFontScale(1.0f);
+    ImGui::Text("RGBA");
+
     //Calculate Text size and location
     ImGui::SetWindowFontScale(4.0f);
     std::string codeStr;

@@ -40,27 +40,19 @@ bool CodePuzzleRoom::OnCreate(){
 
 	//Add collision for trigger panel
 	Ref<Actor> trigger = GetActor("Trigger");
-	trigger->AddComponent<AABB>(trigger.get(), trigger->GetComponent<TransformComponent>(),
-		trigger->GetComponent<TransformComponent>()->GetPosition(),
-		Vec3(trigger->GetComponent<TransformComponent>()->GetScale().x - 0.5f, 1.0f,
-			trigger->GetComponent<TransformComponent>()->GetScale().z - 0.5f));
+	if (trigger) {
+		trigger->AddComponent<AABB>(trigger.get(), trigger->GetComponent<TransformComponent>(),
+			trigger->GetComponent<TransformComponent>()->GetPosition(),
+			Vec3(trigger->GetComponent<TransformComponent>()->GetScale().x - 0.5f, 1.0f,
+				trigger->GetComponent<TransformComponent>()->GetScale().z - 0.5f));
+	}
+
 
 	return true;
 }
 
 void CodePuzzleRoom::Update(float deltaTime){
 
-
-	Ref<Actor> localPlayer = GetActor("LocalPlayer");
-	Ref<Actor> remotePlayer = GetActor("RemotePlayer");
-	Ref<Actor> trigger = GetActor("Trigger");
-
-	bool status1 = Physics::TestTwoAABB(localPlayer->GetComponent<AABB>(), trigger->GetComponent<AABB>());
-	bool status2 = Physics::TestTwoAABB(remotePlayer->GetComponent<AABB>(), trigger->GetComponent<AABB>());
-
-	if ((status1 || status2) && !reset) {
-		Reset();
-	}
 
 	//Check when flashing stops
 	for (auto actor_ : GetActorList()) {
@@ -70,6 +62,20 @@ void CodePuzzleRoom::Update(float deltaTime){
 		}
 		reset = false;
 	}
+
+	Ref<Actor> localPlayer = GetActor("LocalPlayer");
+	Ref<Actor> remotePlayer = GetActor("RemotePlayer");
+	Ref<Actor> trigger = GetActor("Trigger");
+
+	if (!trigger) return;
+
+	bool status1 = Physics::TestTwoAABB(localPlayer->GetComponent<AABB>(), trigger->GetComponent<AABB>());
+	bool status2 = Physics::TestTwoAABB(remotePlayer->GetComponent<AABB>(), trigger->GetComponent<AABB>());
+
+	if ((status1 || status2) && !reset) {
+		Reset();
+	}
+
 
 }
 
