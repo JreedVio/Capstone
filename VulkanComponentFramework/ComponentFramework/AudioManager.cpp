@@ -4,7 +4,7 @@
 AudioManager* AudioManager::instance_(nullptr);
 
 
-AudioManager::AudioManager():backgroundMusic(nullptr), masterVol(1), bgmVol(1), sfxVol(1) {
+AudioManager::AudioManager():backgroundMusic(nullptr), masterVol(0.5), bgmVol(0.5), sfxVol(0.5) {
 	engine = createIrrKlangDevice();
 }
 
