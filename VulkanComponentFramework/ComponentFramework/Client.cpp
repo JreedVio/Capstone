@@ -151,8 +151,12 @@ void Client::Send(){
     Message msg;
     msg.header.type = CustomMessageType::RotationAndPosition;
 
-    AddRotation(msg);
-    AddPosition(msg);
+    Vec3 ijk = localPlayer->GetComponent<TransformComponent>()->GetOrientation().ijk;
+    float w = localPlayer->GetComponent<TransformComponent>()->GetOrientation().w;
+    msg << ijk.x << ijk.y << ijk.z << w;
+
+    Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
+    msg << pos.x << pos.y << pos.z;
 
     //Serialize
     std::stringstream ss;
@@ -228,21 +232,55 @@ void Client::SendReady() {
         str.length() + 1,
         ENET_PACKET_FLAG_RELIABLE);
     enet_peer_send(peer, 0, tempPacket);
+    SendObjectState("Door");
 }
 
-void Client::AddPosition(Message& msg)
-{
-    Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
-    
-    msg << pos.x << pos.y << pos.z;
+void Client::SendObjectPosition(const char* objectName) {
+    if (peer == nullptr) return;
+
+    Message msg;
+    msg.header.type = CustomMessageType::ObjectPosition;
+
+    msg << 10.0f << 20.0f << 30.0f;
+    msg.AddCharArray(objectName, std::strlen(objectName));
+    msg << std::strlen(objectName) + 1;
+
+    //Serialize
+    std::stringstream ss;
+    cereal::BinaryOutputArchive archive(ss);
+    archive(msg);
+
+    std::string str = ss.str();
+
+    // Send over the network
+    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
+        str.length() + 1,
+        ENET_PACKET_FLAG_RELIABLE);
+    enet_peer_send(peer, 0, tempPacket);
 }
 
-void Client::AddRotation(Message& msg)
-{
-    Vec3 ijk = localPlayer->GetComponent<TransformComponent>()->GetOrientation().ijk;
-    float w = localPlayer->GetComponent<TransformComponent>()->GetOrientation().w;
-    
-    msg << ijk.x << ijk.y << ijk.z << w;
+void Client::SendObjectState(const char* objectName) {
+    if (peer == nullptr) return;
+
+    Message msg;
+    msg.header.type = CustomMessageType::ObjectState;
+
+    msg << true;
+    msg.AddCharArray(objectName, std::strlen(objectName));
+    msg << std::strlen(objectName) + 1;
+
+    //Serialize
+    std::stringstream ss;
+    cereal::BinaryOutputArchive archive(ss);
+    archive(msg);
+
+    std::string str = ss.str();
+
+    // Send over the network
+    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
+        str.length() + 1,
+        ENET_PACKET_FLAG_RELIABLE);
+    enet_peer_send(peer, 0, tempPacket);
 }
 
 void Client::Recieve(int tickrate)
@@ -293,17 +331,7 @@ void Client::Recieve(int tickrate)
 
 void Client::ProcessMessage(Message& msg)
 {
-    if (msg.header.type == CustomMessageType::Position) {
-        Vec3 receivedPos;
-        msg >> receivedPos.z >> receivedPos.y >> receivedPos.x;
-        remotePlayer->GetComponent<TransformComponent>()->pos = receivedPos;
-    }
-    else if (msg.header.type == CustomMessageType::Rotation) {
-        float x, y, z, w;
-        msg >> w >> z >> y >> x;
-        remotePlayer->GetComponent<TransformComponent>()->orientation = Quaternion(w, x, y, z);
-    }
-    else if (msg.header.type == CustomMessageType::RotationAndPosition) {
+    if (msg.header.type == CustomMessageType::RotationAndPosition) {
         Vec3 receivedPos;
         msg >> receivedPos.z >> receivedPos.y >> receivedPos.x;
         remotePlayer->GetComponent<TransformComponent>()->pos = receivedPos;
@@ -323,6 +351,44 @@ void Client::ProcessMessage(Message& msg)
     }
     else if (msg.header.type == CustomMessageType::PuzzleSolved) {
         dynamic_cast<RoomScene*>(SceneManager::GetInstance()->GetCurrentScene())->GetRoom()->SetSolved(true);
+    }
+    else if (msg.header.type == CustomMessageType::ObjectPosition) {
+        int size;
+        msg >> size;
+
+        std::vector<char> name;
+        for (int i = 0; i < size; i++)
+        {
+            char letter;
+            msg >> letter;
+            name.push_back(letter);
+        }
+        std::reverse(name.begin(), name.end());
+        const char* objectName = reinterpret_cast<const char*>(name.data());
+
+        float x, y, z;
+        msg >> z >> y >> x;
+        std::cout << "Object " << objectName << " changed pos to ";
+        std::cout << x << " " << y << " " << z << std::endl;
+    }
+    else if (msg.header.type == CustomMessageType::ObjectState) {
+        int size;
+        msg >> size;
+
+        std::vector<char> name;
+        for (int i = 0; i < size; i++)
+        {
+            char letter;
+            msg >> letter;
+            name.push_back(letter);
+        }
+        std::reverse(name.begin(), name.end());
+        const char* objectName = reinterpret_cast<const char*>(name.data());
+
+        bool a;
+        msg >> a;
+        std::cout << "Object " << objectName << " changed bool to ";
+        std::cout << a << std::endl;
     }
 }
 

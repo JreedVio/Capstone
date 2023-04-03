@@ -30,35 +30,32 @@
 [INFO]: Deleting assets for Actor: 
 [INFO]: Deleting assets for Actor: 
 [INFO]: Deleting assets for Actor: 
-[INFO]: Succeed to Load Scene CodePuzzle
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Deleting assets for Actor: 
-[INFO]: Succeed to Load Scene CodePuzzle
-[INFO]: Succeed to Load Scene CodePuzzle
 [INFO]: Deleting the GameSceneManager
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
+[INFO]: Deleting assets for Actor: 
 [INFO]: Deleting the GameSceneManager

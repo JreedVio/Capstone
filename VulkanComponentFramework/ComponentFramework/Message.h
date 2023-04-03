@@ -50,12 +50,12 @@
 #include <vector>
 
 enum class CustomMessageType : uint32_t {
-	Position,
-	Rotation,
 	RotationAndPosition,
 	RoomName,
 	PuzzleSolved,
-	Ready
+	Ready,
+	ObjectPosition,
+	ObjectState
 };
 
 ///[OLC_HEADERIFYIER] START "MESSAGE"
@@ -101,7 +101,7 @@ struct Message
 
 	void AddCharArray(const char* arr, size_t size)
 	{
-		body.reserve(body.size() + size);
+		body.reserve(body.size() + size + 1);
 		//std::copy(arr, arr + size, std::back_inserter(body));
 		body.insert(body.end(), arr, arr + size);
 		body.push_back('\0');
