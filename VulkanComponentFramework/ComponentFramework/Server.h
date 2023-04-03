@@ -17,6 +17,7 @@ public:
 	ENetHost* server;
 	ENetPeer* peer;
 	Ref<Actor> localPlayer, remotePlayer;
+	bool isClientReady;
 
 
 
@@ -28,9 +29,9 @@ public:
 	void Update();
 	void Send();
 	void SendRoomName(const char* roomName);
+	void SendObjectPosition(const char* objectName);
+	void SendObjectState(const char* objectName);
 	void SendPuzzleSolved();
-	void AddPosition(Message& msg);
-	void AddRotation(Message& msg);
 	void Recieve(int tickrate);
 	void ProcessMessage(Message& msg);
 };

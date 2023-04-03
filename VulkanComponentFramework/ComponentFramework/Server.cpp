@@ -15,7 +15,7 @@
 
 using namespace MATH;
 
-Server::Server() : NetworkUnit(UnitType::SERVER)
+Server::Server() : NetworkUnit(UnitType::SERVER), isClientReady(false)
 {
 }
 
@@ -24,7 +24,7 @@ Server::~Server()
     Disconnect();
     if (server != nullptr) enet_host_destroy(server);
     peer = nullptr;
-
+    isClientReady = false;
 }
 
 bool Server::OnCreate()
@@ -85,13 +85,17 @@ void Server::Update()
 }
 
 void Server::Send() {
-    if (peer == nullptr) return;
+    if (peer == nullptr || !isClientReady) return;
 
     Message msg;
     msg.header.type = CustomMessageType::RotationAndPosition;
 
-    AddRotation(msg);
-    AddPosition(msg);
+    Vec3 ijk = localPlayer->GetComponent<TransformComponent>()->GetOrientation().ijk;
+    float w = localPlayer->GetComponent<TransformComponent>()->GetOrientation().w;
+    msg << ijk.x << ijk.y << ijk.z << w;
+
+    Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
+    msg << pos.x << pos.y << pos.z;
 
     //Serialize
     std::stringstream ss;
@@ -127,6 +131,7 @@ void Server::SendRoomName(const char* roomName) {
         str.length() + 1,
         ENET_PACKET_FLAG_RELIABLE);
     enet_peer_send(peer, 0, tempPacket);
+    SendObjectPosition("Plate");
 }
 
 void Server::SendPuzzleSolved()
@@ -150,19 +155,52 @@ void Server::SendPuzzleSolved()
     enet_peer_send(peer, 0, tempPacket);
 }
 
-void Server::AddPosition(Message& msg)
-{
-    Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
+void Server::SendObjectPosition(const char* objectName) {
+    if (peer == nullptr) return;
 
-    msg << pos.x << pos.y << pos.z;
+    Message msg;
+    msg.header.type = CustomMessageType::ObjectPosition;
+
+    msg << 10.0f << 20.0f << 30.0f;
+    msg.AddCharArray(objectName, std::strlen(objectName));
+    msg << std::strlen(objectName) + 1;
+
+    //Serialize
+    std::stringstream ss;
+    cereal::BinaryOutputArchive archive(ss);
+    archive(msg);
+
+    std::string str = ss.str();
+
+    // Send over the network
+    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
+        str.length() + 1,
+        ENET_PACKET_FLAG_RELIABLE);
+    enet_peer_send(peer, 0, tempPacket);
 }
 
-void Server::AddRotation(Message& msg)
-{
-    Vec3 ijk = localPlayer->GetComponent<TransformComponent>()->GetOrientation().ijk;
-    float w = localPlayer->GetComponent<TransformComponent>()->GetOrientation().w;
+void Server::SendObjectState(const char* objectName) {
+    if (peer == nullptr) return;
 
-    msg << ijk.x << ijk.y << ijk.z << w;
+    Message msg;
+    msg.header.type = CustomMessageType::ObjectState;
+
+    msg << true;
+    msg.AddCharArray(objectName, std::strlen(objectName));
+    msg << std::strlen(objectName) + 1;
+
+    //Serialize
+    std::stringstream ss;
+    cereal::BinaryOutputArchive archive(ss);
+    archive(msg);
+
+    std::string str = ss.str();
+
+    // Send over the network
+    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
+        str.length() + 1,
+        ENET_PACKET_FLAG_RELIABLE);
+    enet_peer_send(peer, 0, tempPacket);
 }
 
 void Server::Recieve(int tickrate)
@@ -229,31 +267,15 @@ void Server::Recieve(int tickrate)
 
 void Server::ProcessMessage(Message& msg)
 {
-    if (msg.header.type == CustomMessageType::Position) {
+    if (msg.header.type == CustomMessageType::RotationAndPosition) {
         Vec3 receivedPos;
         msg >> receivedPos.z >> receivedPos.y >> receivedPos.x;
         remotePlayer->GetComponent<TransformComponent>()->pos = receivedPos;
-        //std::cout << "Position: " << receivedPos.x << " " << receivedPos.y
-        //    << " " << receivedPos.z << std::endl;
-    }
-    else if (msg.header.type == CustomMessageType::Rotation) {
-        float x, y, z, w;
-        msg >> w >> z >> y >> x;
-        remotePlayer->GetComponent<TransformComponent>()->orientation = Quaternion(w, x, y, z);
-        //std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
-    }
-    else if (msg.header.type == CustomMessageType::RotationAndPosition) {
-        Vec3 receivedPos;
-        msg >> receivedPos.z >> receivedPos.y >> receivedPos.x;
-        remotePlayer->GetComponent<TransformComponent>()->pos = receivedPos;
-        //std::cout << "Position: " << receivedPos.x << " " << receivedPos.y
-        //    << " " << receivedPos.z << std::endl;
 
         float x, y, z, w;
         msg >> w >> z >> y >> x;
         remotePlayer->GetComponent<TransformComponent>()->orientation = Quaternion(w, x, y, z);
         remotePlayer->GetComponent<TransformComponent>()->SetTransform(receivedPos, Quaternion(w, x, y, z));
-        //std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
     }
     else if (msg.header.type == CustomMessageType::RoomName) {
 
@@ -266,17 +288,45 @@ void Server::ProcessMessage(Message& msg)
     else if (msg.header.type == CustomMessageType::PuzzleSolved) {
         dynamic_cast<RoomScene*>(SceneManager::GetInstance()->GetCurrentScene())->GetRoom()->SetSolved(true);
     }
+    else if (msg.header.type == CustomMessageType::Ready) {
+        isClientReady = true;
+    }
+    else if (msg.header.type == CustomMessageType::ObjectPosition) {
+        int size;
+        msg >> size;
+
+        std::vector<char> name;
+        for (int i = 0; i < size; i++)
+        {
+            char letter;
+            msg >> letter;
+            name.push_back(letter);
+        }
+        std::reverse(name.begin(), name.end());
+        const char* objectName = reinterpret_cast<const char*>(name.data());
+
+        float x, y, z;
+        msg >> z >> y >> x;
+        std::cout << "Object " << objectName << " changed pos to ";
+        std::cout << x << " " << y << " " << z << std::endl;
+    }
+    else if (msg.header.type == CustomMessageType::ObjectState) {
+        int size;
+        msg >> size;
+
+        std::vector<char> name;
+        for (int i = 0; i < size; i++)
+        {
+            char letter;
+            msg >> letter;
+            name.push_back(letter);
+        }
+        std::reverse(name.begin(), name.end());
+        const char* objectName = reinterpret_cast<const char*>(name.data());
+
+        bool a;
+        msg >> a;
+        std::cout << "Object " << objectName << " changed bool to ";
+        std::cout << a << std::endl;
+    }
 }
-
-/*printf("A packet of length %u containing %s was received from %x:%u on channel %u.\n",
-                event.packet->dataLength,
-                event.packet->data,
-                event.peer->address.host,
-                event.peer->address.port,
-                event.channelID);*/
-
-/*//enet_packet_resize(tempPacket, strlen("packetfoo") + 1);
-//memcpy???
-//strcpy_s(reinterpret_cast<char*>(temptemp->data[strlen("packet")]), strlen("packetfoo") + 1, "foo");
-//strcpy(reinterpret_cast<char*>(tempPacket->data[strlen("packet")]), "foo");
-//strcpy(reinterpret_cast<char*>(temptemp->data[strlen("packet")]), "foo");*/

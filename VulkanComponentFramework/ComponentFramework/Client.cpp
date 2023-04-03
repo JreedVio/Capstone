@@ -56,8 +56,6 @@ bool Client::OnCreate()
         return false;
     }
 
-    
-
     /* Wait up to 5 seconds for the connection attempt to succeed. */
     if (enet_host_service(client, &event, 5000) > 0 &&
         event.type == ENET_EVENT_TYPE_CONNECT)
@@ -117,6 +115,9 @@ bool Client::RecieveRoomName(ENetEvent& event)
             SceneManager* sceneManager = SceneManager::GetInstance();
             sceneManager->SetNextScene(roomName);
 
+            // Send an acknowledgement
+            SendReady();
+
             /* Clean up the packet now that we're done using it. */
             enet_packet_destroy(event.packet);
 
@@ -125,10 +126,9 @@ bool Client::RecieveRoomName(ENetEvent& event)
 
         /* Clean up the packet now that we're done using it. */
         enet_packet_destroy(event.packet);
-
-        return false;
-        
     }
+    Disconnect();
+    return false;
 }
 
 void Client::OnDestroy()
@@ -151,8 +151,12 @@ void Client::Send(){
     Message msg;
     msg.header.type = CustomMessageType::RotationAndPosition;
 
-    AddRotation(msg);
-    AddPosition(msg);
+    Vec3 ijk = localPlayer->GetComponent<TransformComponent>()->GetOrientation().ijk;
+    float w = localPlayer->GetComponent<TransformComponent>()->GetOrientation().w;
+    msg << ijk.x << ijk.y << ijk.z << w;
+
+    Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
+    msg << pos.x << pos.y << pos.z;
 
     //Serialize
     std::stringstream ss;
@@ -210,52 +214,74 @@ void Client::SendPuzzleSolved() {
     enet_peer_send(peer, 0, tempPacket);
 }
 
-void Client::AddPosition(Message& msg)
-{
-    Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
-    
-    msg << pos.x << pos.y << pos.z;
+void Client::SendReady() {
+    if (peer == nullptr) return;
+
+    Message msg;
+    msg.header.type = CustomMessageType::Ready;
+
+    //Serialize
+    std::stringstream ss;
+    cereal::BinaryOutputArchive archive(ss);
+    archive(msg);
+
+    std::string str = ss.str();
+
+    // Send over the network
+    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
+        str.length() + 1,
+        ENET_PACKET_FLAG_RELIABLE);
+    enet_peer_send(peer, 0, tempPacket);
+    SendObjectState("Door");
 }
 
-void Client::AddRotation(Message& msg)
-{
-    Vec3 ijk = localPlayer->GetComponent<TransformComponent>()->GetOrientation().ijk;
-    float w = localPlayer->GetComponent<TransformComponent>()->GetOrientation().w;
-    
-    msg << ijk.x << ijk.y << ijk.z << w;
+void Client::SendObjectPosition(const char* objectName) {
+    if (peer == nullptr) return;
+
+    Message msg;
+    msg.header.type = CustomMessageType::ObjectPosition;
+
+    msg << 10.0f << 20.0f << 30.0f;
+    msg.AddCharArray(objectName, std::strlen(objectName));
+    msg << std::strlen(objectName) + 1;
+
+    //Serialize
+    std::stringstream ss;
+    cereal::BinaryOutputArchive archive(ss);
+    archive(msg);
+
+    std::string str = ss.str();
+
+    // Send over the network
+    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
+        str.length() + 1,
+        ENET_PACKET_FLAG_RELIABLE);
+    enet_peer_send(peer, 0, tempPacket);
 }
 
-//void Client::SendPositionPacket() {
-//    if (peer == nullptr) return;
-//    float x = 7.0f, y = 8.0f, z = 9.0f;
-//
-//    std::vector<uint8_t> buffer(sizeof(float) * 3);
-//
-//    // Copy the float values into the buffer
-//    std::memcpy(buffer.data(), &x, sizeof(float));
-//    std::memcpy(buffer.data() + sizeof(float), &y, sizeof(float));
-//    std::memcpy(buffer.data() + 2 * sizeof(float), &z, sizeof(float));
-//
-//    // Get a const void* pointer to the buffer
-//    const void* data_ptr = static_cast<const void*>(buffer.data());
-//    Packet packet(Type::Position, data_ptr, sizeof(data_ptr));
-//
-//    std::stringstream ss;
-//    cereal::BinaryOutputArchive archive(ss);
-//    archive(packet);
-//
-//    // Set pos vector to pos of the Local Player Actor
-//    //Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
-//
-//    std::string str = ss.str();
-//
-//    std::cout << str.length() << std::endl;
-//
-//    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
-//        str.length() + 1,
-//        ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
-//    enet_peer_send(peer, 0, tempPacket);
-//}
+void Client::SendObjectState(const char* objectName) {
+    if (peer == nullptr) return;
+
+    Message msg;
+    msg.header.type = CustomMessageType::ObjectState;
+
+    msg << true;
+    msg.AddCharArray(objectName, std::strlen(objectName));
+    msg << std::strlen(objectName) + 1;
+
+    //Serialize
+    std::stringstream ss;
+    cereal::BinaryOutputArchive archive(ss);
+    archive(msg);
+
+    std::string str = ss.str();
+
+    // Send over the network
+    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
+        str.length() + 1,
+        ENET_PACKET_FLAG_RELIABLE);
+    enet_peer_send(peer, 0, tempPacket);
+}
 
 void Client::Recieve(int tickrate)
 {
@@ -305,31 +331,15 @@ void Client::Recieve(int tickrate)
 
 void Client::ProcessMessage(Message& msg)
 {
-    if (msg.header.type == CustomMessageType::Position) {
+    if (msg.header.type == CustomMessageType::RotationAndPosition) {
         Vec3 receivedPos;
         msg >> receivedPos.z >> receivedPos.y >> receivedPos.x;
         remotePlayer->GetComponent<TransformComponent>()->pos = receivedPos;
-        //std::cout << "Position: " << receivedPos.x << " " << receivedPos.y
-        //    << " " << receivedPos.z << std::endl;
-    }
-    else if (msg.header.type == CustomMessageType::Rotation) {
-        float x, y, z, w;
-        msg >> w >> z >> y >> x;
-        remotePlayer->GetComponent<TransformComponent>()->orientation = Quaternion(w, x, y, z);
-        //std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
-    }
-    else if (msg.header.type == CustomMessageType::RotationAndPosition) {
-        Vec3 receivedPos;
-        msg >> receivedPos.z >> receivedPos.y >> receivedPos.x;
-        remotePlayer->GetComponent<TransformComponent>()->pos = receivedPos;
-        //std::cout << "Position: " << receivedPos.x << " " << receivedPos.y
-        //    << " " << receivedPos.z << std::endl;
 
         float x, y, z, w;
         msg >> w >> z >> y >> x;
         remotePlayer->GetComponent<TransformComponent>()->orientation = Quaternion(w, x, y, z);
         remotePlayer->GetComponent<TransformComponent>()->SetTransform(receivedPos, Quaternion(w, x, y, z));
-        //std::cout << "Rotation: " << x << " " << y << " " << z << " " << w << std::endl;
     }
     else if (msg.header.type == CustomMessageType::RoomName) {
 
@@ -342,24 +352,74 @@ void Client::ProcessMessage(Message& msg)
     else if (msg.header.type == CustomMessageType::PuzzleSolved) {
         dynamic_cast<RoomScene*>(SceneManager::GetInstance()->GetCurrentScene())->GetRoom()->SetSolved(true);
     }
+    else if (msg.header.type == CustomMessageType::ObjectPosition) {
+        int size;
+        msg >> size;
+
+        std::vector<char> name;
+        for (int i = 0; i < size; i++)
+        {
+            char letter;
+            msg >> letter;
+            name.push_back(letter);
+        }
+        std::reverse(name.begin(), name.end());
+        const char* objectName = reinterpret_cast<const char*>(name.data());
+
+        float x, y, z;
+        msg >> z >> y >> x;
+        std::cout << "Object " << objectName << " changed pos to ";
+        std::cout << x << " " << y << " " << z << std::endl;
+    }
+    else if (msg.header.type == CustomMessageType::ObjectState) {
+        int size;
+        msg >> size;
+
+        std::vector<char> name;
+        for (int i = 0; i < size; i++)
+        {
+            char letter;
+            msg >> letter;
+            name.push_back(letter);
+        }
+        std::reverse(name.begin(), name.end());
+        const char* objectName = reinterpret_cast<const char*>(name.data());
+
+        bool a;
+        msg >> a;
+        std::cout << "Object " << objectName << " changed bool to ";
+        std::cout << a << std::endl;
+    }
 }
 
-//enet_peer_disconnect(peer, 0);
-    ///* Allow up to 3 seconds for the disconnect to succeed
-    // * and drop any packets received packets.
-    // */
-    //while (enet_host_service(client, &event, 3000) > 0)
-    //{
-    //    switch (event.type)
-    //    {
-    //    case ENET_EVENT_TYPE_RECEIVE:
-    //        enet_packet_destroy(event.packet);
-    //        break;
-    //    case ENET_EVENT_TYPE_DISCONNECT:
-    //        std::cout << "Disconnection succeeded.\n";
-    //        //return false;
-    //    }
-    //}
-    ///* We've arrived here, so the disconnect attempt didn't */
-    ///* succeed yet.  Force the connection down.             */
-    //enet_peer_reset(peer);
+//void Client::SendPositionPacket() {
+//    if (peer == nullptr) return;
+//    float x = 7.0f, y = 8.0f, z = 9.0f;
+//
+//    std::vector<uint8_t> buffer(sizeof(float) * 3);
+//
+//    // Copy the float values into the buffer
+//    std::memcpy(buffer.data(), &x, sizeof(float));
+//    std::memcpy(buffer.data() + sizeof(float), &y, sizeof(float));
+//    std::memcpy(buffer.data() + 2 * sizeof(float), &z, sizeof(float));
+//
+//    // Get a const void* pointer to the buffer
+//    const void* data_ptr = static_cast<const void*>(buffer.data());
+//    Packet packet(Type::Position, data_ptr, sizeof(data_ptr));
+//
+//    std::stringstream ss;
+//    cereal::BinaryOutputArchive archive(ss);
+//    archive(packet);
+//
+//    // Set pos vector to pos of the Local Player Actor
+//    //Vec3 pos = localPlayer->GetComponent<TransformComponent>()->GetPosition();
+//
+//    std::string str = ss.str();
+//
+//    std::cout << str.length() << std::endl;
+//
+//    ENetPacket* tempPacket = enet_packet_create(str.c_str(),
+//        str.length() + 1,
+//        ENET_PACKET_FLAG_UNRELIABLE_FRAGMENT);
+//    enet_peer_send(peer, 0, tempPacket);
+//}
