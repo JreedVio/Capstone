@@ -25,7 +25,8 @@ public:
 	~NetworkManager();
 	NetworkUnit* GetUnit() { return unit; }
 	bool Initialize();
-	bool StartNetwork(int isServer);
+	bool StartServer();
+	bool StartClient(const char* address);
 	void ResetNetwork();
 	void OnDestroy();
 	void Update();

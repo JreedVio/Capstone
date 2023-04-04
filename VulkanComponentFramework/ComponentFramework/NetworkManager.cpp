@@ -40,21 +40,22 @@ bool NetworkManager::Initialize()
     return true;
 }
 
-bool NetworkManager::StartNetwork(int isServer)
+bool NetworkManager::StartServer()
 {
-    if (isServer == 0) {
-        // Create Client
-        unit = new Client();
-        if (!unit->OnCreate()) return false;
-    }
-    else if (isServer == 1) {
-        // Create Server
-        unit = new Server();
-        if (!unit->OnCreate()) return false;
-    }
-    else {
-        Debug::Error("Failed to use input parameter for Network Manager (it has to be 0 or 1)\n", __FILE__, __LINE__);
-    }
+    // Create Server
+    unit = new Server();
+    if (!unit->OnCreate()) return false;
+    
+    isNetworkRunning = true;
+    return true;
+}
+
+bool NetworkManager::StartClient(const char* address){
+    // Create Client
+    unit = new Client();
+    if (!unit->OnCreate()) return false;
+    if (!dynamic_cast<Client*>(unit)->Connect(address)) return false;
+
     isNetworkRunning = true;
     return true;
 }

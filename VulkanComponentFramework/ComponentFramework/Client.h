@@ -21,6 +21,7 @@ public:
 	~Client();
 
 	bool OnCreate();
+	bool Connect(const char* addressStr);
 	bool RecieveRoomName(ENetEvent& event);
 	void OnDestroy();
 	void Disconnect();

@@ -58,7 +58,7 @@ void IPAddrMenu::Display()
         if (!entered.empty())
         {
             ShowWindow(false);
-            SceneManager::GetInstance()->StartGame(USERTYPE::CLIENT);
+            SceneManager::GetInstance()->StartClient(entered.c_str());
             UIManager::getInstance()->GetUI("MainMenu")->ShowWindow(false);
         }        
     }

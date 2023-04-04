@@ -39,12 +39,17 @@ bool Client::OnCreate()
 
     /// Connect To Server
 
+    
+}
+
+bool Client::Connect(const char* addressStr)
+{
     ENetAddress address;
     ENetEvent event;
-    /* Connect to some.server.net:1234. */
-    auto IP = std::dynamic_pointer_cast<IPAddrMenu>(UIManager::getInstance()->GetUI("MainMenu")->GetChildUI("IPMenu"));
-    printf("IP: %s\n", IP->GetEntered().c_str());
-    enet_address_set_host(&address, IP->GetEntered().c_str());
+
+    if (strcmp(addressStr, "0") == 0) addressStr = "127.0.0.1";
+
+    enet_address_set_host(&address, addressStr);
 
     const size_t s = 1000;
     char hostName[s];
@@ -68,7 +73,7 @@ bool Client::OnCreate()
         event.type == ENET_EVENT_TYPE_CONNECT)
     {
         std::cout << "Connection to " << hostName << " succeeded.\n";
-        
+
         if (!RecieveRoomName(event)) {
             Debug::FatalError("Failed to Recieve Room Name", __FILE__, __LINE__);
             return false;
@@ -97,6 +102,7 @@ bool Client::OnCreate()
 
         return false;
     }
+    return false;
 }
 
 bool Client::RecieveRoomName(ENetEvent& event)

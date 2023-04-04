@@ -177,31 +177,41 @@ void SceneManager::Run() {
 }
 
 
-bool SceneManager::StartGame(USERTYPE userType_){
+bool SceneManager::StartServer(){
 	//Set usertype
-	switch (userType_) {
-		case SERVER:
-			if (!networkManager->StartNetwork((int)userType_)) {
-				Debug::FatalError("Failed to start Network Manager as a Server", __FILE__, __LINE__);
-				networkManager->ResetNetwork();
-				return false;
-			}
-			SetNextScene("Level1");
-			break;
-		case CLIENT:
-			if (!networkManager->StartNetwork((int)userType_)) {
-				Debug::FatalError("Failed to start Network Manager as a Client", __FILE__, __LINE__);
-				networkManager->ResetNetwork();
-				return false;
-			}
-			break;
+	if (!networkManager->StartServer()) {
+		Debug::FatalError("Failed to start Network Manager as a Server", __FILE__, __LINE__);
+		networkManager->ResetNetwork();
+		return false;
 	}
+	SetNextScene("Level1");
+			
 
 	uiManager->openMenu("MainMenu");
 	//Enter the start room
 	BuildScene(ROOMSCENE, nextScene);
 
 	std::thread networking(&NetworkManager::Update, this->networkManager);
+	networking.detach();
+
+	//Restart the timer
+	//timer->Start();
+
+	return true;
+}
+
+bool SceneManager::StartClient(const char* address) {
+	if (!networkManager->StartClient(address)) {
+		Debug::FatalError("Failed to start Network Manager as a Client", __FILE__, __LINE__);
+			networkManager->ResetNetwork();
+			return false;
+	}
+
+	uiManager->openMenu("MainMenu");
+		//Enter the start room
+		BuildScene(ROOMSCENE, nextScene);
+
+		std::thread networking(&NetworkManager::Update, this->networkManager);
 	networking.detach();
 
 	//Restart the timer

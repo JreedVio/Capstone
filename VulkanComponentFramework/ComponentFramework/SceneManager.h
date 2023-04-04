@@ -17,11 +17,6 @@ enum SCENETYPE {
 	MENUSCENE
 };
 
-enum USERTYPE {
-	CLIENT = 0,
-	SERVER
-};
-
 
 class SceneManager  {
 public:
@@ -29,6 +24,7 @@ public:
 	static SceneManager* GetInstance();
 	~SceneManager();
 	void Run();
+	bool StartServer();
 	bool Initialize(std::string name_, int width_, int height_);
 	void GetEvents();
 	static void RunNetworkUpdate(NetworkManager*);
@@ -38,8 +34,8 @@ public:
 	void SetOpenMainMenu(bool openMainMenu_) { openMainMenu = openMainMenu_; }
 	Ref<PlayerController> GetRemotePlayer() { return remotePlayer; }
 	Ref<PlayerController> GetLocalPlayer() { return localPlayer; }
-	bool StartGame(USERTYPE userType_);
 	void QuitGame();
+	bool StartClient(const char* address);
 	void RoomChange(const char* roomName_);
 	void MainMenu();
 	bool GameOver();

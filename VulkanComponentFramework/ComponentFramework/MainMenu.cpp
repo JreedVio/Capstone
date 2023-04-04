@@ -69,7 +69,7 @@ void MainMenu::showMainMenu(){
     ImGui::SetCursorPos(buttonLocation);
     if (ImGui::Button("Start Game", buttonSize)) {
         //Close the window
-        SceneManager::GetInstance()->StartGame(USERTYPE::SERVER);
+        SceneManager::GetInstance()->StartServer();
     }
 
     buttonLocation.y += heightInterval;
