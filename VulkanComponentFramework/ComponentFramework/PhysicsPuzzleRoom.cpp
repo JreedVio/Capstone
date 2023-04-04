@@ -99,8 +99,24 @@ void PhysicsPuzzleRoom::Update(const float deltaTime)
             else {
                 Physics::RigidBodyMove(localPlayer, Cube1, false, false);
             }
+            if (Physics::TestTwoAABB(localPlayer->GetComponent<AABB>(), Cube2->GetComponent<AABB>())) {
+                Physics::RigidBodyMove(localPlayer, Cube2, true, false);
+                NetworkManager::GetInstance()->GetUnit()->SendObjectPosition("Cube2", Cube2->GetComponent<TransformComponent>()->GetPosition());
+                AudioManager::getInstance()->PlaySoundEffects("audio/retroblockHit.wav");
+            }
+            else {
+                Physics::RigidBodyMove(localPlayer, Cube2, false, false);
+            }
         }
         if (NetworkManager::GetInstance()->GetUnit()->unitType == UnitType::CLIENT) {
+            if (Physics::TestTwoAABB(localPlayer->GetComponent<AABB>(), Cube1->GetComponent<AABB>())) {
+                Physics::RigidBodyMove(localPlayer, Cube1, true, false);
+                NetworkManager::GetInstance()->GetUnit()->SendObjectPosition("Cube1", Cube1->GetComponent<TransformComponent>()->GetPosition());
+                AudioManager::getInstance()->PlaySoundEffects("audio/retroblockHit.wav");
+            }
+            else {
+                Physics::RigidBodyMove(localPlayer, Cube1, false, false);
+            }            
             if (Physics::TestTwoAABB(localPlayer->GetComponent<AABB>(), Cube2->GetComponent<AABB>())) {
                 Physics::RigidBodyMove(localPlayer, Cube2, true, false);
                 NetworkManager::GetInstance()->GetUnit()->SendObjectPosition("Cube2", Cube2->GetComponent<TransformComponent>()->GetPosition());
