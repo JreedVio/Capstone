@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\GameDev\OpenGL\include;C:\GameDev\SDL\include;C:\GameDev\Vulkan\include;C:\GameDev\IrrKlang\include;$(SolutionDir)ENet\include;$(SolutionDir)Cereal;$(IncludePath)</IncludePath>
+    <IncludePath>C:\GameDev\OpenGL\include;C:\GameDev\SDL\include;C:\GameDev\Vulkan\include;$(SolutionDir)irrKlang\include\x32;$(SolutionDir)ENet\include;$(SolutionDir)Cereal;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -82,8 +82,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)ENet\include;$(SolutionDir)Cereal;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\GameDev\OpenGL\lib;C:\GameDev\SDL\lib;C:\GameDev\Vulkan\lib32;C:\GameDev\IrrKlang\lib;$(SolutionDir)ENet;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2main.lib;glew32.lib;glew32s.lib;opengl32.lib;vulkan-1.lib;enet.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\GameDev\OpenGL\lib;C:\GameDev\SDL\lib;C:\GameDev\Vulkan\lib32;$(SolutionDir)irrKlang\lib\x32;$(SolutionDir)ENet;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2main.lib;glew32.lib;glew32s.lib;opengl32.lib;vulkan-1.lib;enet.lib;ws2_32.lib;winmm.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -156,6 +156,7 @@
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
+    <ClCompile Include="PlateActor.cpp" />
     <ClCompile Include="PlatePuzzleRoom.cpp" />
     <ClCompile Include="PhysicsPuzzleRoom.cpp" />
     <ClCompile Include="SettingMenu.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="NetworkUnit.h" />
     <ClInclude Include="OpenGLRenderer.h" />
     <ClInclude Include="PauseMenu.h" />
+    <ClInclude Include="PlateActor.h" />
     <ClInclude Include="PlatePuzzleRoom.h" />
     <ClInclude Include="PhysicsPuzzleRoom.h" />
     <ClInclude Include="SettingMenu.h" />

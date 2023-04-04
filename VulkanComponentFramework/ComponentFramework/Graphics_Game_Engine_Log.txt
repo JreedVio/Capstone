@@ -3,5 +3,8 @@
 [INFO]: Succeed to Load Asset RendererAssets
 [INFO]: AudioManager Created
 [INFO]: Succeed to Load Scene Level1
-[INFO]: Succeed to Load Scene Level4
+[INFO]: Succeed to Load Scene Level1
+[INFO]: Succeed to Load Scene Level2
+[INFO]: Succeed to Load Scene Level2
+[INFO]: Deleting the GameSceneManager
 [INFO]: Deleting the GameSceneManager

@@ -99,22 +99,22 @@ void PhysicsPuzzleRoom::Update(const float deltaTime)
         if (status1 && !status2)
         {
             Physics::RigidBodyMove(localPlayer, Cube1, status1, false);
-            //AudioManager::getInstance()->PlaySoundEffects("audio/retroblockHit.wav");
+            AudioManager::getInstance()->PlaySoundEffects("audio/retroblockHit.wav");
         }        
         else if (status2 && !status1)
         {
             Physics::RigidBodyMove(remotePlayer, Cube1, status2, false);
-            //AudioManager::getInstance()->PlaySoundEffects("audio/retroblockHit.wav");
+            AudioManager::getInstance()->PlaySoundEffects("audio/retroblockHit.wav");
         }
         else if (status3 && !status4)
         {
             Physics::RigidBodyMove(localPlayer, Cube2, status3, false);
-            //AudioManager::getInstance()->PlaySoundEffects("audio/retroblockHit.wav");
+            AudioManager::getInstance()->PlaySoundEffects("audio/retroblockHit.wav");
         }
         else if (status4 && !status3)
         {
             Physics::RigidBodyMove(remotePlayer, Cube2, status4, false);
-            //AudioManager::getInstance()->PlaySoundEffects("audio/retroblockHit.wav");
+            AudioManager::getInstance()->PlaySoundEffects("audio/retroblockHit.wav");
         }
         else
         {

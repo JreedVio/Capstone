@@ -30,7 +30,7 @@ public:
 	void Send();
 	void SendRoomName(const char* roomName);
 	void SendObjectPosition(const char* objectName);
-	void SendObjectState(const char* objectName);
+	void SendObjectState(const char* objectName, bool state);
 	void SendPuzzleSolved();
 	void Recieve(int tickrate);
 	void ProcessMessage(Message& msg);

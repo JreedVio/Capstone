@@ -5,6 +5,9 @@
 #include "RoomScene.h"
 #include "Packet.h"
 #include "Message.h"
+#include "PlateActor.h"
+#include <memory>
+
 
 using namespace MATH;
 
@@ -232,7 +235,6 @@ void Client::SendReady() {
         str.length() + 1,
         ENET_PACKET_FLAG_RELIABLE);
     enet_peer_send(peer, 0, tempPacket);
-    SendObjectState("Door");
 }
 
 void Client::SendObjectPosition(const char* objectName) {
@@ -259,13 +261,13 @@ void Client::SendObjectPosition(const char* objectName) {
     enet_peer_send(peer, 0, tempPacket);
 }
 
-void Client::SendObjectState(const char* objectName) {
+void Client::SendObjectState(const char* objectName, bool state) {
     if (peer == nullptr) return;
 
     Message msg;
     msg.header.type = CustomMessageType::ObjectState;
 
-    msg << true;
+    msg << state;
     msg.AddCharArray(objectName, std::strlen(objectName));
     msg << std::strlen(objectName) + 1;
 
@@ -294,7 +296,7 @@ void Client::Recieve(int tickrate)
     int eventStatus = 1;
 
     /* Wait up to 1000 milliseconds for an event. */
-    eventStatus = enet_host_service(client, &event, (1000 / tickrate) - 1);
+    eventStatus = enet_host_service(client, &event, 33);
     if (eventStatus > 0)
     {
         switch (event.type)
@@ -389,6 +391,7 @@ void Client::ProcessMessage(Message& msg)
         msg >> a;
         std::cout << "Object " << objectName << " changed bool to ";
         std::cout << a << std::endl;
+        std::dynamic_pointer_cast<PlateActor>(SceneManager::GetInstance()->GetCurrentScene()->GetActor(objectName))->SetIsEnabled(a);
     }
 }
 

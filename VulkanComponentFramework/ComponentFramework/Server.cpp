@@ -6,7 +6,9 @@
 #include "Room.h"
 #include "Message.h"
 #include "Packet.h"
+#include "PlateActor.h"
 #include <string>
+#include <memory>
 
 #include <WS2tcpip.h>
 
@@ -179,13 +181,13 @@ void Server::SendObjectPosition(const char* objectName) {
     enet_peer_send(peer, 0, tempPacket);
 }
 
-void Server::SendObjectState(const char* objectName) {
+void Server::SendObjectState(const char* objectName, bool state) {
     if (peer == nullptr) return;
 
     Message msg;
     msg.header.type = CustomMessageType::ObjectState;
 
-    msg << true;
+    msg << state;
     msg.AddCharArray(objectName, std::strlen(objectName));
     msg << std::strlen(objectName) + 1;
 
@@ -214,7 +216,7 @@ void Server::Recieve(int tickrate)
     int eventStatus = 1;
 
     /* Wait up to 1000 milliseconds for an event. */
-    eventStatus = enet_host_service(server, &event, (1000 / tickrate) - 1);
+    eventStatus = enet_host_service(server, &event, 33);
 
     // Wait for connection, diconnection and package receival
     if (eventStatus > 0)
@@ -328,5 +330,6 @@ void Server::ProcessMessage(Message& msg)
         msg >> a;
         std::cout << "Object " << objectName << " changed bool to ";
         std::cout << a << std::endl;
+        std::dynamic_pointer_cast<PlateActor>(SceneManager::GetInstance()->GetCurrentScene()->GetActor(objectName))->SetIsEnabled(a);
     }
 }
