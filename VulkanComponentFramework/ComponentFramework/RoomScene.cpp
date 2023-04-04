@@ -48,10 +48,14 @@ bool RoomScene::OnCreate(){
     Vec3 playerStart1 = Vec3(0.0f, 3.0f, 5.0f);
     Vec3 playerStart2 = Vec3(0.0f, 3.0f, -5.0f);
 
-    remoteTransform_->SetTransform(Vec3(-1.0, -0.5f, 0.0f), QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), remoteTransform_->GetScale());
     remoteTransform_->SetTransform(playerStart1, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), remoteTransform_->GetScale());
 
-    localTransform_->SetTransform(playerStart2, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), localTransform_->GetScale());
+    if (NetworkManager::GetInstance()->GetUnit()->unitType == UnitType::SERVER) {
+        localTransform_->SetTransform(playerStart1, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), localTransform_->GetScale());
+    }
+    else {
+        localTransform_->SetTransform(playerStart2, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), localTransform_->GetScale());
+    }
     AddActor("RemotePlayer", remotePlayer->GetPawn());
     AddActor("LocalPlayer", localPlayer->GetPawn());
 
