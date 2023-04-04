@@ -1,5 +1,6 @@
 #include "UIManager.h"
 #include "VulkanRenderer.h"
+#include "AudioManager.h"
 #include "SettingMenu.h"
 #include "MainMenu.h"
 #include "PauseMenu.h"
@@ -240,9 +241,8 @@ void UIManager::openMenu(const char* menuName_){
 	for (auto ui_ : ui_list) {
 		if (strcmp(ui_.first, menuName_) == 0) {
 			ui_.second->ShowWindow(!ui_.second->isOpened());
-			//AudioManager* audioManager = AudioManager::getInstance();
-			//audioManager->PauseBGM(!audioManager->isBGMPaused());
-			//audioManager->PlaySoundEffects(ui_.second->getSoundFile());
+			AudioManager* audioManager = AudioManager::getInstance();
+			audioManager->PlaySoundEffects(ui_.second->getSoundFile());
 		}
 	}
 }
