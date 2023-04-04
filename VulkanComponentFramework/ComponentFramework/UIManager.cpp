@@ -6,7 +6,7 @@
 #include "PauseMenu.h"
 #include "CodeUI.h"
 #include "WinMenu.h"
-
+#include "IPAddrMenu.h"
 
 UIManager* UIManager::instance_(nullptr);
 
@@ -53,6 +53,8 @@ bool UIManager::OnCreate(){
 	MainMenu* mainMenu_ = new MainMenu(nullptr);
 	Ref<SettingMenu> settingMenu = std::make_shared<SettingMenu>(mainMenu_);
 	mainMenu_->AddChildUI("SettingMenu", settingMenu);
+	Ref<IPAddrMenu> IPMenu = std::make_shared<IPAddrMenu>(mainMenu_);
+	mainMenu_->AddChildUI("IPMenu", IPMenu);
 	UIManager::getInstance()->AddUserInterface("MainMenu", mainMenu_);
 
 	//Add pause menu to the ui manager
@@ -71,7 +73,7 @@ bool UIManager::OnCreate(){
 	WinMenu* winMenu_ = new WinMenu(nullptr);
 	AddUserInterface("WinMenu", winMenu_);
 	winMenu_->setSoundFile("audio/bell.wav");
-	winMenu_->ShowWindow(false);
+	winMenu_->ShowWindow(false);	
 
 	return true;
 }

@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "UIManager.h"
 #include "SettingMenu.h"
+#include "IPAddrMenu.h"
 
 MainMenu::MainMenu(UserInterface* parent_) : UserInterface(parent_) {
 
@@ -46,7 +47,7 @@ void MainMenu::showMainMenu(){
     //It needs to be dependent to the scene window size, so that when resizing the scene window,
     //ui window will change accordingly
     float windowW = width * 0.4f;
-    float windowH = height * 0.6f;
+    float windowH = height * 0.7f;
     ImGui::SetWindowSize(ImVec2(windowW, windowH));
     ImGui::SetWindowPos(ImVec2(width / 2.0f - windowW * 0.5f, height / 2.0f - windowH * 0.5f));
 
@@ -76,6 +77,17 @@ void MainMenu::showMainMenu(){
     if (ImGui::Button("Join Game", buttonSize)) {
         //Close the window
         SceneManager::GetInstance()->StartGame(USERTYPE::CLIENT);
+    }
+
+    buttonLocation.y += heightInterval;
+    ImGui::SetCursorPos(buttonLocation);
+    if (ImGui::Button("Enter IP", buttonSize)) {
+        //Open Option menu
+        Ref<UserInterface> IPMenu = GetChildUI("IPMenu");
+        if (IPMenu) {
+            IPMenu->ShowWindow(true);
+            ShowWindow(false);
+        }
     }
 
     buttonLocation.y += heightInterval;

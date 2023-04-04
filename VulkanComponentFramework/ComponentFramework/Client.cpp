@@ -7,6 +7,8 @@
 #include "Message.h"
 #include "PlateActor.h"
 #include <memory>
+#include "UIManager.h"
+#include "IPAddrMenu.h"
 
 
 using namespace MATH;
@@ -40,7 +42,9 @@ bool Client::OnCreate()
     ENetAddress address;
     ENetEvent event;
     /* Connect to some.server.net:1234. */
-    enet_address_set_host(&address, "127.0.0.1"); 
+    auto IP = std::dynamic_pointer_cast<IPAddrMenu>(UIManager::getInstance()->GetUI("MainMenu")->GetChildUI("IPMenu"));
+    printf("IP: %s\n", IP->GetEntered().c_str());
+    enet_address_set_host(&address, IP->GetEntered().c_str());
 
     const size_t s = 1000;
     char hostName[s];
