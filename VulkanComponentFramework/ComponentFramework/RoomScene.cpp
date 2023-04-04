@@ -45,8 +45,8 @@ bool RoomScene::OnCreate(){
     Ref<TransformComponent> localTransform_ = localPawn->GetComponent<TransformComponent>();
 
     //Set the enter location
-    Vec3 playerStart1 = Vec3(0.0f, 3.0f, -5.0f);
-    Vec3 playerStart2 = Vec3(0.0f, 3.0f, 5.0f);
+    Vec3 playerStart1 = Vec3(0.0f, 3.0f, 5.0f);
+    Vec3 playerStart2 = Vec3(0.0f, 3.0f, -5.0f);
 
     remoteTransform_->SetTransform(Vec3(-1.0, -0.5f, 0.0f), QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), remoteTransform_->GetScale());
     remoteTransform_->SetTransform(playerStart1, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), remoteTransform_->GetScale());
