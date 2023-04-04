@@ -21,6 +21,7 @@ public:
 	void Update(float deltaTime_) override;
 	void CollisionResponse() override;
 	void NotCollided() override;
+	void ClearCode() { codeUI->Clear(); }
 	std::vector<int> GetCodeEntered() { return codeUI->GetEntered(); }
 };
 

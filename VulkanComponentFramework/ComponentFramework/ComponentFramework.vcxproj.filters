@@ -237,6 +237,9 @@
     <ClCompile Include="WinMenu.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="PlateActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -442,6 +445,9 @@
     </ClInclude>
     <ClInclude Include="WinMenu.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PlateActor.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

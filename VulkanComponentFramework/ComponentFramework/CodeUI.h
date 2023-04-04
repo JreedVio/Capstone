@@ -18,6 +18,7 @@ public:
 	void Display();
 	void Update(Scene* scene_);
 	std::vector<int> GetEntered() { return entered; }
+	void Clear() { entered.clear(); }
 
 };
 

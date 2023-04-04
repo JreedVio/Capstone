@@ -15,7 +15,7 @@ CodePuzzleRoom::CodePuzzleRoom(int width_, int length_, int height_, float passC
 }
 
 CodePuzzleRoom::~CodePuzzleRoom(){
-
+	codePanel->ClearCode();
 }
 
 bool CodePuzzleRoom::OnCreate(){
