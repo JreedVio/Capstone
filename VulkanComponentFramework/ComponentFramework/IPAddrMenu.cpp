@@ -57,9 +57,10 @@ void IPAddrMenu::Display()
         entered = buf;
         if (!entered.empty())
         {
-            ShowWindow(false);
-            SceneManager::GetInstance()->StartClient(entered.c_str());
-            UIManager::getInstance()->GetUI("MainMenu")->ShowWindow(false);
+            if (SceneManager::GetInstance()->StartClient(entered.c_str())) {
+                ShowWindow(false);
+                UIManager::getInstance()->GetUI("MainMenu")->ShowWindow(false);
+            }
         }        
     }
     if (entered == "")

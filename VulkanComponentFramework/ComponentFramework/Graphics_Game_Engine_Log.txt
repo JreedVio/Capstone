@@ -1,11 +1,7 @@
 [INFO]: Starting the GameSceneManager
-[INFO]: AudioManager Created
 [INFO]: AssetManager Created
 [INFO]: Succeed to Load Asset RendererAssets
 [INFO]: AudioManager Created
-[INFO]: Succeed to Load Scene Level1
-[INFO]: Succeed to Load Scene Level1
-[INFO]: Succeed to Load Scene Level1
 [INFO]: Succeed to Load Scene Level1
 [INFO]: Succeed to Load Scene Level1
 [INFO]: Succeed to Load Scene Level1

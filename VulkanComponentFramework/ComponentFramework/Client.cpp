@@ -150,7 +150,7 @@ void Client::OnDestroy()
 
 void Client::Disconnect()
 {
-    if(peer != nullptr) enet_peer_disconnect(peer, 0);
+    if (peer != nullptr) enet_peer_disconnect(peer, 0);
     if (client != nullptr) enet_host_flush(client);
 }
 
