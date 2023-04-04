@@ -1,6 +1,7 @@
 #include "IPAddrMenu.h"
 #include "UIManager.h"
 #include "AudioManager.h"
+#include "SceneManager.h"
 
 void IPAddrMenu::showEnterIPAddr()
 {
@@ -54,7 +55,12 @@ void IPAddrMenu::Display()
     if (ImGui::Button("Enter", buttonSize))
     {
         entered = buf;
-        
+        if (!entered.empty())
+        {
+            ShowWindow(false);
+            SceneManager::GetInstance()->StartGame(USERTYPE::CLIENT);
+            UIManager::getInstance()->GetUI("MainMenu")->ShowWindow(false);
+        }        
     }
     if (entered == "")
     {

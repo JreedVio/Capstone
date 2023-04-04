@@ -76,19 +76,13 @@ void MainMenu::showMainMenu(){
     ImGui::SetCursorPos(buttonLocation);
     if (ImGui::Button("Join Game", buttonSize)) {
         //Close the window
-        SceneManager::GetInstance()->StartGame(USERTYPE::CLIENT);
-    }
-
-    buttonLocation.y += heightInterval;
-    ImGui::SetCursorPos(buttonLocation);
-    if (ImGui::Button("Enter IP", buttonSize)) {
-        //Open Option menu
         Ref<UserInterface> IPMenu = GetChildUI("IPMenu");
         if (IPMenu) {
             IPMenu->ShowWindow(true);
             ShowWindow(false);
         }
-    }
+        //SceneManager::GetInstance()->StartGame(USERTYPE::CLIENT);
+    }        
 
     buttonLocation.y += heightInterval;
     ImGui::SetCursorPos(buttonLocation);
