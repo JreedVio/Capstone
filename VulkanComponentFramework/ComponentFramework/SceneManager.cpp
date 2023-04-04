@@ -272,7 +272,7 @@ void SceneManager::GetEvents() {
 		else if (sdlEvent.type == SDL_KEYDOWN) {
 			switch (sdlEvent.key.keysym.scancode) {
 			case SDL_SCANCODE_Q:
-				isRunning = false;
+				//isRunning = false;
 				return;
 
 			case SDL_SCANCODE_F1:
@@ -284,7 +284,7 @@ void SceneManager::GetEvents() {
 				break;
 
 			case SDL_SCANCODE_F3:
-				BuildScene(ROOMSCENE, "PhysicsPuzzle");
+				BuildScene(ROOMSCENE, "Level3");
 				break;
 
 			case SDL_SCANCODE_F4:

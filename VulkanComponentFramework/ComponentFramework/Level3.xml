@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Root>	
-	<PhysicsPuzzle>
+	<Level3>
 
-		<Size x="50" y="10" z="50"/>
+		<Size x="30" y="10" z="30"/>
 		<RoomTime time="5"/>
 		<PuzzleType name="PhysicsPuzzle"/>
 
@@ -58,12 +58,12 @@
 		<DoorActor>
 			<Door connection="Level4" actor="Door">
 				<Transform
-					posX ="-2.0" posY ="-0.5" posZ ="-25.0"
+					posX ="-1.0" posY ="-0.5" posZ ="-15.0"
 					angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
 					scaleX="1.0" scaleY="0.8" scaleZ="1.0"/>
 			</Door>
 
 		</DoorActor>
 
-	</PhysicsPuzzle>
+	</Level3>
 </Root>

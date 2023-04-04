@@ -6,8 +6,8 @@
 
 
 Actor::Actor(Component* parent_) :
-    pool(0), sets(0), renderer(nullptr),
-    Component(parent_), visible(true), alpha(1.0f), alphaChange(0.1f), 
+    pool(0), sets(0), renderer(nullptr), Component(parent_), actorType(DEFAULT), 
+    visible(true), alpha(1.0f), alphaChange(0.1f), rotate(false), move(false),
     flash(0), updateInterval(0.5f), elapsedTime(0.0f), currentFlash(0) {}
 
 Actor::Actor(const Actor& actor_){
@@ -23,6 +23,7 @@ Actor::Actor(const Actor& actor_){
     updateInterval = actor_.GetUpdateInterval();
     elapsedTime = 0.0f;
     currentFlash = flash;
+    actorType = actor_.GetActorType();
 }
 
 bool Actor::OnCreate() {
@@ -69,6 +70,8 @@ void Actor::Update(const float deltaTime) {
     //Update Physics
     auto dlm = GetComponent<PHYSICS::DynamicLinearMovement>();
     auto ab = GetComponent<PHYSICS::AABB>();
+    Ref<TransformComponent> transform = GetComponent<TransformComponent>();
+
     if (ab)
     {
         ab->Update(deltaTime);
@@ -78,11 +81,11 @@ void Actor::Update(const float deltaTime) {
         dlm->Update(deltaTime);
     }
 
-    //Update alpha if needed
-    if (currentFlash != 0) {
 
-        if (elapsedTime >= updateInterval) {
+    if (elapsedTime >= updateInterval) {
 
+        //Update alpha if needed
+        if (currentFlash != 0) {
             if (alpha >= 0.01f) {
                 alpha -= alphaChange;
                 currentFlash--;
@@ -90,10 +93,17 @@ void Actor::Update(const float deltaTime) {
             else {
                 alpha = 1.0f;
             }
-            elapsedTime = 0.0f;
         }
 
+        //Update rotation
+        //if (rotate) {
+        //    Quaternion orientation = transform->GetOrientation();
+        //    transform->SetTransform(transform->GetPosition(), QMath::angleAxisRotation(10.0f, Vec3(0.0f, 1.0f, 0.0f)) * orientation);
+        //}
+
+        elapsedTime = 0.0f;
     }
+
 
 
 

@@ -509,7 +509,7 @@
     <Xml Include="Level2.xml">
       <Filter>XML</Filter>
     </Xml>
-    <Xml Include="PhysicsPuzzle.xml">
+    <Xml Include="Level3.xml">
       <Filter>XML</Filter>
     </Xml>
     <Xml Include="Level4.xml">

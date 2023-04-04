@@ -30,7 +30,10 @@ bool CodePuzzleRoom::OnCreate(){
 	codeActor_->AddComponent(material_);
 	codeActor_->AddComponent(shader_);
 
-	Ref<TransformComponent> transform_ = std::make_shared<TransformComponent>(nullptr, Vec3(-7.0f, 1.0f, -25.0f), Quaternion(), Vec3(0.5f, 0.5f, 0.1f));
+	Ref<TransformComponent> doorTransform = door->GetComponent<TransformComponent>();
+	Vec3 doorPos = doorTransform->GetPosition();
+	Vec3 codePanelPosition(doorPos.x - 5.0f, 1.0f, doorPos.z);
+	Ref<TransformComponent> transform_ = std::make_shared<TransformComponent>(nullptr, codePanelPosition, Quaternion(), Vec3(0.5f, 0.5f, 0.1f));
 	codeActor_->AddComponent(transform_);
 	codeActor_->AddComponent<AABB>(codeActor_.get(), transform_, transform_->GetPosition(), Vec3(1.5f, 2.0f, 1.5f), transform_->GetOrientation());
 	codeActor_->OnCreate();
@@ -53,7 +56,6 @@ bool CodePuzzleRoom::OnCreate(){
 
 void CodePuzzleRoom::Update(float deltaTime){
 
-
 	//Check when flashing stops
 	for (auto actor_ : GetActorList()) {
 		if (actor_.second->IsFlashing()) {
@@ -75,7 +77,6 @@ void CodePuzzleRoom::Update(float deltaTime){
 	if ((status1 || status2) && !reset) {
 		Reset();
 	}
-
 
 }
 

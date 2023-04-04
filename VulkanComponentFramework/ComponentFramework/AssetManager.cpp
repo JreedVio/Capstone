@@ -294,6 +294,7 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 		Ref<Actor> wallActorData_ = GetActor(wallActorName);
 		//Copy the actor
 		Ref<Actor> wallActor_ = std::make_shared<Actor>(*wallActorData_.get());
+		wallActor_->SetActorType(ActorType::WALL);
 		/*Calculate tranform position
 		  Left, Right is width calculation
 		  Forward, backward is length calculation
@@ -304,9 +305,6 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 		Vec3 scale = Vec3(10.0f, 1.0f, 10.0f);
 		Vec3 Forward_BackwardScale = Vec3(10.0f, 10.0f, 1.0f);
 		Vec3 Left_RightScale = Vec3(10.0f, 10.0f, 10.0f);
-		Vec3 scaleX = Vec3(0.1f, width, width);
-		Vec3 scaleY = Vec3(length, length, 0.1f);
-		Vec3 scaleZ = Vec3(height, 0.1f, height);
 
 		float floorY = -0.5f;
 		if (strcmp(wallName_, "Left") == 0) {
@@ -332,6 +330,17 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 			scale.z = 1.0f;
 			rotation = QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f));
 		}
+		else if (strcmp(wallName_, "Centre") == 0) {
+			float z_ = 0.0f + length / 2.0f;
+			position = Vec3(0.0f, floorY, -0.1f);
+			scale.z = 1.0f;
+			rotation = QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f));
+		}
+		else if (strcmp(wallName_, "Centre2") == 0) {
+			float z_ = 0.0f + length / 2.0f;
+			position = Vec3(0.0f, floorY, 0.1f);
+			scale.z = 1.0f;
+		}
 		else if (strcmp(wallName_, "Top") == 0) {
 			float y_ = floorY + height / 2.0f;
 			position = Vec3(0.0f, y_, 0.0f);
@@ -346,16 +355,27 @@ Scene* AssetManager::CreateRoom(XMLElement* roomData) {
 		if (strcmp(wallName_, "Bottom") == 0 || strcmp(wallName_, "Top") == 0)
 		{
 			transform_ = std::make_shared<TransformComponent>(wallActor_.get(), position, rotation, scale);
+			wallActor_->AddComponent<AABB>(wallActor_.get(), transform_, position, Vec3(width, 0.1f, length), Quaternion());
+			wallActor_->SetActorType(ActorType::FLOOR);
 		} 
 		else if (strcmp(wallName_, "Backward") == 0 || strcmp(wallName_, "Forward") == 0)
 		{
 			transform_ = std::make_shared<TransformComponent>(wallActor_.get(), position, rotation, Forward_BackwardScale);
+			wallActor_->AddComponent<AABB>(wallActor_.get(), transform_, position, Vec3(width, height, 0.1f), Quaternion());
 		}
 		else if (strcmp(wallName_, "Right") == 0 || strcmp(wallName_, "Left") == 0)
 		{
 			transform_ = std::make_shared<TransformComponent>(wallActor_.get(), position, rotation, Left_RightScale);
+			wallActor_->AddComponent<AABB>(wallActor_.get(), transform_, position, Vec3(0.1f, height, length), Quaternion());
 		}
+		else if (strcmp(wallName_, "Centre") == 0 || strcmp(wallName_, "Centre2") == 0)
+		{
+			transform_ = std::make_shared<TransformComponent>(wallActor_.get(), position, rotation, Forward_BackwardScale);
+			wallActor_->AddComponent<AABB>(wallActor_.get(), transform_, position, Vec3(width, height, 0.1f), Quaternion());
+		}
+
 		wallActor_->AddComponent(transform_);
+
 		wallActor_->OnCreate();
 		room_->AddActor(wallName_, wallActor_);
 		wall_ = wall_->NextSiblingElement("Wall");		

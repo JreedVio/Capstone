@@ -14,23 +14,12 @@ bool Physics::TestTwoAABB(Ref<AABB> b1, Ref<AABB> b2)
 	return AABB::TestAABB(b1, b2);	
 }
 
-//void Physics::Update(const float deltaTime, Ref<DynamicLinearMovement> DLM, Ref<AABB> cBox)
-//{
-//	if (cBox)
-//	{
-//		cBox->Update(deltaTime);
-//	}
-//	if (DLM)
-//	{		
-//		DLM->Update(deltaTime);
-//	}	
-//}
-
 void PHYSICS::Physics::RigidBodyMove(Ref<Actor> Player, Ref<Actor> Object, bool CollisionStatus, bool Dynamic)
 {
 	if (!Dynamic && Player && Object)
 	{
 		auto ObjectDLM = Object->GetComponent<DynamicLinearMovement>();		
+		if (!ObjectDLM) return;
 		if (CollisionStatus && ObjectDLM)
 		{
 			auto playerTrans = Player->GetComponent<TransformComponent>();			
@@ -57,7 +46,37 @@ void PHYSICS::Physics::RigidBodyMove(Ref<Actor> Player, Ref<Actor> Object, bool 
 			ObjectDLM->SetVel(Vec3(0.0f, ObjectDLM->GetVel().y, 0.0f));
 		}
 	}
-	
+}
+
+void PHYSICS::Physics::PlayerWallResponse(Ref<Actor> Player, Ref<Actor> Wall){
+	Ref<AABB> wallCollision = Wall->GetComponent<AABB>();
+	Ref<DynamicLinearMovement> playerMovement = Player->GetComponent<DynamicLinearMovement>();
+	auto playerTrans = Player->GetComponent<TransformComponent>();
+	Vec3 position = playerTrans->GetPosition();
+	float vel = 0.7f;
+	float offset = 1.5f;
+	//Physics::ApplyLinearForce(playerMovement, -playerMovement->GetVel() * vel);
+	if (playerTrans->GetPosition().x > wallCollision->GetMax().x)
+	{
+		Vec3 position_(wallCollision->GetMax().x + offset, position.y, position.z);
+		playerTrans->SetTransform(position_, playerTrans->GetOrientation());
+	}
+	else if (playerTrans->GetPosition().x < wallCollision->GetMin().x)
+	{
+		Vec3 position_(wallCollision->GetMin().x - offset, position.y, position.z);
+		playerTrans->SetTransform(position_, playerTrans->GetOrientation());
+	}
+	else if (playerTrans->GetPosition().z > wallCollision->GetMax().z)
+	{
+		Vec3 position_(position.x, position.y, wallCollision->GetMax().z + offset);
+		playerTrans->SetTransform(position_, playerTrans->GetOrientation());
+	}
+	else if (playerTrans->GetPosition().z < wallCollision->GetMin().z)
+	{
+		Vec3 position_(position.x, position.y, wallCollision->GetMin().z - offset);
+		playerTrans->SetTransform(position_, playerTrans->GetOrientation());
+	}
+
 }
 
 void PHYSICS::Physics::ApplyForce(Ref<DynamicLinearMovement> DynamicLinearMovementComp, const Vec3 force, const float mass)

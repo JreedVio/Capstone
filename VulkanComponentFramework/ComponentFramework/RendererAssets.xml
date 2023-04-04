@@ -7,6 +7,8 @@
 			<Mesh name="MarioModel" filename= "./meshes/Mario.obj"/>
 			<Mesh name="SkullModel" filename= "./meshes/Skull.obj"/>
 			<Mesh name="CubeModel" filename= "./meshes/Cube.obj"/>
+			<Mesh name="SphereModel" filename= "./meshes/Sphere.obj"/>
+			<Mesh name="TetrahedronModel" filename= "./meshes/Tetrahedron.obj"/>
 			<Mesh name="CrateModel" filename= "./meshes/Crate.obj"/>
 			<Mesh name="WallModel" filename= "./meshes/Wall_Empty.obj"/>
 			<Mesh name="FloorModel" filename= "./meshes/FloorTile_Empty.obj"/>
@@ -18,9 +20,12 @@
 			<Material name="SkullNormal" filename="./textures/skull_texture.png"/>
 			<Material name="SkullRed" filename="./textures/skull_red.png"/>
 			<Material name="SkullBlue" filename="./textures/skull_blue.png"/>
+			<Material name="SkullGreen" filename="./textures/skull_green.png"/>
 			<Material name="WallRed" filename="./textures/redWall.png"/>
 			<Material name="ScifiColor" filename="./textures/ScifiColor.png"/>
 			<Material name="WhiteColour" filename="./textures/White.png"/>
+			<Material name="GreenColour" filename="./textures/Green.png"/>
+			<Material name="BlueColour" filename="./textures/Blue.png"/>
 			<Material name="ScifiCrateTexture" filename="./textures/Crate.png"/>
 			<Material name="CrateRed" filename="./textures/CrateRed.png"/>
 			<Material name="CrateBlue" filename="./textures/CrateBlue.png"/>
@@ -92,6 +97,13 @@
 			<Material componentName="SkullRed"/>
 			<Shader componentName="PhongShader"/>
 		</Actor>
+		
+		<Actor name="SkullGreen">
+			<Parent componentName="None"/>
+			<Mesh componentName="SkullModel"/>
+			<Material componentName="SkullGreen"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
 
 		<Actor name="Cube">
 			<Parent componentName="None"/>
@@ -107,10 +119,64 @@
 			<Shader componentName="PhongShader"/>
 		</Actor>
 
-		<Actor name="Cube">
+		<Actor name="SphereWhite">
 			<Parent componentName="None"/>
-			<Mesh componentName="CubeModel"/>
+			<Mesh componentName="SphereModel"/>
+			<Material componentName="WhiteColour"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+
+
+		<Actor name="SphereRed">
+			<Parent componentName="None"/>
+			<Mesh componentName="SphereModel"/>
 			<Material componentName="WallRed"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+
+		<Actor name="SphereBlue">
+			<Parent componentName="None"/>
+			<Mesh componentName="SphereModel"/>
+			<Material componentName="BlueColour"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+
+		<Actor name="SphereGreen">
+			<Parent componentName="None"/>
+			<Mesh componentName="SphereModel"/>
+			<Material componentName="GreenColour"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+
+
+		<Actor name="TetrahedronRed">
+			<Parent componentName="None"/>
+			<Mesh componentName="TetrahedronModel"/>
+			<Material componentName="WallRed"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+
+
+		<Actor name="TetrahedronBlue">
+			<Parent componentName="None"/>
+			<Mesh componentName="TetrahedronModel"/>
+			<Material componentName="BlueColour"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+
+
+		<Actor name="TetrahedronGreen">
+			<Parent componentName="None"/>
+			<Mesh componentName="TetrahedronModel"/>
+			<Material componentName="GreenColour"/>
+			<Shader componentName="PhongShader"/>
+		</Actor>
+
+
+		<Actor name="TetrahedronWhite">
+			<Parent componentName="None"/>
+			<Mesh componentName="TetrahedronModel"/>
+			<Material componentName="WhiteColour"/>
 			<Shader componentName="PhongShader"/>
 		</Actor>
 

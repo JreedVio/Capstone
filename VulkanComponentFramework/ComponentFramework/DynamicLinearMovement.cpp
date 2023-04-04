@@ -49,30 +49,12 @@ void PHYSICS::DynamicLinearMovement::UpdateFall(const float deltaTime)
 	vel += accel * deltaTime;
 
 	TransformRef->SetTransform(pos, orient);
-	//printf("--------------------\n");
-	//vel.print();
-	//pos.print();
 	
 }
 
 void PHYSICS::DynamicLinearMovement::UpdateWall(const float deltaTime)
 {	
 	auto Actor = SceneManager::GetInstance()->GetCurrentScene();
-
-	/*auto wall = room->GetActor("Forward");
-	
-	auto status = wall->GetComponent<AABB>();
-	if (!status)
-	{
-		return;
-	}*/
-
-	/*Vec3 penetration = PlayerRef->GetComponent<AABB>()->Penetration(status);
-	
-	if (penetration == Vec3())
-	{
-		return;
-	}*/
 
 	if (!TransformRef)
 	{
@@ -81,34 +63,29 @@ void PHYSICS::DynamicLinearMovement::UpdateWall(const float deltaTime)
 	}
 	
 	// Right
-	if (pos.x >= Actor->GetActor("Right")->GetComponent<TransformComponent>()->GetPosition().x - 1.5f)
-	{
-		TransformRef->SetTransform(Vec3(23.5f, pos.y, pos.z), orient);
-		//printf("collision!\n");
-	}
-	// Left
-	else if (pos.x <= Actor->GetActor("Left")->GetComponent<TransformComponent>()->GetPosition().x + 1.5f)
-	{
-		TransformRef->SetTransform(Vec3(-23.5f, pos.y, pos.z), orient);
-		//printf("collision!\n");
-	}
-	
-	// Front
-	else if (pos.z <= Actor->GetActor("Forward")->GetComponent<TransformComponent>()->GetPosition().z + 1.5f)
-	{
-		TransformRef->SetTransform(Vec3(pos.x, pos.y, -23.5f), orient);
-		//printf("collision!\n");
-	}
-	//Back
-	else if (pos.z >= Actor->GetActor("Backward")->GetComponent<TransformComponent>()->GetPosition().z - 1.5f)
-	{
-		TransformRef->SetTransform(Vec3(pos.x, pos.y, 23.5f), orient);
-		//printf("collision!\n");
-	}
-
-	//pos += penetration;
-	//vel -= vel * VMath::dot( VMath::cross(VMath::normalize(penetration), Vec3(0, 1, 0)), VMath::cross(VMath::normalize(penetration), Vec3(0, 1, 0)) );
-	
-	//PlayerRef->GetComponent<TransformComponent>()->SetTransform(pos, orient);
+	//if (pos.x >= Actor->GetActor("Right")->GetComponent<TransformComponent>()->GetPosition().x - 1.5f)
+	//{
+	//	TransformRef->SetTransform(Vec3(23.5f, pos.y, pos.z), orient);
+	//	//printf("collision!\n");
+	//}
+	//// Left
+	//else if (pos.x <= Actor->GetActor("Left")->GetComponent<TransformComponent>()->GetPosition().x + 1.5f)
+	//{
+	//	TransformRef->SetTransform(Vec3(-23.5f, pos.y, pos.z), orient);
+	//	//printf("collision!\n");
+	//}
+	//
+	//// Front
+	//else if (pos.z <= Actor->GetActor("Forward")->GetComponent<TransformComponent>()->GetPosition().z + 1.5f)
+	//{
+	//	TransformRef->SetTransform(Vec3(pos.x, pos.y, -23.5f), orient);
+	//	//printf("collision!\n");
+	//}
+	////Back
+	//else if (pos.z >= Actor->GetActor("Backward")->GetComponent<TransformComponent>()->GetPosition().z - 1.5f)
+	//{
+	//	TransformRef->SetTransform(Vec3(pos.x, pos.y, 23.5f), orient);
+	//	//printf("collision!\n");
+	//}
 }
 

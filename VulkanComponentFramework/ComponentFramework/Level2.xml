@@ -2,7 +2,7 @@
 <Root>
 	<Level2>
 
-		<Size x="50" y="10" z="50"/>
+		<Size x="30" y="10" z="30"/>
 		<RoomTime time="5"/>
 		<PuzzleType name="CodePuzzle" pass="1234"/>
 		
@@ -25,9 +25,9 @@
 		</LightActor>
 
 		<DoorActor>
-			<Door connection="PhysicsPuzzle" actor="Door">
+			<Door connection="Level3" actor="Door">
 				<Transform
-					posX ="-2.0" posY ="-0.5" posZ ="-25.0"
+					posX ="-1.0" posY ="-0.5" posZ ="-15.0"
 					angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
 					scaleX="1.0" scaleY="0.8" scaleZ="1.0"/>
 			</Door>
@@ -41,149 +41,189 @@
 		</ReferenceActor>
 
 
-		<Actor ref="Mario" name="Hint1">
+		<Actor ref="SphereRed" name="Hint1">
 			<Transform componentName="transform"
-						   posX ="-11.0" posY ="3.0" posZ ="-25.0"
-						   angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
-						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
+						   posX ="-11.0" posY ="3.0" posZ ="-15.0"
+						   angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+						   scaleX="0.3" scaleY="0.3" scaleZ="0.3"/>
 			<Alpha value="0.5"/>
 		</Actor>
 
-		<Actor ref="Cube" name="Hint2">
+		<Actor ref="SphereGreen" name="Hint2">
 			<Transform componentName="transform"
-						   posX ="-9.0" posY ="3.0" posZ ="-25.0"
-						   angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
-						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
+						   posX ="-9.0" posY ="3.0" posZ ="-15.0"
+						   angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+						   scaleX="0.3" scaleY="0.3" scaleZ="0.3"/>
 		</Actor>
 
-		<Actor ref="Skull" name="Hint3">
+		<Actor ref="SphereBlue" name="Hint3">
 			<Transform componentName="transform"
-						   posX ="-7.0" posY ="3.0" posZ ="-25.0"
+						   posX ="-7.0" posY ="3.0" posZ ="-15.0"
 						   angle="0.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.3" scaleY="0.3" scaleZ="0.3"/>
 		</Actor>
 
-		<Actor ref="SkullRed" name="Hint4">
+		<Actor ref="SphereWhite" name="Hint4">
 			<Transform componentName="transform"
-						   posX ="-5.0" posY ="3.0" posZ ="-25.0"
+						   posX ="-5.0" posY ="3.0" posZ ="-15.0"
 						   angle="0.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.3" scaleY="0.3" scaleZ="0.3"/>
 		</Actor>
 
-		<Actor ref="Mario" name="Mario1">
+		<Actor ref="SphereRed" name="SphereRed1">
 			<Transform componentName="transform"
-						   posX ="-11.0" posY ="3.0" posZ ="20.0"
+						   posX ="-11.0" posY ="3.0" posZ ="10.0"
 						   angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
 		</Actor>
 
 
-		<Actor ref="Cube" name="Cube1">
+		<Actor ref="SphereGreen" name="SphereGreen1">
 			<Transform componentName="transform"
-						   posX ="5.0" posY ="1.0" posZ ="20.0"
+						   posX ="10.0" posY ="1.0" posZ ="-4.0"
 						   angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.8" scaleY="0.8" scaleZ="0.8"/>
 		</Actor>
 
-		<Actor ref="Cube" name="Cube2">
+		<Actor ref="SphereGreen" name="SphereGreen2">
 			<Transform componentName="transform"
-						   posX ="-12.0" posY ="2.0" posZ ="-18.0"
+						   posX ="-12.0" posY ="2.5" posZ ="-12.0"
 						   angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
 		</Actor>
 
-		<Actor ref="Skull" name="Skull1">
+		<Actor ref="SphereBlue" name="SphereBlue1">
 			<Transform componentName="transform"
-						   posX ="-20.0" posY ="3.0" posZ ="-18.0"
+						   posX ="-10.0" posY ="3.0" posZ ="-9.0"
 						   angle="90.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.3" scaleY="0.3" scaleZ="0.3"/>
 		</Actor>
 
-		<Actor ref="Skull" name="Skull2">
+		<Actor ref="SphereBlue" name="SphereBlue2">
 			<Transform componentName="transform"
-						   posX ="3.0" posY ="2.0" posZ ="10.0"
+						   posX ="3.0" posY ="1.0" posZ ="-6.0"
 						   angle="45.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.8" scaleY="0.8" scaleZ="0.8"/>
 		</Actor>
 
-		<Actor ref="Skull" name="Skull3">
+		<Actor ref="SphereBlue" name="SphereBlue3">
 			<Transform componentName="transform"
 						   posX ="-7.0" posY ="1.0" posZ ="5.0"
 						   angle="18.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.3" scaleY="0.3" scaleZ="0.3"/>
 		</Actor>
 
-		<Actor ref="SkullRed" name="SkullRed1">
+		<Actor ref="SphereWhite" name="SphereWhite1">
 			<Transform componentName="transform"
-						   posX ="-5.0" posY ="4.0" posZ ="18.0"
+						   posX ="-5.0" posY ="1.0" posZ ="11.0"
 						   angle="45.0" axisX ="1.0" axisY ="0.0" axisZ ="0.0"
 						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
 		</Actor>
 
-		<Actor ref="SkullRed" name="SkullRed2">
+		<Actor ref="SphereWhite" name="SphereWhite2">
 			<Transform componentName="transform"
-						   posX ="20.0" posY ="3.0" posZ ="-18.0"
+						   posX ="3.5" posY ="3.0" posZ ="-12.0"
 						   angle="-45.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.4" scaleY="0.4" scaleZ="0.4"/>
 		</Actor>
 
-		<Actor ref="SkullRed" name="SkullRed3">
+		<Actor ref="SphereWhite" name="SphereWhite3">
 			<Transform componentName="transform"
-						   posX ="12.0" posY ="2.0" posZ ="13.0"
+						   posX ="0.0" posY ="2.5" posZ ="13.0"
 						   angle="75.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.7" scaleY="0.7" scaleZ="0.7"/>
 		</Actor>
 
-		<Actor ref="SkullRed" name="SkullRed4">
+		<Actor ref="SphereWhite" name="SphereWhite4">
 			<Transform componentName="transform"
-						   posX ="5.0" posY ="3.0" posZ ="-14.0"
+						   posX ="-7.0" posY ="2.0" posZ ="-11.0"
 						   angle="45.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.4" scaleY="0.4" scaleZ="0.4"/>
 		</Actor>
 
-		<Actor ref="MarioBlack" name="MarioBlack1">
+		<Actor ref="TetrahedronWhite" name="TetrahedronWhite1">
 			<Transform componentName="transform"
 						   posX ="-3.0" posY ="2.5" posZ ="-2.0"
 						   angle="45.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
 		</Actor>
 
-		<Actor ref="MarioBlack" name="MarioBlack2">
+		<Actor ref="TetrahedronWhite" name="TetrahedronWhite2">
 			<Transform componentName="transform"
-						   posX ="-15.0" posY ="3.5" posZ ="-10.0"
+						   posX ="-11.0" posY ="3.5" posZ ="10.0"
 						   angle="90.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
 		</Actor>
 
-		<Actor ref="MarioBlack" name="MarioBlack3">
+		<Actor ref="TetrahedronWhite" name="TetrahedronWhite3">
 			<Transform componentName="transform"
-						   posX ="-3.0" posY ="1.5" posZ ="5.0"
+						   posX ="3.0" posY ="1.5" posZ ="5.0"
 						   angle="90.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
 		</Actor>
 
-		<Actor ref="SkullBlue" name="SkullBlue1">
+		<Actor ref="TetrahedronRed" name="TetrahedronRed1">
 			<Transform componentName="transform"
-						   posX ="-9.0" posY ="2.5" posZ ="5.0"
+						   posX ="-9.0" posY ="2.5" posZ ="6.5"
 						   angle="90.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
 		</Actor>
 
-		<Actor ref="SkullBlue" name="SkullBlue2">
+		<Actor ref="TetrahedronRed" name="TetrahedronRed2">
 			<Transform componentName="transform"
-						   posX ="9.0" posY ="2.5" posZ ="-5.0"
+						   posX ="12.0" posY ="3.5" posZ ="-10.0"
 						   angle="45.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
 		</Actor>
 
-		<Actor ref="SkullBlue" name="SkullBlue3">
+		<Actor ref="TetrahedronRed" name="TetrahedronRed3">
 			<Transform componentName="transform"
-						   posX ="5.0" posY ="2.5" posZ ="5.0"
+						   posX ="5.0" posY ="2.0" posZ ="6.0"
 						   angle="-90.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
 						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
 		</Actor>
-		
 
+		<Actor ref="TetrahedronRed" name="TetrahedronRed4">
+			<Transform componentName="transform"
+						   posX ="0.0" posY ="1.0" posZ ="9.0"
+						   angle="-90.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
+		</Actor>
+
+		<Actor ref="TetrahedronBlue" name="TetrahedronBlue1">
+			<Transform componentName="transform"
+						   posX ="1.0" posY ="1.0" posZ ="1.0"
+						   angle="-90.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
+		</Actor>
+
+		<Actor ref="TetrahedronBlue" name="TetrahedronBlue2">
+			<Transform componentName="transform"
+						   posX ="10.0" posY ="3.0" posZ ="10.0"
+						   angle="-90.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
+		</Actor>
+
+		<Actor ref="TetrahedronGreen" name="TetrahedronGreen1">
+			<Transform componentName="transform"
+						   posX ="-10.0" posY ="4.0" posZ ="-10.0"
+						   angle="-90.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
+		</Actor>
+
+		<Actor ref="TetrahedronGreen" name="TetrahedronGreen2">
+			<Transform componentName="transform"
+						   posX ="-7.0" posY ="3.1" posZ ="4.0"
+						   angle="-90.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
+		</Actor>
+
+		<Actor ref="TetrahedronGreen" name="TetrahedronGreen3">
+			<Transform componentName="transform"
+						   posX ="13.0" posY ="2.1" posZ ="-5.0"
+						   angle="-90.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+						   scaleX="0.5" scaleY="0.5" scaleZ="0.5"/>
+		</Actor>
 
 	</Level2>
 </Root>

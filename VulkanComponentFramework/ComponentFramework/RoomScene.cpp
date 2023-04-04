@@ -45,12 +45,13 @@ bool RoomScene::OnCreate(){
     Ref<TransformComponent> localTransform_ = localPawn->GetComponent<TransformComponent>();
 
     //Set the enter location
-    Vec3 playerStart = Vec3(0.0f, 3.0f, 0.0f);
+    Vec3 playerStart1 = Vec3(0.0f, 3.0f, -5.0f);
+    Vec3 playerStart2 = Vec3(0.0f, 3.0f, 5.0f);
 
     remoteTransform_->SetTransform(Vec3(-1.0, -0.5f, 0.0f), QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), remoteTransform_->GetScale());
-    remoteTransform_->SetTransform(playerStart, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), remoteTransform_->GetScale());
+    remoteTransform_->SetTransform(playerStart1, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), remoteTransform_->GetScale());
 
-    localTransform_->SetTransform(playerStart, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), localTransform_->GetScale());
+    localTransform_->SetTransform(playerStart2, QMath::angleAxisRotation(180.0f, Vec3(0.0f, 1.0f, 0.0f)), localTransform_->GetScale());
     AddActor("RemotePlayer", remotePlayer->GetPawn());
     AddActor("LocalPlayer", localPlayer->GetPawn());
 
@@ -81,7 +82,7 @@ bool RoomScene::OnCreate(){
         wallForward->GetComponent<TransformComponent>()->GetOrientation());
 
     //Play Background music
-    AudioManager::getInstance()->PlayBGM("audio/ByeByeBrain320bit.wav");
+    //AudioManager::getInstance()->PlayBGM("audio/ByeByeBrain320bit.wav");
 
     return false;
 }
@@ -106,6 +107,7 @@ void RoomScene::Update(const float deltaTime) {
 
     room->Update(deltaTime);
     camera->Update(deltaTime);
+    localPawn->Update(deltaTime);
 
     localPawn->GetComponent<DynamicLinearMovement>()->SetAccel(Vec3(0.0f,-9.81f / 1.0f, 0.0f));   
     
@@ -124,7 +126,12 @@ void RoomScene::Update(const float deltaTime) {
                 Vec3 tempAccel = localPawn->GetComponent<DynamicLinearMovement>()->GetAccel();
                 localPawn->GetComponent<DynamicLinearMovement>()->SetAccel(Vec3(tempAccel.x, 0.0f, tempAccel.z));
                 localPawn->GetComponent<DynamicLinearMovement>()->SetVel(Vec3(tempVel.x , 0.0f, tempVel.z));
-             }
+            }
+            else if (actor_->GetActorType() == ActorType::WALL) {
+                Physics::PlayerWallResponse(localPawn, actor_);
+                std::cout << "RigitBodyMove: " << e.first << "\n";
+            }
+
         }
         else {
             actor_->NotCollided();
@@ -135,8 +142,8 @@ void RoomScene::Update(const float deltaTime) {
     }    
 
     remotePlayer->GetPawn()->GetComponent<AABB>()->SetCentre(remotePlayer->GetPawn()->GetComponent<TransformComponent>()->GetPosition()); 
-    localPawn->Update(deltaTime);
-    
+
+   
 }
 
 void RoomScene::Render() const{

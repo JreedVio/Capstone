@@ -2,7 +2,7 @@
 <Root>
 	<Level1>
 
-		<Size x="50" y="10" z="50"/>
+		<Size x="20" y="10" z="20"/>
 		<RoomTime time="5"/>
 		<PuzzleType name="PlatePuzzle" plate1="PlateA3" plate2="PlateB2"/>
 
@@ -15,6 +15,24 @@
 			<Wall name="Top" actor="Floor"/>
 			<Wall name="Bottom" actor="Floor"/>
 		</WallActor>
+
+
+		<LightActor>
+			<Light posX ="0.0" posY ="5.0" posZ ="0.0"
+				   r="0.0" g="0.5" b="0.0" a="1.0"/>
+			<Light posX ="-5.0" posY ="0.0" posZ ="0.0"
+				   r="0.1" g="0.1" b="0.1" a="0.1"/>
+		</LightActor>
+
+		<DoorActor>
+			<Door connection="Level2" actor="Door">
+				<Transform
+					posX ="-2.0" posY ="-0.5" posZ ="-10.0"
+					angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+					scaleX="1.0" scaleY="0.8" scaleZ="1.0"/>
+			</Door>
+
+		</DoorActor>
 
 		<!-->	 0 - 1 - 2	 <-->
 		<!-->    3 - 4 - 5	 <-->
@@ -151,22 +169,6 @@
 			<Alpha value="0.5"/>
 		</Actor>
 
-		<LightActor>
-			<Light posX ="0.0" posY ="5.0" posZ ="0.0"
-				   r="0.0" g="0.5" b="0.0" a="1.0"/>
-			<Light posX ="-5.0" posY ="0.0" posZ ="0.0"
-				   r="0.1" g="0.1" b="0.1" a="0.1"/>
-		</LightActor>
-
-		<DoorActor>
-			<Door connection="Level2" actor="Door">
-				<Transform
-					posX ="-2.0" posY ="-0.5" posZ ="-25.0"
-					angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
-					scaleX="1.0" scaleY="0.8" scaleZ="1.0"/>
-			</Door>
-
-		</DoorActor>
 
 
 	</Level1>

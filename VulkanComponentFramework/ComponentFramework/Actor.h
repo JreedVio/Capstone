@@ -12,6 +12,12 @@ using namespace MATH;
 
 class VulkanRenderer;
 
+enum ActorType {
+	DEFAULT = 0,
+	WALL,
+	FLOOR
+};
+
 struct PushConst {
 	Matrix4 model;
 	Matrix4 normal;
@@ -28,7 +34,10 @@ class Actor : public Component {
 
 protected:
 	std::vector<Ref<Component>> components;
+	ActorType actorType;
 	bool visible;
+	bool rotate;
+	bool move;
 	float updateInterval;
 	float alpha;
 	float alphaChange;
@@ -50,6 +59,8 @@ public:
 	void OnDestroy();
 	void Update(const float deltaTime_);
 	void Render() const;
+	ActorType GetActorType() const { return actorType; }
+	void SetActorType(ActorType actorType_) { actorType = actorType_; }
 	float GetUpdateInterval() const { return updateInterval; }
 	void SetUpdateInterval(float updateInterval_) { updateInterval = updateInterval_; }
 	float GetAlpha() const { return alpha; }

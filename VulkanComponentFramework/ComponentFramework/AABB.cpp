@@ -140,9 +140,7 @@ bool PHYSICS::AABB::TestAABB(Ref<AABB> b1, Ref<AABB> b2)
 
 	if (b1->min.z >= b2->max.z) return false;
 	if (b1->max.z <= b2->min.z) return false;
-		
-	//printf("Collision!\n");	
-	
+
 	return true;
 }
 
@@ -154,7 +152,6 @@ void PHYSICS::AABB::Update(const float deltaTime_)
 	}
 	else
 	{
-		//SetCentre(ParentTransform->GetPosition() + Vec3(0.0f, 1.7f, 0.0f));
 		SetCentre(ParentTransform->GetPosition() + offset);
 	}
 	SetBounds(scale, centre, orientation);
