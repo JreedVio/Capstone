@@ -237,13 +237,13 @@ void Client::SendReady() {
     enet_peer_send(peer, 0, tempPacket);
 }
 
-void Client::SendObjectPosition(const char* objectName) {
+void Client::SendObjectPosition(const char* objectName, Vec3 pos) {
     if (peer == nullptr) return;
 
     Message msg;
     msg.header.type = CustomMessageType::ObjectPosition;
 
-    msg << 10.0f << 20.0f << 30.0f;
+    msg << pos.x << pos.y << pos.z;
     msg.AddCharArray(objectName, std::strlen(objectName));
     msg << std::strlen(objectName) + 1;
 
@@ -370,8 +370,9 @@ void Client::ProcessMessage(Message& msg)
 
         float x, y, z;
         msg >> z >> y >> x;
-        std::cout << "Object " << objectName << " changed pos to ";
-        std::cout << x << " " << y << " " << z << std::endl;
+
+        Ref<TransformComponent> transform = SceneManager::GetInstance()->GetCurrentScene()->GetActor(objectName)->GetComponent<TransformComponent>();
+        transform->SetTransform(Vec3(x, y, z), transform->GetOrientation());
     }
     else if (msg.header.type == CustomMessageType::ObjectState) {
         int size;
@@ -389,8 +390,6 @@ void Client::ProcessMessage(Message& msg)
 
         bool a;
         msg >> a;
-        std::cout << "Object " << objectName << " changed bool to ";
-        std::cout << a << std::endl;
         std::dynamic_pointer_cast<PlateActor>(SceneManager::GetInstance()->GetCurrentScene()->GetActor(objectName))->SetIsEnabled(a);
     }
 }

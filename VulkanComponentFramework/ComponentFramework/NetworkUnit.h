@@ -1,5 +1,9 @@
 #pragma once
 
+#include "VMath.h"
+
+using namespace MATH;
+
 enum class UnitType {
 	NONE,
 	SERVER,
@@ -20,7 +24,7 @@ public:
 	virtual void OnDestroy() = 0;
 	virtual void SendRoomName(const char* roomName) = 0;
 	virtual void SendPuzzleSolved() = 0;
-	virtual void SendObjectPosition(const char* objectName) = 0;
+	virtual void SendObjectPosition(const char* objectName, Vec3 pos) = 0;
 	virtual void SendObjectState(const char* objectName, bool state) = 0;
 	UnitType unitType;
 };
