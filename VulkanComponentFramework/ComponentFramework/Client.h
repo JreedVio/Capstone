@@ -30,7 +30,7 @@ public:
 	void SendPuzzleSolved();
 	void SendReady();
 	void SendObjectPosition(const char* objectName);
-	void SendObjectState(const char* objectName);
+	void SendObjectState(const char* objectName, bool state);
 	//void SendPositionPacket();
 	void Recieve(int tickrate);
 	void ProcessMessage(Message& msg);

@@ -82,13 +82,13 @@ void NetworkManager::Update()
         {
             //ChronoTimer chronoTimer;
 
-            timer->UpdateFrameTicks();
+            //timer->UpdateFrameTicks();
 
             if (unit == nullptr) return;
 
             unit->Send();
             unit->Recieve(tickrate);
         }
-        SDL_Delay(timer->GetSleepTime(tickrate));
+        //SDL_Delay(timer->GetSleepTime(tickrate));
     }
 }
