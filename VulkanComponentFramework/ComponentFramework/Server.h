@@ -32,7 +32,7 @@ public:
 	void SendObjectPosition(const char* objectName, Vec3 pos);
 	void SendObjectState(const char* objectName, bool state);
 	void SendPuzzleSolved();
-	void Recieve(int tickrate);
+	void Recieve();
 	void ProcessMessage(Message& msg);
 };
 

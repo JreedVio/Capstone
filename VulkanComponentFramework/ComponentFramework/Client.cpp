@@ -295,7 +295,7 @@ void Client::SendObjectState(const char* objectName, bool state) {
     enet_peer_send(peer, 0, tempPacket);
 }
 
-void Client::Recieve(int tickrate)
+void Client::Recieve()
 {
     // Initialize variables
     ENetEvent event;
@@ -306,7 +306,7 @@ void Client::Recieve(int tickrate)
     int eventStatus = 1;
 
     /* Wait up to 1000 milliseconds for an event. */
-    eventStatus = enet_host_service(client, &event, 33);
+    eventStatus = enet_host_service(client, &event, 0);
     if (eventStatus > 0)
     {
         switch (event.type)

@@ -19,7 +19,7 @@ public:
 	virtual bool OnCreate() = 0;
 	virtual void Disconnect() = 0;
 	virtual void Send() = 0;
-	virtual void Recieve(int) = 0;
+	virtual void Recieve() = 0;
 	virtual void Update() = 0;
 	virtual void OnDestroy() = 0;
 	virtual void SendRoomName(const char* roomName) = 0;

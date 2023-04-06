@@ -6,7 +6,7 @@
 
 NetworkManager* NetworkManager::Instance(nullptr);
 
-NetworkManager::NetworkManager() : tickrate(30), isNetworkRunning(false){
+NetworkManager::NetworkManager() : tickrate(60), isNetworkRunning(false){
 }
 
 NetworkManager::~NetworkManager()
@@ -76,19 +76,24 @@ void NetworkManager::OnDestroy()
 
 void NetworkManager::Update()
 {
-    timer->Start();
+    //timer->Start();
+
+    std::chrono::steady_clock::time_point sendTime = std::chrono::steady_clock::now();
+    float time = 1000000.0f / tickrate;
+    std::chrono::microseconds sendInterval((int)time);
 
     while (isNetworkRunning && SceneManager::GetInstance()->GetIsRunning() &&
-           SceneManager::GetInstance() != nullptr) {
+           SceneManager::GetInstance() != nullptr && unit != nullptr) {
         {
             //ChronoTimer chronoTimer;
-
             //timer->UpdateFrameTicks();
 
-            if (unit == nullptr) return;
-
-            unit->Send();
-            unit->Recieve(tickrate);
+            // Limit Send function to tickrate
+            if (std::chrono::steady_clock::now() >= sendTime) { 
+                unit->Send();
+                sendTime = std::chrono::steady_clock::now() + sendInterval;
+            }
+            unit->Recieve();
         }
         //SDL_Delay(timer->GetSleepTime(tickrate));
     }

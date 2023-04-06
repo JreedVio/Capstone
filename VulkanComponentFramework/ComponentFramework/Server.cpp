@@ -204,7 +204,7 @@ void Server::SendObjectState(const char* objectName, bool state) {
     enet_peer_send(peer, 0, tempPacket);
 }
 
-void Server::Recieve(int tickrate)
+void Server::Recieve()
 {
     // Initialize variables
     ENetEvent event;
@@ -215,7 +215,7 @@ void Server::Recieve(int tickrate)
     int eventStatus = 1;
 
     /* Wait up to 1000 milliseconds for an event. */
-    eventStatus = enet_host_service(server, &event, 33);
+    eventStatus = enet_host_service(server, &event, 0);
 
     // Wait for connection, diconnection and package receival
     if (eventStatus > 0)
