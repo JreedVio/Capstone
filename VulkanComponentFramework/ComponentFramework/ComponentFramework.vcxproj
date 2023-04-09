@@ -84,7 +84,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)ENet\include;$(SolutionDir)Cereal;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ENet\include;$(SolutionDir)Cereal;$(SolutionDir)irrKlang\include\x32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\GameDev\OpenGL\lib;C:\GameDev\SDL\lib;C:\GameDev\Vulkan\lib32;$(SolutionDir)irrKlang\lib\x32;$(SolutionDir)ENet;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -164,7 +164,6 @@
     <ClCompile Include="MaterialComponent.cpp" />
     <ClCompile Include="MenuScene.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
-    <ClCompile Include="Message.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="PauseMenu.cpp" />

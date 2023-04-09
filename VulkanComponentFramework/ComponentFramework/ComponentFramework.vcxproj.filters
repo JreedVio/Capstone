@@ -76,15 +76,27 @@
     <Filter Include="Source Files\Physics">
       <UniqueIdentifier>{cae3b99f-ed8f-41e0-bb4b-5399f9985227}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Networking">
+      <UniqueIdentifier>{ff3fa6f6-8b65-4db1-9347-59c077fc963c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Networking">
+      <UniqueIdentifier>{ce2af295-0621-4d1c-8722-9aebf4743961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Other">
+      <UniqueIdentifier>{f3fe574d-1e6f-4883-acc0-3ec1151d587b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Other">
+      <UniqueIdentifier>{578a0f4f-75cb-4b24-a9d5-d98ca9f99468}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player">
+      <UniqueIdentifier>{49fe99a0-35af-4983-a3a3-328e2ceadb48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Player">
+      <UniqueIdentifier>{27d51c87-e67a-4882-9424-7f8742b2822f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MMath.cpp">
@@ -123,12 +135,6 @@
     <ClCompile Include="QMath.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxml2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AssetManager.cpp">
       <Filter>Source Files\Assets</Filter>
     </ClCompile>
@@ -138,26 +144,8 @@
     <ClCompile Include="Room.cpp">
       <Filter>Source Files\Scenes\Room</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Client.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Server.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CameraActor.cpp">
       <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Message.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui.cpp">
       <Filter>Source Files\UI\ImGUI</Filter>
@@ -237,17 +225,41 @@
     <ClCompile Include="WinMenu.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>Source Files\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="Server.cpp">
+      <Filter>Source Files\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkManager.cpp">
+      <Filter>Source Files\Networking</Filter>
+    </ClCompile>
     <ClCompile Include="PlateActor.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="IPAddrMenu.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>Source Files\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml2.cpp">
+      <Filter>Source Files\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>Source Files\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>Source Files\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Matrix.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
@@ -311,9 +323,6 @@
     <ClInclude Include="Quaternion.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="tiny_obj_loader.h">
       <Filter>XML</Filter>
     </ClInclude>
@@ -329,35 +338,8 @@
     <ClInclude Include="Room.h">
       <Filter>Header Files\Scenes\Room</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Client.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkUnit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Server.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChronoTimer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CameraActor.h">
       <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Message.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Packet.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imconfig.h">
       <Filter>Header Files\UI\ImGUI</Filter>
@@ -446,8 +428,47 @@
     <ClInclude Include="WinMenu.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="Server.h">
+      <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkManager.h">
+      <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkUnit.h">
+      <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="Message.h">
+      <Filter>Header Files\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="IPAddrMenu.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
     <ClInclude Include="PlateActor.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ChronoTimer.h">
+      <Filter>Header Files\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Header Files\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
+      <Filter>Header Files\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
+      <Filter>Header Files\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

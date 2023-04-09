@@ -86,7 +86,7 @@ bool RoomScene::OnCreate(){
         wallForward->GetComponent<TransformComponent>()->GetOrientation());
 
     //Play Background music
-    //AudioManager::getInstance()->PlayBGM("audio/ByeByeBrain320bit.wav");
+    AudioManager::getInstance()->PlayBGM("audio/ByeByeBrain320bit.wav");
 
     return false;
 }

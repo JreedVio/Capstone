@@ -27,11 +27,9 @@ bool AudioManager::OnCreate(){
 void AudioManager::OnDestroy(){
 	if (backgroundMusic) {
 		backgroundMusic->drop();
-		delete backgroundMusic;
-		backgroundMusic = nullptr;
 	}
 
-	//if (engine) delete engine;
+	if (engine) engine->drop();
 }
 
 void AudioManager::Update(){
@@ -45,9 +43,8 @@ void AudioManager::Update(){
 void AudioManager::PlayBGM(const char* fileName_){
 
 	if (backgroundMusic) {
+		backgroundMusic->stop();
 		backgroundMusic->drop();
-		delete backgroundMusic;
-		backgroundMusic = nullptr;
 	}
 	//Make the isound with sound being paused
 	backgroundMusic = engine->play2D(fileName_, true, true, true);
