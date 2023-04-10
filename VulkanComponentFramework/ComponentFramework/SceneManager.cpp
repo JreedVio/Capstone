@@ -19,7 +19,7 @@
 SceneManager* SceneManager::Instance(nullptr);
 
 SceneManager::SceneManager(): 
-	currentScene(nullptr), timer(nullptr),
+	currentScene(nullptr), timer(nullptr), isRendering(false),
 	fps(60), isRunning(false), rendererType(RendererType::VULKAN), 
 	renderer(nullptr), assetManager(nullptr), audioManager(nullptr), uiManager(nullptr),
 	openMainMenu(false){}
@@ -142,7 +142,7 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 void SceneManager::Run() {
 	timer->Start();
 	isRunning = true;
-	
+	isRendering = true;
 	while (isRunning) {
 	{
 			//ChronoTimer chronoTimer;
@@ -165,10 +165,11 @@ void SceneManager::Run() {
 
 			currentScene->Update(timer->GetDeltaTime());
 			uiManager->Update(currentScene);
-			uiManager->Display();
 			audioManager->Update();
-			currentScene->Render();
-
+			if (isRendering) {
+				uiManager->Display();
+				currentScene->Render();
+			}
 			GetEvents();
 		}
 
@@ -318,11 +319,21 @@ void SceneManager::GetEvents() {
 				break;
 			}
 		}
+		if (sdlEvent.type == SDL_WINDOWEVENT) {
+			switch (sdlEvent.window.event) {
+			case SDL_WINDOWEVENT_MINIMIZED:
+				isRendering = false;
+				break;
+			case SDL_WINDOWEVENT_RESTORED:
+				isRendering = true;
+				break;
+			}
+		}
 		if (currentScene == nullptr) {
 			Debug::FatalError("Failed to initialize Scene", __FILE__, __LINE__);
 			isRunning = false;
 			return;
-		}	
+		}
 		currentScene->HandleEvents(sdlEvent);
 	}
 }

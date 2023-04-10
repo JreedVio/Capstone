@@ -63,6 +63,7 @@ private:
 	unsigned int fps;
 	bool isRunning;
 	bool openMainMenu;
+	bool isRendering;
 	void BuildScene(SCENETYPE scenetype_, const char* fileName);
 
 	int winCondition = 10;
