@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root>
+	<TestScene>
+	
+	<Size x="50" y="10" z="50"/>
+	<RoomTime time="5"/>
+	<WallActor>
+		<!--><-->
+	<Wall name="Left" actor="Wall"/>
+	<Wall name="Right" actor="Wall"/>
+	<Wall name="Forward" actor="Wall"/>
+	<Wall name="Backward" actor="Wall"/>
+	<Wall name="Top" actor="Floor"/>
+	<Wall name="Bottom" actor="Floor"/>
+	</WallActor>
+
+	<PuzzleActor>
+
+		<PressurePlate name="PlateA0" actor="Cube"/>
+		<PressurePlate name="PlateA1" actor="Cube"/>
+		<PressurePlate name="PlateA2" actor="Cube"/>
+		<PressurePlate name="PlateA3" actor="Cube"/>
+		<PressurePlate name="PlateA4" actor="Cube"/> <!-->	0 - 1 - 2	<-->
+		<PressurePlate name="PlateA5" actor="Cube"/> <!-->  3 - 4 - 5	<-->
+		<PressurePlate name="PlateA6" actor="Cube"/> <!-->	6 - 7 - 8	<-->
+		<PressurePlate name="PlateA7" actor="Cube"/> 
+		<PressurePlate name="PlateA8" actor="Cube"/>
+
+		<PressurePlate name="PlateB0" actor="Cube"/>
+		<PressurePlate name="PlateB1" actor="Cube"/>
+		<PressurePlate name="PlateB2" actor="Cube"/>
+		<PressurePlate name="PlateB3" actor="Cube"/>
+		<PressurePlate name="PlateB4" actor="Cube"/> <!-->	0 - 1 - 2	<-->		
+		<PressurePlate name="PlateB5" actor="Cube"/> <!-->  3 - 4 - 5	<-->
+		<PressurePlate name="PlateB6" actor="Cube"/> <!-->	6 - 7 - 8	<-->
+		<PressurePlate name="PlateB7" actor="Cube"/>
+		<PressurePlate name="PlateB8" actor="Cube"/>
+		
+	</PuzzleActor>
+		
+	<LightActor>
+		<Light posX ="0.0" posY ="5.0" posZ ="0.0"
+			   r="0.0" g="0.5" b="0.0" a="1.0"/>
+		<Light posX ="-5.0" posY ="0.0" posZ ="0.0"
+			   r="0.1" g="0.1" b="0.1" a="0.1"/>
+	</LightActor>
+
+	<DoorActor>
+		<Door connection="TestScene2" actor="Door">
+			<Transform
+				posX ="-2.0" posY ="-0.5" posZ ="-25.0"
+				angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+				scaleX="1.0" scaleY="0.8" scaleZ="1.0"/>
+		</Door>
+
+	</DoorActor>
+		
+	<ReferenceActor>
+		<RefName name="Mario"/>
+		<RefName name="Skull"/>
+		<RefName name="Cube"/>
+	</ReferenceActor>
+		
+		
+	<Actor ref="Mario" name="Mario1">
+	<Transform componentName="MarioTransform"
+				   posX ="1.0" posY ="1.5" posZ ="-5.0"
+				   angle="180.0" axisX ="0.0" axisY ="1.0" axisZ ="0.0"
+				   scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
+	</Actor>
+	
+	<Actor ref="Skull" name="Skull1">
+		<Transform componentName="SkullTransform"
+		   posX ="3.0" posY ="0.0" posZ ="5.0"
+		   angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+		   scaleX="0.3" scaleY="0.3" scaleZ="0.3"/>
+
+	</Actor>
+
+	
+		<Actor ref="Random" name="Cube1">
+		<Transform componentName="CubeTransform"
+			posX ="-3.0" posY ="0.0" posZ ="0.0"
+			angle="0.0" axisX ="0.0" axisY ="0.0" axisZ ="0.0"
+			scaleX="1.0" scaleY="1.0" scaleZ="1.0"/>
+	</Actor>
+	
+		
+	</TestScene>
+</Root>

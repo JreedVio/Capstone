@@ -25,6 +25,8 @@ SDL_Window* VulkanRenderer::CreateSDLWindow(std::string name_, int width_, int h
     windowHeight = height_;
     SDL_Init(SDL_INIT_VIDEO);
     window = SDL_CreateWindow(name_.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
+    SDL_Surface* icon = IMG_Load("textures/QuantumMazeIcon.png");
+    SDL_SetWindowIcon(window, icon);
     return window;
 }
 

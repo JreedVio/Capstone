@@ -1,4 +1,5 @@
 #include "CodeUI.h"
+#include "UIManager.h"
 
 CodeUI::CodeUI(UserInterface* parent_) : UserInterface(parent_) {
 
@@ -11,6 +12,7 @@ CodeUI::~CodeUI(){
 void CodeUI::Display(){
 
     if (!showWindow) return;
+    windowAlpha = UIManager::getInstance()->GetAlpha();
 
     ImGui::SetNextWindowBgAlpha(windowAlpha);
     ImGui::Begin("CodeUI", &showWindow,

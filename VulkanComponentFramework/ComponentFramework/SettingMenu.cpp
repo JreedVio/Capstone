@@ -6,6 +6,7 @@
 SettingMenu::~SettingMenu(){}
 
 void SettingMenu::Display(){
+    windowAlpha = UIManager::getInstance()->GetAlpha();
     ImGui::SetNextWindowBgAlpha(windowAlpha);
     ImGui::Begin("Settings", NULL, 
            ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
@@ -60,7 +61,11 @@ void SettingMenu::Display(){
             }
             //Change alpha
             ImGui::Text("UI Window Transparency");
-            ImGui::SliderFloat("##windowAlpha", &windowAlpha, 0.0f, 1.0f, "%.2f");            
+            float tempAlpha = UIManager::getInstance()->GetAlpha();
+            if (ImGui::SliderFloat("##windowAlpha", &tempAlpha, 0.0f, 1.0f, "%.2f"))
+            {
+                UIManager::getInstance()->SetAlpha(tempAlpha);
+            }
 
             ImGui::EndTabItem();
         }
@@ -78,7 +83,7 @@ void SettingMenu::Display(){
 }
 
 void SettingMenu::Update(Scene* scene_){
-
+    windowAlpha = UIManager::getInstance()->GetAlpha();
 }
 
 

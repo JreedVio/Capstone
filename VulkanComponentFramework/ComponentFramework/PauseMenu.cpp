@@ -11,6 +11,7 @@ PauseMenu::PauseMenu(UserInterface* parent_) : UserInterface(parent_) {
 PauseMenu::~PauseMenu() {}
 
 void PauseMenu::Display() {
+    windowAlpha = UIManager::getInstance()->GetAlpha();
 
     if (showWindow) {
         showPauseMenu();

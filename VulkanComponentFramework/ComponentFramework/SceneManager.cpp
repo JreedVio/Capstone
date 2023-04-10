@@ -234,7 +234,11 @@ void SceneManager::MainMenu() {
 	if(networkManager != nullptr)
 		networkManager->ResetNetwork();
 
+	audioManager->PauseBGM(true);
+
+	uiManager->GetUI("PauseMenu")->GetChildUI("SettingMenu")->ShowWindow(false);
 	uiManager->GetUI("PauseMenu")->ShowWindow(false);
+
 	uiManager->GetUI("WinMenu")->ShowWindow(false);
 
 	BuildScene(MENUSCENE, "MainMenu");

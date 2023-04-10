@@ -17,6 +17,7 @@ protected:
 	UIManager();
 	int width;
 	int height;
+	float windowAlpha;
 	VulkanRenderer* renderer;
 	std::unordered_map<const char*, UserInterface*> ui_list;
 	const char* currentUI;
@@ -47,6 +48,8 @@ public:
 	//void greenTheme();
 	bool isOpened(const char* menuName_);
 	void openMenu(const char* menuName_);
+	void SetAlpha(float alpha_) { windowAlpha = alpha_; }
+	float GetAlpha() { return windowAlpha; }
 	bool isHovered();
 };
 

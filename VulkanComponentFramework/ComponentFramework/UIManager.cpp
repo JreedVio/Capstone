@@ -10,7 +10,8 @@
 
 UIManager* UIManager::instance_(nullptr);
 
-UIManager::UIManager():renderer(nullptr), width(0), height(0), currentUI("default"), style(nullptr) {
+UIManager::UIManager():renderer(nullptr), width(0), height(0), currentUI("default"), 
+style(nullptr), windowAlpha(1.0f) {
 
 }
 
