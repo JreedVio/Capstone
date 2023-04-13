@@ -26,10 +26,8 @@ CameraActor::~CameraActor() {
 bool CameraActor::OnCreate() {
 	if (isCreated) 	return isCreated; //or return true
 	
-	//viewMatrix = MMath::rotate(0.0f, Vec3(0.0f, 1.0f, 0.0f)) * MMath::translate(0.0f, 0.0f, -5.0f);
 	UpdateProjectionMatrix(45.0f, (16.0f / 9.0f), 0.01f, 100.0f); /// default projection
 	UpdateViewMatrix();
-
 	isCreated = true;
 	return isCreated;
 }
@@ -63,6 +61,10 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 
 	Vec3 upVector = Vec3(0.0f, 1.0f, 0.0f);
 	Vec3 rightDirection = VMath::cross(forwardVec, upVector);
+
+	if (sdlEvent.window.event == SDL_WINDOWEVENT_LEAVE) {
+		Deactivate();
+	}
 
 	switch (sdlEvent.type) {
 	case SDL_KEYDOWN:
@@ -123,16 +125,12 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 	case SDL_MOUSEMOTION:
 
 		if (!isActivate) return;
-
+		VulkanRenderer* renderer = VulkanRenderer::GetInstance();
 		Vec3 rotationAxis;
 		//Find the destination vector that the current forward vector should rotate to
 		Vec3 mousePos = Vec3(sdlEvent.motion.x, sdlEvent.motion.y, 0.0f);
 		Vec3 delta = (mousePos - lastMousePos);
-		float smoothValue = VERY_SMALL;
 		//Limit the camera upgrade interval
-		//if (VMath::mag(delta) <= smoothValue) {
-		//	break;
-		//}
 		Vec3 current = forwardVec;
 		Vec3 cameraPos = transform_->GetPosition();
 		if (parent) {
@@ -171,6 +169,7 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 				Ref<TransformComponent> parentTransform = dynamic_cast<Actor*>(parent)->GetComponent<TransformComponent>();
 				parentTransform->SetTransform(parentTransform->GetPosition(),
 									QMath::angleAxisRotation(-delta.x * cameraSpeed, upVector) * parentTransform->GetOrientation());
+
 			}
 		}
 
@@ -182,16 +181,17 @@ void CameraActor::HandleEvents(const SDL_Event & sdlEvent){
 		//y axis rotation
 		if (abs(delta.y) >= VERY_SMALL) {
 			if (abs(delta.y) >= w_ / 2.0f) delta.y /= w_;
-
+			if (VMath::mag(rightDirection) <= VERY_SMALL) return;
 			Quaternion newOrientation_ = QMath::angleAxisRotation(-delta.y * cameraSpeed, rightDirection) * transform_->GetOrientation();
-			Vec3 ijk = newOrientation_.ijk;
 			//Limit the y axis rotation
 			//Predict the vector after rotation, and check the y axis
 			Vec3 destination = QMath::rotate(forward, newOrientation_);
 			destination *= -1.0f; //flip upside down
-			//if (ijk.x >= 0.0f && ijk.x <= 0.05f) {
+			destination = Vec3(0.0f, destination.y, destination.z);
+			float magDesition = VMath::mag(destination);
+			float cosine = abs(VMath::dot(Vec3(0.0f, 0.0f, 1.0f), destination) / magDesition);
 			// LookUp & Down threshold
-			if (destination.y >= -1.0f && destination.y <= 0.5f){
+			if (cosine >= 0.8f && cosine <= 1.0f){
 				transform_->SetTransform(transform_->GetPosition(), newOrientation_);
 			}
 		}
