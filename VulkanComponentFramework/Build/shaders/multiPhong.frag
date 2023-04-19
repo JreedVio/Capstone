@@ -11,15 +11,10 @@ layout (binding = 1) uniform GlobalLightingUBO {
 	vec4 diffuse[2];
 } glights;
 
-layout (push_constant) uniform PushConst {
-	mat4 model;
-	mat4 normal;
-	float alpha;
-} pushConst;
-
 layout(binding = 2) uniform sampler2D texSampler;
 
 layout(location = 0) out vec4 fragColor;
+layout(location = 5) in float Alpha;
 
 void main() {
 	vec4 kt = texture(texSampler, fragTexCoord);
@@ -51,7 +46,7 @@ void main() {
 		color += (diff[i] * kt * kd[i]) + (spec[i] * ks[i]);
 	}
 	
-	fragColor = color * pushConst.alpha;
+	fragColor = color * Alpha;
 
 } 
 

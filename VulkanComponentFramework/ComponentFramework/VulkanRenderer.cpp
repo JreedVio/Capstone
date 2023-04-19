@@ -951,7 +951,7 @@ void VulkanRenderer::recordCommandBuffer() {
                 Ref<MaterialComponent> actorMaterial = actor->GetComponent<MaterialComponent>();
                 PushConst actorPushConst = actor->GetModelMatrix();
                 vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, actorShader->graphicsPipeline);
-                vkCmdPushConstants(commandBuffers[i], actorShader->pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0,
+                vkCmdPushConstants(commandBuffers[i], actorShader->pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT || VK_SHADER_STAGE_FRAGMENT_BIT, 0,
                     sizeof(PushConst), &actorPushConst);
                 vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, &actorMesh->vertexBufferID, offsets);
                 vkCmdBindIndexBuffer(commandBuffers[i], actorMesh->indexBufferID, 0, VK_INDEX_TYPE_UINT32);

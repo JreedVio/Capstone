@@ -162,7 +162,7 @@ void ShaderComponent::createGraphicsPipeline() {
     VkPushConstantRange push_constant{};
     push_constant.offset = 0;
     push_constant.size = sizeof(PushConst);
-    push_constant.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+    push_constant.stageFlags = VK_SHADER_STAGE_VERTEX_BIT || VK_SHADER_STAGE_FRAGMENT_BIT;
     // NEW
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;

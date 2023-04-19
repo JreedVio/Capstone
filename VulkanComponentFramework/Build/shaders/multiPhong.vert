@@ -4,6 +4,7 @@
 layout (location = 0) in  vec4 inPosition;
 layout (location = 1) in  vec4 inNormal;
 layout (location = 2) in  vec2 inTexCoord;
+layout (location = 5) out  float Alpha;
 
 layout (binding = 0) uniform UniformBufferObject {
     mat4 view;
@@ -30,6 +31,7 @@ layout (location = 4) out vec2 fragTexCoord;
 void main() {
 
 	fragTexCoord = inTexCoord;
+	Alpha = pushConst.alpha;
 
 	mat3 normalMatrix = mat3(pushConst.normal);
 
