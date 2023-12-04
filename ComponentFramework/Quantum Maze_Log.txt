@@ -2,4 +2,4 @@
 [INFO]: AssetManager Created
 [INFO]: Succeed to Load Asset RendererAssets
 [INFO]: AudioManager Created
-[INFO]: Deleting the GameSceneManager
+[INFO]: Succeed to Load Scene Level1
