@@ -70,12 +70,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\GameDev\OpenGL\include;C:\GameDev\SDL\include;C:\GameDev\Vulkan\include;$(SolutionDir)irrKlang\include\x32;$(SolutionDir)ENet\include;$(SolutionDir)Cereal;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)GameDev\OpenGL\include;$(SolutionDir)GameDev\SDL\include;C:\VulkanSDK\1.3.268.0\Include;$(SolutionDir)GameDev\irrKlang\include;$(SolutionDir)GameDev\ENet\include;$(SolutionDir)GameDev\Cereal;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>C:\GameDev\OpenGL\include;C:\GameDev\SDL\include;C:\GameDev\Vulkan\include;$(SolutionDir)irrKlang\include\x32;$(SolutionDir)ENet\include;$(SolutionDir)Cereal;$(IncludePath)</IncludePath>
     <LinkIncremental>
     </LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)GameDev\OpenGL\include;$(SolutionDir)GameDev\SDL\include;C:\VulkanSDK\1.3.268.0\Include;$(SolutionDir)GameDev\irrKlang\include;$(SolutionDir)GameDev\ENet\include;$(SolutionDir)GameDev\Cereal;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -84,10 +87,10 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)ENet\include;$(SolutionDir)Cereal;$(SolutionDir)irrKlang\include\x32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameDev\ENet\include;$(SolutionDir)GameDev\Cereal;$(SolutionDir)GameDev\irrKlang\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\GameDev\OpenGL\lib;C:\GameDev\SDL\lib;C:\GameDev\Vulkan\lib32;$(SolutionDir)irrKlang\lib\x32;$(SolutionDir)ENet;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)GameDev\OpenGL\lib;$(SolutionDir)GameDev\SDL\lib;C:\VulkanSDK\1.3.268.0\Lib32;$(SolutionDir)GameDev\irrKlang\lib;$(SolutionDir)GameDev\ENet;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2_image.lib;SDL2main.lib;glew32.lib;glew32s.lib;opengl32.lib;vulkan-1.lib;enet.lib;ws2_32.lib;winmm.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -98,7 +101,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameDev\ENet\include;$(SolutionDir)GameDev\Cereal;$(SolutionDir)GameDev\irrKlang\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)GameDev\OpenGL\lib;$(SolutionDir)GameDev\SDL\lib;C:\VulkanSDK\1.3.268.0\Lib32;$(SolutionDir)GameDev\irrKlang\lib;$(SolutionDir)GameDev\ENet;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
