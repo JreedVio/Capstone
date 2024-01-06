@@ -10,7 +10,7 @@ YouTube: https://youtu.be/d-Y-lqMCalk<br /><br />
 The executable file is located in Build\ComponentFramework.exe<br />
 To test multiplayer, the game needs to be played in 2 instances on the same device. Use ip 127.0.0.1 to connect locally.<br /><br />
 
-# How to Find Code File File
+# How to Find Code Files
 All code files and assets are located in the ComponentFramework folder.<br /><br />
 
 # How to Run Code in Visual Studio
